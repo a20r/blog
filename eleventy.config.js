@@ -19,6 +19,8 @@ export default function (eleventyConfig) {
     return date.toISOString().split("T")[0];
   });
 
+  eleventyConfig.addFilter("pad2", (n) => String(n).padStart(2, "0"));
+
   eleventyConfig.addFilter("readingTime", (content) => {
     const words = String(content)
       .replace(/<[^>]*>/g, " ")
