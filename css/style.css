@@ -338,6 +338,17 @@ main,
   margin: 0 0 1.25rem;
 }
 
+/* Editorial drop cap on the opening paragraph. */
+.post > p:first-of-type::first-letter {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: 3.1em;
+  float: left;
+  line-height: 0.85;
+  padding: 0.02em 0.14em 0 0;
+  color: var(--accent);
+}
+
 .post a {
   color: var(--accent);
   text-decoration: underline;
