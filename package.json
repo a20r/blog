@@ -1,0 +1,14 @@
+{
+  "name": "unrelated-rambles",
+  "version": "1.0.0",
+  "description": "unrelated rambles — a blog",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "build": "eleventy",
+    "start": "eleventy --serve"
+  },
+  "devDependencies": {
+    "@11ty/eleventy": "^3.0.0"
+  }
+}

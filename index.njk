@@ -1,0 +1,16 @@
+---
+layout: layouts/base.njk
+---
+<section class="intro">
+  <h1 class="intro-title">{{ site.title }}</h1>
+  <p class="intro-tagline">{{ site.description }}</p>
+</section>
+
+<section class="post-list">
+  {%- for post in collections.posts | reverse %}
+  <a class="post-card" href="{{ post.url }}">
+    <time class="post-card-date" datetime="{{ post.date | isoDate }}">{{ post.date | readableDate }}</time>
+    <h2 class="post-card-title">{{ post.data.title }}</h2>
+  </a>
+  {%- endfor %}
+</section>
