@@ -1,0 +1,12 @@
+---
+layout: layouts/base.njk
+---
+<article class="post">
+  <div class="post-meta">
+    <time datetime="{{ page.date | isoDate }}">{{ page.date | readableDate }}</time>
+    <span class="meta-sep">·</span>
+    <span>{{ content | readingTime }} min read</span>
+  </div>
+  {{ content | safe }}
+  <p class="back-link"><a href="/">&larr; all rambles</a></p>
+</article>
