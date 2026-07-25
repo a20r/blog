@@ -21,6 +21,19 @@ export default function (eleventyConfig) {
 
   eleventyConfig.addFilter("pad2", (n) => String(n).padStart(2, "0"));
 
+  // Posts declare topics via `topics: [a, b]` front matter (a separate key
+  // from Eleventy's `tags`, which the posts/ directory data uses to build
+  // the posts collection). This maps topic -> posts for the /tags/ pages.
+  eleventyConfig.addCollection("byTopic", (collectionApi) => {
+    const map = {};
+    for (const post of collectionApi.getFilteredByTag("posts")) {
+      for (const topic of post.data.topics || []) {
+        (map[topic] ??= []).push(post);
+      }
+    }
+    return map;
+  });
+
   eleventyConfig.addFilter("readingTime", (content) => {
     const words = String(content)
       .replace(/<[^>]*>/g, " ")

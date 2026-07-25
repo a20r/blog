@@ -1,25 +1,29 @@
 ---
 layout: layouts/base.njk
+pagination:
+  data: collections.byTopic
+  size: 1
+  alias: topic
+permalink: "/tags/{{ topic | slugify }}/"
+eleventyComputed:
+  title: "#{{ topic }}"
 ---
-<section class="intro">
-  <h1 class="intro-title">unrelated<br><em>rambles</em><span class="intro-dot">.</span></h1>
-  <p class="intro-tagline">{{ site.description }}</p>
+<section class="tag-header">
+  <p class="intro-tagline">posts tagged</p>
+  <h1 class="tag-title">#{{ topic }}</h1>
 </section>
 
 <section class="post-list">
-  {%- for post in collections.posts | reverse %}
+  {%- for post in collections.byTopic[topic] | reverse %}
   <a class="post-item" href="{{ post.url }}">
     <span class="post-num">{{ (loop.length - loop.index0) | pad2 }}</span>
     <span class="post-item-main">
       <h2 class="post-item-title">{{ post.data.title }}</h2>
       <time class="post-item-date" datetime="{{ post.date | isoDate }}">{{ post.date | readableDate }}</time>
-      {%- if post.data.topics %}
-      <span class="item-topics">
-        {%- for topic in post.data.topics %}<span class="tag-chip">#{{ topic }}</span>{% endfor %}
-      </span>
-      {%- endif %}
     </span>
     <span class="post-arrow" aria-hidden="true">&rarr;</span>
   </a>
   {%- endfor %}
 </section>
+
+<p class="back-link"><a href="/">&larr; all rambles</a></p>

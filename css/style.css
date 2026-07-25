@@ -287,6 +287,59 @@ main,
   transform: translateX(6px);
 }
 
+/* Topic chips --------------------------------------------------------------*/
+
+.item-topics,
+.post-topics {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.item-topics {
+  display: flex;
+  margin-top: 0.6rem;
+}
+
+.tag-chip {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  padding: 0.12rem 0.6rem;
+  text-decoration: none;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+a.tag-chip:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+/* Tag pages ----------------------------------------------------------------*/
+
+.tag-header {
+  padding: 4rem 0 2.5rem;
+}
+
+.tag-header .intro-tagline {
+  margin: 0 0 0.75rem;
+}
+
+.tag-title {
+  margin: 0;
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 500;
+  font-size: clamp(2.4rem, 8vw, 4rem);
+  letter-spacing: -0.03em;
+  line-height: 1;
+  color: var(--accent);
+}
+
 /* Post -------------------------------------------------------------------- */
 
 .post {

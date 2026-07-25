@@ -6,6 +6,12 @@ layout: layouts/base.njk
     <time datetime="{{ page.date | isoDate }}">{{ page.date | readableDate }}</time>
     <span class="meta-sep">·</span>
     <span>{{ content | readingTime }} min read</span>
+    {%- if topics %}
+    <span class="meta-sep">·</span>
+    <span class="post-topics">
+      {%- for topic in topics %}<a class="tag-chip" href="/tags/{{ topic | slugify }}/">#{{ topic }}</a>{% endfor %}
+    </span>
+    {%- endif %}
   </div>
   {{ content | safe }}
   <p class="back-link"><a href="/">&larr; all rambles</a></p>
