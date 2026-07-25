@@ -12,14 +12,17 @@ Drop a markdown file into `posts/` — that's it. No front matter needed:
 
 Open a PR with the new file; CI builds the site as a check. When the PR merges to `main`, the site rebuilds and deploys automatically.
 
-Front matter is optional but supported if you want to override things:
+Front matter is optional but supported if you want to override things or tag the post:
 
 ```markdown
 ---
 title: A custom title
 date: 2026-01-01
+topics: [claude, shenanigans]
 ---
 ```
+
+`topics` are shown as chips on the home page and on the post, and each topic gets its own listing page at `/tags/<topic>/`.
 
 ## Local development
 
