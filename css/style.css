@@ -19,6 +19,13 @@
   --code-bg: #f2ecdd;
   --glow: rgba(232, 73, 15, 0.07);
 
+  --tok-comment: #877d63;
+  --tok-keyword: #c23c0d;
+  --tok-string: #5d7a2e;
+  --tok-function: #8a4a86;
+  --tok-number: #a0561f;
+  --tok-builtin: #2f7e77;
+
   --serif: "Fraunces", Georgia, "Times New Roman", serif;
   --sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     sans-serif;
@@ -37,6 +44,13 @@
     --rule: #3a3529;
     --code-bg: #221f18;
     --glow: rgba(255, 138, 76, 0.06);
+
+    --tok-comment: #857b64;
+    --tok-keyword: #ff8a4c;
+    --tok-string: #b5c96a;
+    --tok-function: #d495cd;
+    --tok-number: #e0a458;
+    --tok-builtin: #6fc7bd;
   }
 }
 
@@ -51,6 +65,13 @@
   --rule: #3a3529;
   --code-bg: #221f18;
   --glow: rgba(255, 138, 76, 0.06);
+
+  --tok-comment: #857b64;
+  --tok-keyword: #ff8a4c;
+  --tok-string: #b5c96a;
+  --tok-function: #d495cd;
+  --tok-number: #e0a458;
+  --tok-builtin: #6fc7bd;
 }
 
 * {
@@ -445,6 +466,62 @@ a.tag-chip:hover {
 .post pre code {
   background: none;
   padding: 0;
+}
+
+/* Syntax highlighting -------------------------------------------------------
+   Prism token classes emitted at build time by the Eleventy syntax highlight
+   plugin, colored with theme variables so both modes stay on-palette. */
+
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+  color: var(--tok-comment);
+  font-style: italic;
+}
+
+.token.keyword,
+.token.tag,
+.token.important,
+.token.atrule {
+  color: var(--tok-keyword);
+}
+
+.token.string,
+.token.char,
+.token.attr-value,
+.token.regex,
+.token.inserted {
+  color: var(--tok-string);
+}
+
+.token.function,
+.token.class-name,
+.token.selector,
+.token.attr-name,
+.token.deleted {
+  color: var(--tok-function);
+}
+
+.token.number,
+.token.boolean,
+.token.constant,
+.token.symbol,
+.token.entity,
+.token.url {
+  color: var(--tok-number);
+}
+
+.token.builtin,
+.token.property,
+.token.variable,
+.token.namespace {
+  color: var(--tok-builtin);
+}
+
+.token.operator,
+.token.punctuation {
+  color: var(--text-muted);
 }
 
 .post img {
