@@ -48,20 +48,26 @@ nodes would take a decade to rebuild.
 
 A short tour of the neighborhood this project models. Semiconductor lasers
 breathe neon, which is a byproduct of Soviet-era steel-mill air separation,
-and until February 2022 roughly half of the world's chip-grade purification
-ran through two Ukrainian companies — one of them in Mariupol. Gallium is not
+and until February 2022 [roughly half of the world's chip-grade purification
+ran through two Ukrainian companies](https://www.cnbc.com/2022/03/12/russias-attack-on-ukraine-halts-half-of-worlds-neon-output-for-chips.html)
+— one of them in Mariupol. Gallium is not
 rare at all; it's sitting in bauxite tailings on every continent. It's just
-that ~98% of *refining* happens in China, because everyone else stopped
-bothering — which is how a December 2024 export ban could turn a geological
+that [~98% of *refining* happens in China](https://www.csis.org/analysis/beyond-rare-earths-chinas-growing-threat-gallium-supply-chains),
+because everyone else stopped
+bothering — which is how a [December 2024 export ban](https://nam.org/china-bans-export-of-some-critical-minerals-to-u-s-32784/)
+could turn a geological
 non-issue into a supply crisis. The chokepoint is a license regime, not the
 Earth's crust. Every advanced chip passes through extreme-ultraviolet
 lithography machines that exactly one company, ASML, knows how to build, a
 few dozen a year — and underneath ASML sits Carl Zeiss SMT, whose mirrors are
-polished to sub-nanometer figure by three decades of institutional knowledge
-that exists in one place. A monopoly *under* the monopoly. In 1993, about 60%
-of the world's epoxy molding compound for chip packaging came from a single
-Sumitomo plant, right up until it exploded. And roughly 90% of leading-edge
-logic fabrication sits on one island, which also hosts the shipping strait,
+[polished to sub-nanometer figure](https://www.zeiss.com/semiconductor-manufacturing-technology/smt-magazine/euv-lithography-as-an-european-joint-project.html)
+by three decades of institutional knowledge
+that exists in one place. A monopoly *under* the monopoly. In 1993, about
+[60% of the world's epoxy molding compound for chip packaging came from a
+single Sumitomo plant](https://www.upi.com/Archives/1993/07/22/Computer-memory-chip-prices-stabilize-after-factory-fire-sends-them-soaring/7204743313600/),
+right up until it exploded. And [roughly 90% of leading-edge
+logic fabrication sits on one island](https://theconversation.com/how-taiwan-came-to-dominate-the-global-chip-industry-276939),
+which also hosts the shipping strait,
 which means one bad month in one place hits fabrication *and* transport as a
 single correlated event.
 
@@ -132,7 +138,9 @@ respect to every capacity and every stockpile in the net
 (`core/gradients.py`). Investing along that vector is gradient ascent on
 resilience. The magnitudes are only as good as the calibration — the frozen
 numbers live in `validation/baseline_outputs.txt`, and the signs and
-rankings are the sturdy part — but two results deserve to be told straight.
+rankings are the sturdy part (sturdy so far by argument, not audit: the
+sensitivity sweep showing the rankings survive parameter perturbation is
+still owed) — but two results deserve to be told straight.
 
 First, the **negative shipping gradient**: −2.68 in the single-scenario run,
 −1.63 averaged over the disruption prior. After a shock destroys fabrication
