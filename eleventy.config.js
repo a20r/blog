@@ -3,6 +3,7 @@ import syntaxHighlight from "@11ty/eleventy-plugin-syntaxhighlight";
 
 export default function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy("css");
+  eleventyConfig.addPassthroughCopy("js");
   eleventyConfig.addPlugin(HtmlBasePlugin);
   eleventyConfig.addPlugin(syntaxHighlight);
 
