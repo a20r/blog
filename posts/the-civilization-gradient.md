@@ -138,9 +138,13 @@ respect to every capacity and every stockpile in the net
 (`core/gradients.py`). Investing along that vector is gradient ascent on
 resilience. The magnitudes are only as good as the calibration — the frozen
 numbers live in `validation/baseline_outputs.txt`, and the signs and
-rankings are the sturdy part (sturdy so far by argument, not audit: the
-sensitivity sweep showing the rankings survive parameter perturbation is
-still owed) — but two results deserve to be told straight.
+rankings are the sturdy part (no longer just by argument: a 500-draw
+perturbation sweep across the map's confidence-C fog keeps the negative
+signs in ~87–95% of the draws the integrator can handle — worst-case
+floors ~77–94% if every draw it can't handle were counted as a flip — and
+in 100% under pure disruption-prior fog, while fine-grained rank order
+dissolves; the repo's `SENSITIVITY.md` holds the tables) — but two
+results deserve to be told straight.
 
 First, the **negative shipping gradient**: −2.68 in the single-scenario run,
 −1.63 averaged over the disruption prior. After a shock destroys fabrication
@@ -151,13 +155,18 @@ When the means of production are damaged, the correct policy is to hold the
 product back from consumers and feed it to the machines that make machines —
 and that fell out of a derivative.
 
-Second, the **boneyard result**: the highest-value stockpile in the entire
-net is worn-out tools, at 0.85, beating *working* spare tools at 0.70. A
-refurbishable boneyard is worth more than pristine inventory, because the
-refurbishment path converts junk back into capacity at a fraction of the
-cost of building new. The US Air Force figured this out decades ago in the
-Arizona desert. The semiconductor industry, which scraps old fab equipment
-routinely, is quietly shredding resilience capital.
+Second, the **boneyard result**: worn-out tools are among the most
+valuable stockpiles in the entire net — 0.85 against 0.70 for *working*
+spare tools in the single-scenario run. The sensitivity sweep took the
+stronger version of this claim away from me: average over the disruption
+prior and the two flip (0.43 vs 0.51), and under parameter fog worn-on-top
+survives only in a minority of draws. What survives every regime is that a
+refurbishable boneyard is *comparable in value* to pristine inventory,
+because the refurbishment path converts junk back into capacity at a
+fraction of the cost of building new — still a strong claim about an
+industry that scraps old fab equipment routinely, and quietly shreds
+resilience capital doing it. The US Air Force figured this out decades ago
+in the Arizona desert.
 
 <section class="civgrad-demo" id="demo">
 <h2 class="demo-title">The model, live</h2>
@@ -281,6 +290,17 @@ wrong; the real economy reallocated its way out in months. But a formalism
 that can *express* collapse-as-attractor is exactly what a project with
 this name requires. It just needs the escape mechanism reality has, and
 that gap is filed as a failing test with an open issue — not a footnote.
+(Two things now sit on the other side of that issue. The sweep says the
+miss is structural: ~9 of 10 nearby parameterizations miss it too, so no
+citation will fix it. And an experiment says the diagnosis was right:
+teach the model to see a processing margin — fat input saturation beside a
+starved output, the formal shadow of the 1993 epoxy price spike — and let
+that margin restore destroyed capacity toward baseline, and the attractor
+dissolves: recovery in about ten months, the passing replays untouched.
+The same experiment's cautionary arm: rationing the contested stock by the
+gradient itself makes the collapse *worse*, because a gradient computed on
+one catastrophe is the wrong price list for another. `PRICE_EXPERIMENT.md`
+in the repo has both.)
 
 Which yields the caveat that belongs in bold on everything this model
 outputs. It has no price-mediated allocation, no substitution, no
