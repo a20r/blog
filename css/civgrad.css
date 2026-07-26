@@ -1,0 +1,411 @@
+/* ---------------------------------------------------------------------------
+   civgrad demo + scorecard widgets, ported from a20r/civgrad site/css and
+   restyled on the blog's theme variables so both modes stay on-palette.
+   Loaded only by the civilization-gradient post (extraCss front matter).
+--------------------------------------------------------------------------- */
+
+:root {
+  --cg-pass: #2f7d4f;
+  --cg-fail: #b3402f;
+  --cg-oos: var(--text-muted);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --cg-pass: #6fbf8f;
+    --cg-fail: #e08573;
+  }
+}
+
+:root[data-theme="dark"] {
+  --cg-pass: #6fbf8f;
+  --cg-fail: #e08573;
+}
+
+/* Break the widgets out of the 46rem prose column on wide screens. */
+.civgrad-demo,
+.civgrad-scorecard {
+  width: min(62rem, calc(100vw - 2rem));
+  margin: 3rem 0 3rem 50%;
+  transform: translateX(-50%);
+  padding: 1.5rem 1.25rem;
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+
+.civgrad-demo .demo-title {
+  margin-top: 0;
+}
+
+.civgrad-demo .demo-sub {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+/* ---------- diagram ---------- */
+
+.net-wrap {
+  position: relative;
+}
+
+#net {
+  width: 100%;
+  height: auto;
+  display: block;
+  color: var(--text-muted); /* arrowheads + hatch use currentColor */
+}
+
+#net text {
+  font: 11.5px var(--mono);
+  fill: var(--text);
+}
+
+#net .place circle {
+  fill: var(--bg);
+  stroke: var(--text-muted);
+  stroke-width: 1.4;
+}
+
+#net .trans rect {
+  fill: var(--text);
+  rx: 2;
+  cursor: pointer;
+}
+
+#net .trans:hover rect,
+#net .trans.selected rect {
+  fill: var(--accent);
+}
+
+#net .trans.selected rect {
+  stroke: var(--accent);
+  stroke-width: 5;
+  stroke-opacity: 0.25;
+}
+
+#net .arc {
+  stroke: var(--text-muted);
+  stroke-width: 1.2;
+  fill: none;
+  marker-end: url(#arrow);
+  opacity: 0.75;
+}
+
+#net .arc.read {
+  stroke-dasharray: 4 3;
+}
+
+#net .arc.ghost {
+  stroke-dasharray: 2 4;
+  opacity: 0.5;
+}
+
+#net .fog {
+  filter: url(#fogblur);
+  cursor: help;
+}
+
+#net .fog rect,
+#net .fog circle {
+  fill: url(#hatch);
+  stroke: var(--text-muted);
+  stroke-dasharray: 5 4;
+  stroke-width: 1.2;
+}
+
+#net .fog text {
+  opacity: 0.75;
+}
+
+#net .lane-label {
+  fill: var(--text-muted);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+#tooltip {
+  position: absolute;
+  max-width: 20rem;
+  padding: 0.55rem 0.7rem;
+  z-index: 3;
+  background: var(--text);
+  color: var(--bg);
+  border-radius: 8px;
+  font-size: 0.8rem;
+  line-height: 1.45;
+  pointer-events: none;
+}
+
+#tooltip .t-name {
+  color: var(--accent);
+  font-weight: 700;
+  font-family: var(--mono);
+}
+
+/* ---------- controls ---------- */
+
+.civgrad-demo .controls {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1.25rem;
+}
+
+.civgrad-demo .presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.civgrad-demo .presets button {
+  font: 600 0.82rem/1 var(--mono);
+  padding: 0.5rem 0.7rem;
+  border-radius: 999px;
+  border: 1px solid var(--rule);
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.civgrad-demo .presets button:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.civgrad-demo .presets button.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--bg);
+}
+
+.civgrad-demo .sliders {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+  gap: 0.9rem 1.4rem;
+}
+
+.civgrad-demo .sliders label {
+  font-size: 0.8rem;
+  font-family: var(--mono);
+  color: var(--text-muted);
+  display: block;
+}
+
+.civgrad-demo .sliders .val {
+  color: var(--text);
+  font-weight: 700;
+  float: right;
+}
+
+.civgrad-demo .sliders input[type="range"] {
+  width: 100%;
+  accent-color: var(--accent);
+  margin: 0.35rem 0 0;
+}
+
+.civgrad-demo .sliders select {
+  width: 100%;
+  margin-top: 0.35rem;
+  padding: 0.35rem;
+  border-radius: 6px;
+  border: 1px solid var(--rule);
+  background: var(--bg-raised);
+  color: var(--text);
+  font: 0.85rem var(--mono);
+}
+
+.civgrad-demo .sliders small {
+  display: block;
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  margin-top: 0.15rem;
+}
+
+.civgrad-demo .readouts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.civgrad-demo .readout {
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  padding: 0.45rem 0.7rem;
+  font-family: var(--mono);
+  font-size: 0.85rem;
+}
+
+.civgrad-demo .readout .k {
+  color: var(--text-muted);
+  margin-right: 0.55rem;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.civgrad-demo .readout .v {
+  font-weight: 700;
+}
+
+.civgrad-demo .readout .v.bad {
+  color: var(--cg-fail);
+}
+
+.civgrad-demo .readout .v.good {
+  color: var(--cg-pass);
+}
+
+.civgrad-demo .history-line {
+  color: var(--text-muted);
+  font-size: 0.88rem;
+  font-style: italic;
+  margin: 0;
+}
+
+/* ---------- chart ---------- */
+
+.civgrad-demo .charts {
+  margin-top: 1rem;
+}
+
+#chart {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+#chart .axis {
+  stroke: var(--rule);
+  stroke-width: 1;
+}
+
+#chart .gridlabel {
+  font: 10.5px var(--mono);
+  fill: var(--text-muted);
+}
+
+#chart .ref {
+  stroke: var(--text-muted);
+  stroke-width: 1;
+  stroke-dasharray: 2 4;
+}
+
+#chart .thresh {
+  stroke: var(--cg-fail);
+  stroke-width: 1;
+  stroke-dasharray: 5 4;
+  opacity: 0.6;
+}
+
+#chart .shock {
+  stroke: var(--accent);
+  stroke-width: 1;
+  stroke-dasharray: 2 3;
+  opacity: 0.8;
+}
+
+#chart .fab {
+  stroke: var(--accent);
+  stroke-width: 2.2;
+  fill: none;
+}
+
+#chart .ship {
+  stroke: var(--text-muted);
+  stroke-width: 1.6;
+  fill: none;
+}
+
+.civgrad-demo .chart-note {
+  color: var(--text-muted);
+  font-size: 0.82rem;
+}
+
+.civgrad-demo .swatch {
+  display: inline-block;
+  width: 1.2em;
+  height: 0.55em;
+  border-radius: 2px;
+  vertical-align: baseline;
+}
+
+.civgrad-demo .swatch.accent {
+  background: var(--accent);
+}
+
+.civgrad-demo .swatch.muted {
+  background: var(--text-muted);
+}
+
+/* ---------- scorecard ---------- */
+
+.civgrad-scorecard .table-wrap {
+  overflow-x: auto;
+}
+
+.civgrad-scorecard table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 0.85rem;
+}
+
+.civgrad-scorecard th,
+.civgrad-scorecard td {
+  text-align: left;
+  padding: 0.5rem 0.6rem;
+  border-bottom: 1px solid var(--rule);
+  vertical-align: top;
+}
+
+.civgrad-scorecard th {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+}
+
+.civgrad-scorecard td.num {
+  text-align: right;
+  font-family: var(--mono);
+  white-space: nowrap;
+}
+
+.civgrad-scorecard .status {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  white-space: nowrap;
+}
+
+.civgrad-scorecard .status.pass {
+  color: var(--cg-pass);
+}
+
+.civgrad-scorecard .status.xfail {
+  color: var(--cg-fail);
+}
+
+.civgrad-scorecard .status.oos {
+  color: var(--cg-oos);
+}
+
+.civgrad-scorecard details {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+}
+
+.civgrad-scorecard summary {
+  cursor: pointer;
+  color: var(--accent);
+}
+
+@media (max-width: 640px) {
+  .civgrad-demo,
+  .civgrad-scorecard {
+    border-radius: 0;
+    border-left: 0;
+    border-right: 0;
+    width: 100vw;
+  }
+}
