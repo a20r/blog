@@ -529,6 +529,16 @@ a.tag-chip:hover {
   border-radius: 8px;
 }
 
+/* Build-time MathJax output: display math scrolls inside its own box
+   instead of stretching the page horizontally. */
+.post mjx-container[display="true"] {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0.1rem 0;
+}
+
 .post hr {
   border: none;
   text-align: center;
