@@ -5,6 +5,7 @@ import mathjax3 from "markdown-it-mathjax3";
 export default function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy("css");
   eleventyConfig.addPassthroughCopy("js");
+  eleventyConfig.addPassthroughCopy("images");
   eleventyConfig.addPlugin(HtmlBasePlugin);
   eleventyConfig.addPlugin(syntaxHighlight);
   // $...$ / $$...$$ rendered to inline SVG at build time — no client JS.
