@@ -170,5 +170,60 @@ lot on a basemap. If you want to try it without running anything, here's [the
 CSV from my run](/images/sql-heatmaps/s2_heatmap.csv) — drop it straight into
 the demo.
 
+# Zooming out is integer math
+
+There's a bonus hiding in the fact that cell IDs are *hierarchical* integers.
+The 64 bits of an S2 cell ID are laid out as: 3 bits picking the cube face,
+then two bits per level walking down the quadtree (which of the four children
+you descended into), then a single `1` bit marking where the path ends, then
+zeros. So a cell's ancestor at any coarser level is a pure bit operation on the
+ID — truncate the path, move the marker:
+
+```sql
+DECLARE coarse_level INT64 DEFAULT 13;
+
+SELECT
+  CAST((cell & -(1 << (2 * (30 - coarse_level))))
+         | (1 << (2 * (30 - coarse_level)))
+       AS STRING FORMAT 'xxxxxxxxxxxxxxxx') AS s2_token,
+  SUM(total) / POW(4, 17 - coarse_level) AS avg_overlap
+FROM
+  heatmap_17
+GROUP BY
+  s2_token
+```
+
+Here `heatmap_17` is the first query's output materialized with the raw `INT64`
+cell kept alongside the token. `1 << (2 * (30 - coarse_level))` is the marker
+bit for the target level; AND-ing with its negation zeroes out every path bit
+below it (two's complement: `-x` is all ones from `x`'s bit upward), and the OR
+plants the new marker. Every level-17 cell maps to exactly one level-13
+ancestor, so the `GROUP BY` folds each 256-cell block into one row — the
+expensive rasterization never runs again. This works identically on the signed
+`INT64`s BigQuery stores, because bitwise ops don't care about the sign
+interpretation.
+
+One honest subtlety: the statistic changes meaning. Dividing the sum by
+$4^{17-\ell}$ (the number of level-17 descendants) gives the *mean overlap
+depth* over the coarse cell — a box-filtered downsample of the fine heatmap,
+the same thing graphics people call a mipmap. It is *not* the count of distinct
+polygons touching the coarse cell; that isn't recoverable from counts alone,
+and if you need it, re-run the original query at the coarser level. For a
+heatmap, though, the mean is exactly what you want: intensities stay comparable
+as you zoom. (Cells with zero overlap are simply absent from `heatmap_17`, and
+absent rows contribute nothing to the sum — which is the correct zero.)
+
+I ran this against my emulated results too — same SQLite database, polygons
+never touched again — folding the 24,060 level-17 rows down to 1,618 cells at
+level 15 and 127 at level 13:
+
+![The same heatmap re-aggregated to levels 15 and 13 with bit math alone](/images/sql-heatmaps/s2-heatmap-pyramid.png)
+
+Precompute a few of these and you have a zoomable heatmap pyramid: pick the
+level by map zoom, serve the matching token table, and the colors mean the same
+thing at every altitude. (You can also see the S2 grid getting visibly skewed
+at level 13 — the projected cube-face lattice again.)
+
 That's the whole trick: one array function to rasterize, one `GROUP BY` to
-count, one cast to make the result a map.
+count, one cast to make the result a map — and every zoom level after that is a
+bit mask and a `SUM`.
