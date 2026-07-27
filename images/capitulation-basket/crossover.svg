@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="470" viewBox="0 0 960 470" font-family="ui-monospace,Menlo,monospace">
+  <rect width="960" height="470" fill="#0b1220"/>
+  <g transform="translate(70,40)">
+    <rect x="0" y="0" width="830" height="340" fill="#0e1628" stroke="#22314f"/>
+    <!-- x: 80'..94' over 830 => 59.3px/min. crossover at 90' => x=593 -->
+    <!-- regions -->
+    <rect x="0" y="0" width="593" height="340" fill="#00f0ff" opacity="0.045"/>
+    <rect x="593" y="0" width="237" height="340" fill="#ff4fa3" opacity="0.055"/>
+    <text x="296" y="24" fill="#57e6ff" font-size="13.5" text-anchor="middle">HOLD &#8212; carry outruns hazard</text>
+    <text x="296" y="42" fill="#3f5b7a" font-size="12" text-anchor="middle">M&#8242;(t) &gt; &#955;(t)&#183;(M(t)+L)</text>
+    <text x="716" y="24" fill="#ff7fbf" font-size="13.5" text-anchor="middle">LOCK NOW</text>
+    <text x="716" y="42" fill="#7a4b63" font-size="12" text-anchor="middle">carry no longer pays</text>
+    <!-- gridlines / ticks -->
+    <g stroke="#1c2a47"><line x1="119" y1="0" x2="119" y2="340"/><line x1="237" y1="0" x2="237" y2="340"/><line x1="356" y1="0" x2="356" y2="340"/><line x1="474" y1="0" x2="474" y2="340"/><line x1="593" y1="0" x2="593" y2="340"/><line x1="711" y1="0" x2="711" y2="340"/></g>
+    <g fill="#5b6b8c" font-size="12" text-anchor="middle">
+      <text x="0" y="360">80&#8242;</text><text x="119" y="360">82&#8242;</text><text x="237" y="360">84&#8242;</text>
+      <text x="356" y="360">86&#8242;</text><text x="474" y="360">88&#8242;</text><text x="593" y="360">90&#8242;</text>
+      <text x="711" y="360">92&#8242;</text><text x="830" y="360">94&#8242;</text>
+    </g>
+    <text x="-14" y="170" fill="#5b6b8c" font-size="12" text-anchor="end" transform="rotate(-90,-14,170)">$/min</text>
+
+    <!-- M'(t): carry accrual, declining as the curve flattens: from ~2.1$/min to ~0.4 ; y(v)=310-110*v -->
+    <path d="M 0 85 C 200 100, 400 130, 593 174 C 700 199, 780 222, 830 240"
+          fill="none" stroke="#00f0ff" stroke-width="3"/>
+    <text x="120" y="72" fill="#00f0ff" font-size="13.5">M&#8242;(t) &#8212; lock-margin accrual</text>
+
+    <!-- hazard cost line: rising gently from ~0.95 to ~1.45 -->
+    <path d="M 0 206 C 200 202, 400 190, 593 172 C 700 162, 780 155, 830 151"
+          fill="none" stroke="#ff4fa3" stroke-width="3"/>
+    <text x="300" y="250" fill="#ff4fa3" font-size="13.5">&#955;(t)&#183;(M(t)+L) &#8212; hazard-weighted exposure cost</text>
+    <text x="300" y="267" fill="#7a4b63" font-size="11.5">rises: &#955; climbs past 87&#8242; and M itself grows</text>
+
+    <!-- crossover point ~ (593, ~172) -->
+    <circle cx="593" cy="174" r="7" fill="none" stroke="#ffd166" stroke-width="2.5"/>
+    <circle cx="593" cy="174" r="2.5" fill="#ffd166"/>
+    <line x1="593" y1="174" x2="593" y2="340" stroke="#ffd166" stroke-width="1.2" stroke-dasharray="4 4"/>
+    <text x="593" y="-10" fill="#ffd166" font-size="13.5" text-anchor="middle">crossover: M&#8242; = &#955;(M+L) &#8776; 89&#8242;&#8211;91&#8242;</text>
+
+    <!-- annotation: first positive lock -->
+    <line x1="180" y1="0" x2="180" y2="340" stroke="#3b4e75" stroke-width="1.2" stroke-dasharray="3 5"/>
+    <text x="186" y="330" fill="#5b6b8c" font-size="12">M crosses 0 here &#8212; locking now discards the steep carry</text>
+  </g>
+  <text x="480" y="450" fill="#5b6b8c" font-size="12" text-anchor="middle">convert when margin growth stops beating the hazard-weighted cost &#8212; not at the first positive lock</text>
+</svg>
