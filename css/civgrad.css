@@ -43,6 +43,42 @@
   font-size: 0.95rem;
 }
 
+/* ---------- magazine callout ---------- */
+
+.cg-callout {
+  margin: 2.75rem 0;
+  padding: 1.6rem 0 1.5rem;
+  border-top: 2px solid var(--accent);
+  border-bottom: 1px solid var(--rule);
+}
+
+.cg-callout .kicker {
+  margin: 0 0 0.9rem;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--accent);
+}
+
+.cg-callout .pull {
+  margin: 0 0 1rem;
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 500;
+  font-size: 1.55rem;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+
+.cg-callout .note {
+  margin: 0;
+  font-size: 0.92rem;
+  line-height: 1.7;
+  color: var(--text-muted);
+}
+
 /* ---------- static methodology figures ---------- */
 
 .cg-fig {

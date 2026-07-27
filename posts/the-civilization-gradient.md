@@ -38,6 +38,18 @@ the island geometry actually raises: in a closed, hyperconnected economy,
 *where precisely is it brittle* — and if you had one marginal dollar of
 resilience to spend, where should it go?
 
+<aside class="cg-callout">
+<p class="kicker">what this essay is</p>
+<p class="pull">One marginal dollar of resilience to spend — where should
+it go?</p>
+<p class="note">An exploration, not a thesis. There was no destination
+when this started: a question wandered in during a book chapter and got
+taken seriously. What follows is a small formal model of one
+supply-chain slice — built in the open, running live in this page,
+graded against four historical shocks with its misses kept in red.
+Where it ends up was not known at the start. That is the point.</p>
+</aside>
+
 ## 2. Brittleness is not depletion
 
 The collapse conversation fixates on depletion — peak this, running out of
@@ -223,7 +235,8 @@ this formalism and not a flow network; §5 adds the epistemic layer — fog,
 drawn honestly; §6 reads the gradient and its two surprises, with the
 model running live; §7 makes recovery emergent and confesses the five
 failures that shaped it; §8 scores the machine against history, misses
-included; §9 says what all of this is and isn't.
+included; §9 steps back to what the way of looking taught; §10 says what
+all of this is and isn't.
 
 ## 4. Why Petri nets
 
@@ -467,7 +480,43 @@ checked against it in CI.</p>
 <p id="xfail-reason"></p></details>
 </section>
 
-## 9. What this is and isn't
+## 9. What the way of looking taught
+
+There is a version of this essay that is all prose — the chokepoint tour
+of §2 stretched to five thousand words, with adjectives standing where
+the numbers are. That essay would have been easier to write and
+impossible to be wrong in, and those are the same defect. The reason to
+build the machine instead is that a formalism is an instrument for
+locating your own ignorance. "Equipment manufacturing is concentrated"
+sat comfortably in the prose version for exactly as long as it took to
+draw the box — at which point the box demanded edges, the edges demanded
+a source for optics, and the Zeiss monopoly fell out of the act of
+diagramming. The fog of §5 exists as a concept because the net forced
+every unknown to have a shape and a location. You cannot label an
+ignorance you cannot draw.
+
+The second lesson is that predictions have to be allowed to die.
+Freezing the constants, registering the bands, and replaying history
+turned this from a mood into an experiment, and the education came
+almost entirely from the failures: the five instructive wrongs of §7,
+and Sumitomo missing twice in opposite directions, which located the
+model's actual boundary — no prices — with a precision no amount of
+introspection would have found. When the sensitivity audit later took
+the boneyard headline away, that was the same instrument working in the
+other direction. A method that cannot lose claims cannot be trusted to
+keep them.
+
+And the third: derivatives discipline rhetoric. The question in the
+callout up top — the marginal dollar — is unanswerable in prose; every
+op-ed answers it with the author's priors wearing a suit. Making it a
+gradient did not make the answer *true* (the magnitudes are only as good
+as the confidence-C fog they pass through), but it made the answer
+*arguable*: a vector with signs that survive an audit and rankings that
+only coarsely do. That trade — from unfalsifiable confidence to
+falsifiable structure — is why the essay looks at the world this way.
+The wandering was real, and the method is what kept it honest.
+
+## 10. What this is and isn't
 
 This is not a forecast, not a policy tool, and not a claim that collapse is
 coming. Every parameter in the map carries provenance metadata, and right
