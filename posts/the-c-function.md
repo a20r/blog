@@ -1,6 +1,7 @@
 ---
 topics: [go, programming, experiments]
 date: 2022-02-11
+summary: "Can a Go function count how many times you chain-call it? Recursive function types, a pointer smuggled through a closure, and C(c()()()()) == 4. Not useful!"
 ---
 # The C Function
 

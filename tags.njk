@@ -20,6 +20,7 @@ eleventyComputed:
     <span class="post-item-main">
       <h2 class="post-item-title">{{ post.data.title }}</h2>
       <time class="post-item-date" datetime="{{ post.date | isoDate }}">{{ post.date | readableDate }}</time>
+      {%- if post.data.series %}<span class="series-chip">{{ post.data.series }} · part {{ post.data.seriesPart }}</span>{% endif %}
     </span>
     <span class="post-arrow" aria-hidden="true">&rarr;</span>
   </a>
