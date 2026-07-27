@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="480" viewBox="0 0 960 480" font-family="ui-monospace,Menlo,monospace">
+  <rect width="960" height="480" fill="#0b1220"/>
+  <!-- plot area -->
+  <g transform="translate(70,30)">
+    <rect x="0" y="0" width="830" height="380" fill="#0e1628" stroke="#22314f"/>
+    <!-- conversion window shading 80'..90' (x: 60'..95' over 830px => 23.71 px/min) -->
+    <rect x="474" y="0" width="237" height="380" fill="#00f0ff" opacity="0.06"/>
+    <text x="592" y="18" fill="#57e6ff" font-size="12" text-anchor="middle" opacity="0.9">conversion window</text>
+    <!-- gridlines + x ticks -->
+    <g stroke="#1c2a47" stroke-width="1">
+      <line x1="0" y1="95" x2="830" y2="95"/><line x1="0" y1="190" x2="830" y2="190"/><line x1="0" y1="285" x2="830" y2="285"/>
+      <line x1="118" y1="0" x2="118" y2="380"/><line x1="237" y1="0" x2="237" y2="380"/><line x1="355" y1="0" x2="355" y2="380"/>
+      <line x1="474" y1="0" x2="474" y2="380"/><line x1="592" y1="0" x2="592" y2="380"/><line x1="711" y1="0" x2="711" y2="380"/>
+    </g>
+    <!-- y axis labels: price 0..1 (y = 380 - 380*price) -->
+    <g fill="#5b6b8c" font-size="12">
+      <text x="-10" y="384" text-anchor="end">0¢</text>
+      <text x="-10" y="289" text-anchor="end">25¢</text>
+      <text x="-10" y="194" text-anchor="end">50¢</text>
+      <text x="-10" y="99" text-anchor="end">75¢</text>
+      <text x="-10" y="10" text-anchor="end">$1</text>
+    </g>
+    <g fill="#5b6b8c" font-size="12" text-anchor="middle">
+      <text x="0" y="398">60&#8242;</text><text x="118" y="398">65&#8242;</text><text x="237" y="398">70&#8242;</text>
+      <text x="355" y="398">75&#8242;</text><text x="474" y="398">80&#8242;</text><text x="592" y="398">85&#8242;</text>
+      <text x="711" y="398">90&#8242;</text><text x="830" y="398">95&#8242;</text>
+    </g>
+    <!-- score shock at 71' (x=261) -->
+    <line x1="261" y1="0" x2="261" y2="380" stroke="#ffd166" stroke-width="1.5" stroke-dasharray="5 4"/>
+    <text x="261" y="-8" fill="#ffd166" font-size="12.5" text-anchor="middle">score shock: equalizer 71&#8242;</text>
+
+    <!-- A-win (was leading): ~68c, collapses at shock to ~42c, then slow anchored bleed, late capitulation -->
+    <path d="M 0 122 L 100 118 L 200 116 L 258 114
+             L 264 224 L 320 228 L 400 236 L 474 248 L 540 262 L 600 282 L 660 306 L 711 330 L 780 352 L 830 362"
+          fill="none" stroke="#ff4fa3" stroke-width="3"/>
+    <text x="330" y="212" fill="#ff4fa3" font-size="13">a_t : invalidated win-share</text>
+    <text x="330" y="229" fill="#c96d97" font-size="11.5">anchoring &#8594; slow capitulation (&#167;10)</text>
+
+    <!-- Draw: ~24c pre-shock, jumps to ~38c, then rises with time decay to ~62c -->
+    <path d="M 0 292 L 100 290 L 200 289 L 258 288
+             L 264 240 L 340 232 L 420 220 L 474 210 L 560 192 L 640 172 L 711 156 L 780 146 L 830 140"
+          fill="none" stroke="#00f0ff" stroke-width="3"/>
+    <text x="500" y="178" fill="#00f0ff" font-size="13">d_t : draw carry while tied</text>
+
+    <!-- B-win tail: ~10c, small pop, compresses late -->
+    <path d="M 0 342 L 200 344 L 258 344 L 264 322 L 360 330 L 474 340 L 592 352 L 711 362 L 830 368"
+          fill="none" stroke="#9bffb0" stroke-width="2.5"/>
+    <text x="600" y="340" fill="#9bffb0" font-size="13">b_t : far tail compresses</text>
+
+    <!-- entry + carry annotation -->
+    <circle cx="290" cy="236" r="5" fill="#00f0ff"/>
+    <text x="300" y="252" fill="#8fd8e8" font-size="12">enter d&#8320;</text>
+    <circle cx="711" cy="156" r="5" fill="#00f0ff"/>
+    <text x="640" y="120" fill="#8fd8e8" font-size="12">convert at d&#8321;: surplus = d&#8321;&#8722;d&#8320;</text>
+    <path d="M 711 156 L 711 236 L 293 236" fill="none" stroke="#8fd8e8" stroke-width="1" stroke-dasharray="3 3"/>
+  </g>
+  <text x="70" y="470" fill="#5b6b8c" font-size="12">idealized price paths after a late equalizer: the shock, the anchored bleed, the draw carry, the basket window</text>
+</svg>
