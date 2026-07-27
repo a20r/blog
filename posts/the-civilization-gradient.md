@@ -11,8 +11,8 @@ Every number in it traces to the repo's frozen baseline.*
 
 ## 1. An island with no off-island
 
-I was in the middle of the Anasazi chapter of Jared Diamond's *Collapse* when
-the thought arrived, uninvited, about a different chapter: Easter Island. To a
+I was in the middle of the Easter Island chapter of Jared Diamond's
+*Collapse* when the thought arrived, uninvited. To a
 Rapa Nui islander, the island effectively *was* the world — a closed system
 ringed by an ocean that might as well have been vacuum. A few thousand people
 to that island is, at relative scale, a few billion people to this planet. The
@@ -334,8 +334,8 @@ unknown directions, so declare it. And an honest scorecard beats an
 impressive demo: the red Sumitomo row is the most valuable pixel on this
 site, because it's the model telling you exactly where not to trust it.
 
-This started as: a guy reads the Anasazi chapter and wonders, for a closed
-island with no off-island, which way is up. It was built in one long
+This started as: a guy reads the Easter Island chapter and wonders, for a
+closed island with no off-island, which way is up. It was built in one long
 back-and-forth with an AI (the receipts are in the footer), then hardened
 by the discipline any model deserves — frozen parameters, registered
 predictions, public misses. The gradient points somewhere. Mostly, I built
