@@ -12,6 +12,7 @@
     "@11ty/eleventy": "^3.0.0"
   },
   "dependencies": {
-    "@11ty/eleventy-plugin-syntaxhighlight": "^5.0.2"
+    "@11ty/eleventy-plugin-syntaxhighlight": "^5.0.2",
+    "markdown-it-mathjax3": "^5.2.0"
   }
 }
