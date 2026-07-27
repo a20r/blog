@@ -1,6 +1,7 @@
 ---
 topics: [sql, bigquery, s2, geospatial, kepler-gl]
 date: 2022-02-17
+summary: "Turn thousands of overlapping polygons into a heatmap with one GROUP BY: S2 cells turn geometry into integers, a hex cast turns integers into Kepler.gl tokens, and a bit mask zooms out for free."
 ---
 # Creating heatmaps from overlapping polygons with BigQuery, S2, and Kepler.gl
 

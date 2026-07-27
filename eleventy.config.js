@@ -16,6 +16,7 @@ export default function (eleventyConfig) {
   eleventyConfig.amendLibrary("md", (mdLib) => mdLib.use(mathjax3));
 
   eleventyConfig.ignores.add("README.md");
+  eleventyConfig.ignores.add("CLAUDE.md");
 
   eleventyConfig.addFilter("readableDate", (date) => {
     return new Intl.DateTimeFormat("en-US", {
