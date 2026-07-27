@@ -3,6 +3,8 @@ topics: [quant, prediction-markets, kalshi, soccer, optimal-stopping, trading]
 # Part 1 of the Kalshi basket series — timestamped before the momentum-field
 # post so it sorts as the earlier entry.
 date: 2026-07-27T09:00:00Z
+series: Kalshi basket
+seriesPart: 1
 ---
 
 # Late-Game Capitulation Basket Conversion: A Protocol for Three-Outcome Soccer Markets

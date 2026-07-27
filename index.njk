@@ -13,6 +13,7 @@ layout: layouts/base.njk
     <span class="post-item-main">
       <h2 class="post-item-title">{{ post.data.title }}</h2>
       <time class="post-item-date" datetime="{{ post.date | isoDate }}">{{ post.date | readableDate }}</time>
+      {%- if post.data.series %}<span class="series-chip">{{ post.data.series }} · part {{ post.data.seriesPart }}</span>{% endif %}
       {%- if post.data.topics %}
       <span class="item-topics">
         {%- for topic in post.data.topics %}<span class="tag-chip">#{{ topic }}</span>{% endfor %}

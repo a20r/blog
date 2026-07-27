@@ -2,6 +2,8 @@
 topics: [quant, soccer, prediction-markets, stochastic-processes, rust, wasm]
 # Part 2 of the Kalshi basket series — sorts after capitulation-basket.
 date: 2026-07-27T15:00:00Z
+series: Kalshi basket
+seriesPart: 2
 ---
 
 # A Momentum Field for Soccer: Pricing Late-Game Goal Risk with Fokker–Planck, Decision Jumps, and a 49-Parameter Learnable θ

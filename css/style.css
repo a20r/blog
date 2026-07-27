@@ -282,7 +282,7 @@ main,
 }
 
 .post-item-date {
-  display: block;
+  display: inline-block;
   margin-top: 0.45rem;
   font-family: var(--mono);
   font-size: 0.75rem;
@@ -306,6 +306,20 @@ main,
 .post-item:hover .post-arrow {
   color: var(--accent);
   transform: translateX(6px);
+}
+
+/* Series badge: marks list entries that belong to a multi-part series. */
+.series-chip {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  border-radius: 999px;
+  padding: 0.12rem 0.6rem;
+  margin-left: 0.6rem;
+  white-space: nowrap;
 }
 
 /* Topic chips --------------------------------------------------------------*/
