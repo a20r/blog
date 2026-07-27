@@ -6,9 +6,10 @@ summary: "The living essay of the civgrad project: model a civilization's supply
 # The civilization gradient
 
 *The living essay of the [civgrad](https://github.com/a20r/civgrad) project
-(v0.2 — first full draft), moved here from the project site. Versioned like
-the methodology: see `essay/VERSION` and `essay/CHANGELOG.md` in the repo.
-Every number in it traces to the repo's frozen baseline.*
+(v0.3 — audited numbers and the policy section), moved here from the project
+site. Versioned like the methodology: see `essay/VERSION` and
+`essay/CHANGELOG.md` in the repo. Every number in it traces to the repo's
+frozen baseline or its committed audits.*
 
 ## 1. An island with no off-island
 
@@ -236,8 +237,9 @@ this formalism and not a flow network; §5 adds the epistemic layer — fog,
 drawn honestly; §6 reads the gradient and its two surprises, with the
 model running live; §7 makes recovery emergent and confesses the five
 failures that shaped it; §8 scores the machine against history, misses
-included; §9 steps back to what the way of looking taught; §10 says what
-all of this is and isn't.
+included; §9 cashes the gradient out into an actionable conclusion; §10
+steps back to what the way of looking taught; §11 says what all of this is
+and isn't.
 
 ## 4. Why Petri nets
 
@@ -298,14 +300,16 @@ becomes a vector you can compute: the derivative of disrupted throughput with
 respect to every capacity and every stockpile in the net
 (`core/gradients.py`). Investing along that vector is gradient ascent on
 resilience. The magnitudes are only as good as the calibration — the frozen
-numbers live in `validation/baseline_outputs.txt`, and the signs and
-rankings are the sturdy part (no longer just by argument: a 500-draw
-perturbation sweep across the map's confidence-C fog keeps the negative
-signs in ~87–95% of the draws the integrator can handle — worst-case
-floors ~77–94% if every draw it can't handle were counted as a flip — and
-in 100% under pure disruption-prior fog, while fine-grained rank order
-dissolves; the repo's `SENSITIVITY.md` holds the tables) — but two
-results deserve to be told straight.
+numbers live in `validation/baseline_outputs.txt`, and "trust the signs and
+rankings, distrust the magnitudes" is no longer just an argument: a
+500-draw perturbation sweep that lets every confidence-C parameter be
+wrong by a factor of two keeps the two big negative signs in 85–92% of
+draws (100% under pure disruption-prior fog), and keeps the top of the
+ranking inside the production/equipment complex in 91–99% of draws — while
+*which* node leads is fog-conditional and fine-grained rank order
+dissolves (Kendall τ ≈ 0.5); the repo's
+[`SENSITIVITY.md`](https://github.com/a20r/civgrad/blob/main/SENSITIVITY.md)
+holds the tables — but two results deserve to be told straight.
 
 First, the **negative shipping gradient**: −2.68 in the single-scenario run,
 −1.63 averaged over the disruption prior. After a shock destroys fabrication
@@ -321,8 +325,8 @@ valuable stockpiles in the entire net — 0.85 against 0.70 for *working*
 spare tools in the single-scenario run. The sensitivity sweep took the
 stronger version of this claim away from me: average over the disruption
 prior and the two flip (0.43 vs 0.51), and under parameter fog worn-on-top
-survives only in a minority of draws. What survives every regime is that a
-refurbishable boneyard is *comparable in value* to pristine inventory,
+survives in only about a fifth of draws. What survives every regime is that
+a refurbishable boneyard is *comparable in value* to pristine inventory,
 because the refurbishment path converts junk back into capacity at a
 fraction of the cost of building new — still a strong claim about an
 industry that scraps old fab equipment routinely, and quietly shreds
@@ -438,29 +442,35 @@ invisible (−1.7% — the wrong-observable failure). Under v1, measured at the
 right observable, it predicts a 57.6% delivery collapse that *never
 recovers* within the 72-month horizon — against a historical record of
 "price spike, brief pain, no catastrophe." The never-recovers part is the
-interesting part. During the outage the tool fleet wears down unreplaced;
-the system settles into a self-consistent depressed equilibrium; the runway
-alarm is silent because nothing is draining, and the restoration alarm is
-silent because no capacity is destroyed. The *stocks* are misallocated —
-one buffer bloated, the equipment loop starving — and reallocation between
-competing uses is a price mechanism this model does not yet have. That is
-hysteresis: the shock knocks the system into a worse basin that is locally
-stable. Uninvited, Diamond's actual thesis showed up in the mathematics —
-**collapse as attractor, not event**. For 1993 the prediction is simply
-wrong; the real economy reallocated its way out in months. But a formalism
-that can *express* collapse-as-attractor is exactly what a project with
-this name requires. It just needs the escape mechanism reality has, and
-that gap is filed as a failing test with an open issue — not a footnote.
-(Two things now sit on the other side of that issue. The sweep says the
-miss is structural: ~9 of 10 nearby parameterizations miss it too, so no
+interesting part, and tracing the trajectory shows the trap precisely: the
+outage piles up unpackaged chips upstream, and that bloated buffer *masks
+the destroyed capacity* — packaging flow returns to its pre-crisis
+reference while 8% of its capacity is still missing, so the restoration
+alarm falls silent; downstream, deliveries settle at nine-tenths of
+pre-shock with nothing draining, so the runway alarm is silent too. A
+self-consistent depressed equilibrium with every alarm quantitatively off —
+the wrong-observable failure again, this time *inside the control law*. The
+stocks are misallocated — one buffer bloated, the loop it feeds starving —
+and reallocation between competing uses is a price mechanism this model
+does not yet have. That is hysteresis: the shock knocks the system into a
+worse basin that is locally stable. Uninvited, Diamond's actual thesis
+showed up in the mathematics — **collapse as attractor, not event**. For
+1993 the prediction is simply wrong; the real economy reallocated its way
+out in months. But a formalism that can *express* collapse-as-attractor is
+exactly what a project with this name requires. It just needs the escape
+mechanism reality has, and that gap is a failing test on the scorecard —
+not a footnote.
+(Two things now sit on the other side of that test. The sweep says the
+miss is structural: 95% of 500 nearby parameterizations miss it too, so no
 citation will fix it. And an experiment says the diagnosis was right:
 teach the model to see a processing margin — fat input saturation beside a
 starved output, the formal shadow of the 1993 epoxy price spike — and let
 that margin restore destroyed capacity toward baseline, and the attractor
 dissolves: recovery in about ten months, the passing replays untouched.
 The same experiment's cautionary arm: rationing the contested stock by the
-gradient itself makes the collapse *worse*, because a gradient computed on
-one catastrophe is the wrong price list for another. `PRICE_EXPERIMENT.md`
+gradient itself drives deliveries to zero, because a gradient computed on
+one catastrophe is the wrong price list for another.
+[`PRICE_EXPERIMENT.md`](https://github.com/a20r/civgrad/blob/main/PRICE_EXPERIMENT.md)
 in the repo has both.)
 
 Which yields the caveat that belongs in bold on everything this model
@@ -481,7 +491,58 @@ checked against it in CI.</p>
 <p id="xfail-reason"></p></details>
 </section>
 
-## 9. What the way of looking taught
+## 9. The marginal dollar, cashed out
+
+The question in §1 was where one marginal dollar of resilience should go.
+Having audited what the model can and cannot license, here is its answer —
+each conclusion wearing its measured robustness, all magnitudes under the
+standing caveat, full tables in the repo's
+[`POLICY.md`](https://github.com/a20r/civgrad/blob/main/POLICY.md).
+
+**Buffers first — and they have a sizing rule.** A shock bites only when
+buffer-months of cover fall short of the integrated capacity deficit while
+supply rebuilds; that one inequality decides all six replay rows. The
+industry's post-2014 neon stockpile (~6 months) sat just above the measured
+deficit (5.7 month-equivalents) — the 2014 lesson bought almost exactly the
+right amount of insurance. So: at single-source chokepoints, hold — or at
+least require disclosure of — months-of-cover sized against plausible
+outages. It is the cheapest resilience anywhere in the model.
+
+**The marginal capacity dollar goes upstream — never to logistics.** In
+91–99% of fog draws the top-gradient capacity is fab, equipment-making, or
+a fab-input source; the equipment loop is the modal leader; shipping led in
+one draw out of a thousand. Which single node wins, the audit refuses to
+say — but industrial-policy dollars pointed at shipping, packaging, or
+consumption-side capacity are pointed the wrong way in nearly every world
+consistent with the map.
+
+**Post-shock, allocation beats capacity — and static priority lists are
+dangerous.** The negative shipping gradient (sign-stable in 85–89% of
+parameter-fog draws, 100% under prior fog) is the model deriving wartime
+rationing from topology. But the price experiment's cautionary arm shows
+that a *frozen* priority list applied in the wrong crisis drives deliveries
+to zero. Crisis authority should reallocate on current information, per
+event — or get out of the way of the prices that re-solve that problem
+daily.
+
+**Stop shredding the boneyard.** Comparable value to pristine spares, at
+scrap prices, in every fog regime — and in the tail analysis it is the
+refurbishment loop that carries the system through the Zeiss-knockout
+scenario. A decommissioned-tool registry and refurbishment capacity are
+cheap resilience buys.
+
+**Tail-risk planners buy fab redundancy.** Weight the objective toward the
+worst 30% of the prior and the ranking concentrates on the Taiwan-fab and
+gallium scenarios; no plausible buffer covers a 60-month ramp, so the tail
+answer is geographic redundancy for the decade-rebuild nodes. (The optics
+monopoly's true cost lives beyond the model's 72-month horizon — pricing it
+honestly is named future work, not a comfort.)
+
+All of it conditional on a confidence-C toy slice — and the audit's own
+conclusion is that citations, not more cleverness, are what would sharpen
+the rankings. That is exactly what the map's provenance gates are for.
+
+## 10. What the way of looking taught
 
 There is a version of this essay that is all prose — the chokepoint tour
 of §2 stretched to five thousand words, with adjectives standing where
@@ -517,12 +578,15 @@ only coarsely do. That trade — from unfalsifiable confidence to
 falsifiable structure — is why the essay looks at the world this way.
 The wandering was real, and the method is what kept it honest.
 
-## 10. What this is and isn't
+## 11. What this is and isn't
 
-This is not a forecast, not a policy tool, and not a claim that collapse is
-coming. Every parameter in the map carries provenance metadata, and right
-now every one of them is confidence-C: session estimates awaiting real
-citations. It is a lens — and the honest surprise of the project is how
+This is not a forecast, not a claim that collapse is coming, and not a
+policy tool you should point at the real world without reading its
+scorecard first — §9's conclusions come with their conditions attached for
+exactly that reason. Every parameter in the map carries provenance
+metadata; every one is still confidence-C, though the load-bearing ones now
+carry verified citations awaiting a reviewer's upgrade. It is a lens — and
+the honest surprise of the project is how
 much structure a toy lens resolves. Brittleness is concentration times
 rebuild time, not depletion. Buffer-months versus ramp-time integrals
 decide who feels a shock. Boneyards are resilience capital, and adding
