@@ -1,11 +1,14 @@
 import { HtmlBasePlugin } from "@11ty/eleventy";
 import syntaxHighlight from "@11ty/eleventy-plugin-syntaxhighlight";
+import mathjax3 from "markdown-it-mathjax3";
 
 export default function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy("css");
   eleventyConfig.addPassthroughCopy("js");
   eleventyConfig.addPlugin(HtmlBasePlugin);
   eleventyConfig.addPlugin(syntaxHighlight);
+  // $...$ / $$...$$ rendered to inline SVG at build time — no client JS.
+  eleventyConfig.amendLibrary("md", (mdLib) => mdLib.use(mathjax3));
 
   eleventyConfig.ignores.add("README.md");
 
@@ -39,6 +42,9 @@ export default function (eleventyConfig) {
 
   eleventyConfig.addFilter("readingTime", (content) => {
     const words = String(content)
+      // style/script CONTENT survives a plain tag-strip (MathJax injects a
+      // large <style> block) — drop those blocks before counting words.
+      .replace(/<(style|script)[\s\S]*?<\/\1>/gi, " ")
       .replace(/<[^>]*>/g, " ")
       .split(/\s+/)
       .filter(Boolean).length;

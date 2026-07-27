@@ -38,6 +38,18 @@ the island geometry actually raises: in a closed, hyperconnected economy,
 *where precisely is it brittle* — and if you had one marginal dollar of
 resilience to spend, where should it go?
 
+<aside class="cg-callout">
+<p class="kicker">what this essay is</p>
+<p class="pull">One marginal dollar of resilience to spend — where should
+it go?</p>
+<p class="note">An exploration, not a thesis. There was no destination
+when this started: a question wandered in during a book chapter and got
+taken seriously. What follows is a small formal model of one
+supply-chain slice — built in the open, running live in this page,
+graded against four historical shocks with its misses kept in red.
+Where it ends up was not known at the start. That is the point.</p>
+</aside>
+
 ## 2. Brittleness is not depletion
 
 The collapse conversation fixates on depletion — peak this, running out of
@@ -78,18 +90,166 @@ plus rebuild times, because what's concentrated isn't machines but learning.
 Brittleness, throughout this project, means concentration × rebuild-time ×
 co-location. Depletion barely makes the list.
 
-## 3. Why Petri nets
+## 3. The machinery, defined
+
+Before the why, the what. The whole project is one pipeline, and it is
+easier to walk each stage later if you have seen the map of it first:
+
+<figure class="cg-fig">
+<svg viewBox="0 0 1000 132" role="img" aria-label="The civgrad pipeline: map, discrete net, continuous relaxation, gradients, adaptation, scorecard">
+<defs>
+<marker id="cg-arrow-p" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0.5 L7.5,4 L0,7.5 Z" fill="currentColor" opacity="0.75"/></marker>
+</defs>
+<g class="boxes">
+<rect x="8" y="30" width="148" height="64" rx="10"/><text x="82" y="56" text-anchor="middle">the map</text><text x="82" y="74" text-anchor="middle" class="sub">values + provenance</text>
+<rect x="176" y="30" width="148" height="64" rx="10"/><text x="250" y="56" text-anchor="middle">discrete net</text><text x="250" y="74" text-anchor="middle" class="sub">SPOFs, livelock</text>
+<rect x="344" y="30" width="148" height="64" rx="10"/><text x="418" y="56" text-anchor="middle">relaxation</text><text x="418" y="74" text-anchor="middle" class="sub">saturating ODE</text>
+<rect x="512" y="30" width="148" height="64" rx="10"/><text x="586" y="56" text-anchor="middle">gradients</text><text x="586" y="74" text-anchor="middle" class="sub">where to invest</text>
+<rect x="680" y="30" width="148" height="64" rx="10"/><text x="754" y="56" text-anchor="middle">adaptation</text><text x="754" y="74" text-anchor="middle" class="sub">emergent recovery</text>
+<rect x="848" y="30" width="148" height="64" rx="10"/><text x="922" y="56" text-anchor="middle">scorecard</text><text x="922" y="74" text-anchor="middle" class="sub">misses kept red</text>
+</g>
+<g class="arcs">
+<path d="M156,62 L172,62" class="arc"/>
+<path d="M324,62 L340,62" class="arc"/>
+<path d="M492,62 L508,62" class="arc"/>
+<path d="M660,62 L676,62" class="arc"/>
+<path d="M828,62 L844,62" class="arc"/>
+</g>
+</svg>
+<figcaption>One pipeline: a provenance-carrying map is compiled into a
+discrete net for structural questions, relaxed into an ODE for
+differentiable ones, and held to account by historical replays.</figcaption>
+</figure>
+
+A **Petri net** is a bipartite graph with two kinds of node. *Places* hold
+*tokens* — the state is a marking $m \in \mathbb{N}^{|P|}$ — and stand for
+stocks: crates of crude neon, packaged chips, working EUV tools.
+*Transitions* are processes, wired to places by weighted arcs collected in
+two matrices: $W^-$ says what each transition consumes, $W^+$ what it
+produces. A transition $t$ is *enabled* when its inputs are present,
+$m \ge W^- e_t$, and firing it moves matter:
+
+$$ m' \;=\; m + \big(W^+ - W^-\big)\, e_t $$
+
+Nothing appears from nowhere and nothing vanishes: conservation is an
+invariant of the algebra, not an assumption you hope holds. Two more arc
+types round out the vocabulary. A **read arc** requires a token without
+consuming it — enabling needs $m_p \ge w$, but firing doesn't subtract. An
+**inhibitor arc** inverts the test: the transition is enabled only while
+its inhibitor place is *empty*.
+
+<figure class="cg-fig">
+<svg viewBox="0 0 900 270" role="img" aria-label="Petri net primitives: places, tokens, a transition, a read arc, and an inhibitor arc">
+<defs>
+<marker id="cg-arrow-q" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0.5 L7.5,4 L0,7.5 Z" fill="currentColor" opacity="0.75"/></marker>
+<marker id="cg-inhib" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><circle cx="5" cy="5" r="3.4" fill="none" stroke="currentColor" stroke-width="1.4"/></marker>
+</defs>
+<g class="net">
+<circle cx="150" cy="170" r="22" class="place"/>
+<circle cx="143" cy="165" r="3.4" class="token"/><circle cx="157" cy="165" r="3.4" class="token"/><circle cx="150" cy="177" r="3.4" class="token"/>
+<text x="150" y="215" text-anchor="middle">place (stock)</text>
+<text x="150" y="231" text-anchor="middle" class="sub">tokens = how much</text>
+<rect x="437" y="152" width="26" height="36" class="trans"/>
+<text x="450" y="215" text-anchor="middle">transition (process)</text>
+<text x="450" y="231" text-anchor="middle" class="sub">fires when inputs present</text>
+<circle cx="750" cy="170" r="22" class="place"/>
+<circle cx="750" cy="170" r="3.4" class="token"/>
+<text x="750" y="215" text-anchor="middle">place (stock)</text>
+<path d="M176,170 L431,170" class="arc"/>
+<text x="300" y="160" text-anchor="middle" class="sub">consumes (W⁻)</text>
+<path d="M467,170 L722,170" class="arc"/>
+<text x="597" y="160" text-anchor="middle" class="sub">produces (W⁺)</text>
+<circle cx="330" cy="52" r="18" class="place"/>
+<circle cx="330" cy="52" r="3.4" class="token"/>
+<text x="330" y="24" text-anchor="middle">capital equipment</text>
+<path d="M344,64 C 380,96 414,128 439,148" class="arc read"/>
+<text x="332" y="112" text-anchor="middle" class="sub">read arc: required,</text>
+<text x="332" y="127" text-anchor="middle" class="sub">not consumed</text>
+<circle cx="570" cy="52" r="18" class="place"/>
+<text x="570" y="24" text-anchor="middle">policy token</text>
+<path d="M556,64 C 520,96 486,128 461,148" class="arc inhib"/>
+<text x="574" y="112" text-anchor="middle" class="sub">inhibitor: blocks</text>
+<text x="574" y="127" text-anchor="middle" class="sub">while marked</text>
+</g>
+</svg>
+<figcaption>The four arc types on one illustrative transition. Capital
+equipment is a read arc (a catalyst); an export ban is one token sitting
+on an inhibitor place.</figcaption>
+</figure>
+
+The discrete net answers structural questions — *can this state ever be
+reached, is there a firing sequence after which no chip can ever be made
+again* — but investment questions need derivatives, and counting doesn't
+differentiate. So the second stage relaxes the net: markings become real
+concentrations $x \in \mathbb{R}_{\ge 0}^{|P|}$, and each transition
+becomes a flow with saturation kinetics borrowed from enzyme chemistry.
+With $s(x) = x/(x + k)$ — Michaelis–Menten, where $k$ is the just-in-time
+cliff, about a day and a half of stock in the frozen calibration — a
+transition with capacity $c_i$ runs at
+
+$$ v_i \;=\; c_i \cdot \min_{p \,\in\, \mathrm{in}(i)} s(x_p)
+   \cdot \prod_{p \,\in\, \mathrm{read}(i)} s(x_p),
+   \qquad \dot{x} \;=\; \big(W^+ - W^-\big)^{\!\top} v $$
+
+The $\min$ is Liebig's law of the minimum — a process runs at the pace of
+its scarcest input — and read arcs multiply in as catalyst availability.
+Concretely: the fab runs at
+$c_{\text{Fab}} \cdot \min(s_{\text{Ga}}, s_{\text{Ne}},
+s_{\text{wafers}}) \cdot s_{\text{tools}}$. This is now a
+piecewise-smooth ODE, which means it can be differentiated end to end,
+which is the move the project is named for. Write $J$ for total fab
+throughput over a disrupted trajectory; the headline object is the
+gradient of its expectation over a prior $\pi$ of disruption scenarios,
+
+$$ g \;=\; \nabla_{c,\,x_0}\; \mathbb{E}_{s \sim \pi}\!\left[ J_s(c, x_0) \right] $$
+
+— one number per capacity and per stockpile, read as *marginal resilience
+per marginal unit of investment*. Sorting $g$ is the whole thesis of the
+project in a single vector, and §6 reads it.
+
+Two more pieces complete the machine. The **adaptation law** (protocol
+v1) lets capacity respond to scarcity instead of recovering on an imposed
+schedule: each transition's capacity grows toward need at a frozen gain,
+
+$$ \dot{c}_i \;=\; \alpha\, \bar{c}_i\, \sigma_i, \qquad
+   \sigma_i \;=\; \max\!\big(\, \mathrm{scar}_{\mathrm{runway}},\;
+   \mathrm{deficit}_i \cdot \mathrm{gap}_i \big) $$
+
+where the runway alarm fires when a stock's months of cover
+$r_p = x_p / \mathrm{drain}_p$ falls below a planning horizon
+($\mathrm{scar} = \mathrm{clip}(1 - r_p/H)$, $H = 6$ months), and the
+restoration term rebuilds destroyed capacity in proportion to how far
+current flow sits below its pre-crisis reference. The gain
+$\alpha = 0.06$ — six percent of baseline capacity re-buildable per month
+at full alarm — was fitted once, on a single training event, then frozen;
+how it earned each of those signals the hard way is §7's story. And the
+**measurement**: every historical replay is scored on two numbers, the
+*dip* (deepest drop of the observed flow against its pre-shock mean) and
+the *recovery* (months until the flow re-crosses 95% of that mean).
+Everything above lives in a few hundred lines of
+[the repo's](https://github.com/a20r/civgrad) `core/`, and the map's
+values feed it with provenance attached.
+
+That is the whole machine. The rest of the essay walks it: §4 argues why
+this formalism and not a flow network; §5 adds the epistemic layer — fog,
+drawn honestly; §6 reads the gradient and its two surprises, with the
+model running live; §7 makes recovery emergent and confesses the five
+failures that shaped it; §8 scores the machine against history, misses
+included; §9 steps back to what the way of looking taught; §10 says what
+all of this is and isn't.
+
+## 4. Why Petri nets
 
 Supply chains usually get modeled as graphs — nodes, edges, flows. But the
 things that actually break are *stocks* and *concurrency*: buffers draining,
 processes waiting on each other, matter being conserved whether you like it
-or not. Petri nets give you all three natively. Places hold tokens (stocks);
-transitions fire when their inputs are present (processes); conservation is
-an invariant you can check rather than an assumption you hope holds. Two arc
-types do surprising amounts of work: a **read arc** lets a transition require
-a token without consuming it — which is exactly what capital equipment is, a
-catalyst — and an **inhibitor arc** lets a token *block* a transition, which
-is exactly what a policy is. In this model, China's gallium export ban is
+or not. The machinery of §3 gives you all three natively: stocks are
+places, processes are transitions, and conservation is an invariant you
+can check rather than an assumption you hope holds. And the two exotic arc
+types do surprising amounts of work once you notice what they *mean*: a
+read arc — required, not consumed — is exactly what capital equipment is,
+a catalyst; an inhibitor arc is exactly what a policy is. In this model,
+China's gallium export ban is
 literally one token sitting on one place. Sanctions relief is removing it.
 
 The centerpiece of the discrete model (`core/net.py`) is a failure mode that
@@ -104,7 +264,7 @@ ability to build ocean-going canoes. Collapse doesn't have to look like
 silence. It can look like a perfectly normal Tuesday on which a certain kind
 of thing has quietly become impossible.
 
-## 4. The map and the fog
+## 5. The map and the fog
 
 Nobody can model the global supply chain, and this project doesn't pretend
 to. It borrows the fog of war from strategy games and makes it a modeling
@@ -126,7 +286,7 @@ not optimistic; **it is wrong in whichever direction its hidden structure
 points**. The only honest response is to draw it, label it, and remember
 that every conclusion is conditional on where the fog currently sits.
 
-## 5. The gradient of collapse
+## 6. The gradient of collapse
 
 Then comes the move the project is named for. Relax the discrete net into a
 continuous one — real-valued stocks, transitions as flow rates with
@@ -216,7 +376,7 @@ protocol <b>v0</b> rows, the acceptance bands, and every miss are in the
 </div>
 </section>
 
-## 6. Making recovery emergent
+## 7. Making recovery emergent
 
 The first version of this model had a dirty secret: recovery time was an
 input. The 2022 neon shock replay recovered in about the historical window
@@ -228,7 +388,7 @@ curve with an adaptation law: every transition's capacity grows at a rate
 What counts as "scarce" took five instructive failures to get honest, and
 each one was forced by data rather than taste. **One**: the infinite-faucet
 bias from the discrete era — unconstrained sources faked away deadlock —
-which became the fog doctrine of §4. **Two**: the wrong observable —
+which became the fog doctrine of §5. **Two**: the wrong observable —
 Sumitomo 1993 was invisible through fab throughput because packaging sits
 *downstream* of the fab; the historical pain was in deliveries, and the
 model has to be read at the place history was measured. **Three**: buffers
@@ -254,7 +414,7 @@ evidence).
 "6% of baseline capacity re-buildable per month at full alarm," a plausible
 industrial number — and then frozen. Everything after that is holdout.
 
-## 7. The scorecard
+## 8. The scorecard
 
 The protocol: structure, constants, and the calibration rule are frozen;
 per-event inputs are documented historical facts with citations; predictions
@@ -320,7 +480,43 @@ checked against it in CI.</p>
 <p id="xfail-reason"></p></details>
 </section>
 
-## 8. What this is and isn't
+## 9. What the way of looking taught
+
+There is a version of this essay that is all prose — the chokepoint tour
+of §2 stretched to five thousand words, with adjectives standing where
+the numbers are. That essay would have been easier to write and
+impossible to be wrong in, and those are the same defect. The reason to
+build the machine instead is that a formalism is an instrument for
+locating your own ignorance. "Equipment manufacturing is concentrated"
+sat comfortably in the prose version for exactly as long as it took to
+draw the box — at which point the box demanded edges, the edges demanded
+a source for optics, and the Zeiss monopoly fell out of the act of
+diagramming. The fog of §5 exists as a concept because the net forced
+every unknown to have a shape and a location. You cannot label an
+ignorance you cannot draw.
+
+The second lesson is that predictions have to be allowed to die.
+Freezing the constants, registering the bands, and replaying history
+turned this from a mood into an experiment, and the education came
+almost entirely from the failures: the five instructive wrongs of §7,
+and Sumitomo missing twice in opposite directions, which located the
+model's actual boundary — no prices — with a precision no amount of
+introspection would have found. When the sensitivity audit later took
+the boneyard headline away, that was the same instrument working in the
+other direction. A method that cannot lose claims cannot be trusted to
+keep them.
+
+And the third: derivatives discipline rhetoric. The question in the
+callout up top — the marginal dollar — is unanswerable in prose; every
+op-ed answers it with the author's priors wearing a suit. Making it a
+gradient did not make the answer *true* (the magnitudes are only as good
+as the confidence-C fog they pass through), but it made the answer
+*arguable*: a vector with signs that survive an audit and rankings that
+only coarsely do. That trade — from unfalsifiable confidence to
+falsifiable structure — is why the essay looks at the world this way.
+The wandering was real, and the method is what kept it honest.
+
+## 10. What this is and isn't
 
 This is not a forecast, not a policy tool, and not a claim that collapse is
 coming. Every parameter in the map carries provenance metadata, and right
