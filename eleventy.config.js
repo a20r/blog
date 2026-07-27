@@ -6,6 +6,10 @@ export default function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy("css");
   eleventyConfig.addPassthroughCopy("js");
   eleventyConfig.addPassthroughCopy("images");
+  // The momentum-field demo is a prebuilt static app — copy it verbatim and
+  // keep Eleventy from processing its index.html as a template.
+  eleventyConfig.addPassthroughCopy("momentum-field");
+  eleventyConfig.ignores.add("momentum-field/**");
   eleventyConfig.addPlugin(HtmlBasePlugin);
   eleventyConfig.addPlugin(syntaxHighlight);
   // $...$ / $$...$$ rendered to inline SVG at build time — no client JS.
