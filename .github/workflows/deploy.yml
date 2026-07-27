@@ -11,6 +11,8 @@ permissions:
   contents: read
   pages: write
   id-token: write
+  # Needed to delete duplicate github-pages artifacts (see the prune step).
+  actions: write
 
 concurrency:
   group: pages
@@ -52,6 +54,26 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           path: _site
+
+      # The artifact service can transiently register one upload as several
+      # identical artifacts, and deploy-pages refuses to deploy when more than
+      # one "github-pages" artifact exists on the run. Keep only the newest.
+      - name: Prune duplicate Pages artifacts
+        if: github.event_name != 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const { data } = await github.rest.actions.listWorkflowRunArtifacts({
+              owner, repo, run_id: context.runId,
+            });
+            const pages = data.artifacts
+              .filter((a) => a.name === 'github-pages')
+              .sort((a, b) => b.id - a.id);
+            for (const dup of pages.slice(1)) {
+              core.warning(`Deleting duplicate github-pages artifact ${dup.id}`);
+              await github.rest.actions.deleteArtifact({ owner, repo, artifact_id: dup.id });
+            }
 
   deploy:
     if: github.event_name != 'pull_request'
