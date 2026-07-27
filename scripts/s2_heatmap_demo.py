@@ -119,14 +119,18 @@ print(f"{N_POLYGONS} polygons -> {len(rows)} (polygon, cell) rows")
 db = sqlite3.connect(":memory:")
 db.execute("CREATE TABLE polygon_table (id TEXT, cell INTEGER)")
 db.executemany("INSERT INTO polygon_table VALUES (?, ?)", rows)
-result = db.execute(
+# Materialized with the raw INT64 cell kept alongside, so the zoom-pyramid
+# step below can re-aggregate it with integer math alone.
+db.execute(
     """
-    SELECT
-      printf('%016x', cell) AS s2_token,
-      COUNT(cell) AS total
+    CREATE TABLE heatmap_17 AS
+    SELECT cell, COUNT(cell) AS total
     FROM polygon_table
     GROUP BY cell
     """
+)
+result = db.execute(
+    "SELECT printf('%016x', cell) AS s2_token, total FROM heatmap_17"
 ).fetchall()
 print(f"-> {len(result)} distinct level-{LEVEL} cells, max overlap "
       f"{max(t for _, t in result)}")
@@ -198,6 +202,53 @@ ax.set_axis_off()
 ax.set_title(f"one polygon, its {len(tokens)} level-{LEVEL} cells",
              color="#e6e9ec", fontsize=11)
 fig.savefig(OUT / "s2-covering-single.png", bbox_inches="tight",
+            facecolor=surface, pad_inches=0.15)
+plt.close(fig)
+
+# 5. The zoom pyramid: coarsen the *output* with integer math only ----------
+# An S2 id is [3 face bits][2 bits per level of path][1][zeros...], so the
+# ancestor at a coarser level is a bit-mask: chop the path, move the marker.
+def coarsen(level):
+    lsb = 1 << (2 * (30 - level))
+    return db.execute(
+        f"""
+        SELECT
+          printf('%016x', (cell & -{lsb}) | {lsb}) AS s2_token,
+          SUM(total) / {4 ** (LEVEL - level)}.0 AS avg_overlap
+        FROM heatmap_17
+        GROUP BY 1
+        """
+    ).fetchall()
+
+
+panels = [(17, "~70 m cells", result),
+          (15, "~280 m cells", coarsen(15)),
+          (13, "~1.1 km cells", coarsen(13))]
+
+xlim = (min(xs) - pad, max(xs) + pad)
+ylim = (min(ys) - pad, max(ys) + pad)
+fig, axes = plt.subplots(1, 3, figsize=(18, 6.2), dpi=150)
+fig.patch.set_facecolor(surface)
+for ax, (lvl, label, data) in zip(axes, panels):
+    quads = [[mercator(*v) for v in cell_vertices(t)] for t, _ in data]
+    vals = [v for _, v in data]
+    pc = PolyCollection(quads, array=vals, cmap="magma", norm=norm,
+                        edgecolors="none", antialiaseds=False)
+    ax.set_facecolor(surface)
+    ax.add_collection(pc)
+    ax.set_xlim(*xlim)
+    ax.set_ylim(*ylim)
+    ax.set_aspect("equal")
+    ax.set_axis_off()
+    ax.set_title(f"level {lvl} · {label} · {len(data):,} rows",
+                 color="#e6e9ec", fontsize=11)
+    print(f"level {lvl}: {len(data)} cells, max mean overlap "
+          f"{max(vals):.1f}")
+cb = fig.colorbar(pc, ax=axes, fraction=0.015, pad=0.01)
+cb.set_label("mean overlapping polygons per cell", color="#e6e9ec")
+cb.ax.yaxis.set_tick_params(color="#8a939e", labelcolor="#e6e9ec")
+cb.outline.set_edgecolor("#2a3138")
+fig.savefig(OUT / "s2-heatmap-pyramid.png", bbox_inches="tight",
             facecolor=surface, pad_inches=0.15)
 plt.close(fig)
 print("figures written to", OUT)
