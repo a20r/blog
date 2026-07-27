@@ -327,7 +327,7 @@ The ensemble trajectories sample the same jump tables per step (release → choo
 **[▶ Open the live demo](/momentum-field/)** — the real model running in your browser (WebGL2, ~14 MB of tracking data, nothing leaves the page). Or play with it right here:
 
 <iframe src="/momentum-field/" title="momentum-field live demo"
-        style="width:100%; height:720px; border:1px solid #234; border-radius:8px;"
+        style="width:100%; aspect-ratio: 688 / 534; border:1px solid #234; border-radius:8px;"
         loading="lazy"></iframe>
 
 ![Forward view without the decision jumps' player evolution](/images/momentum-field-soccer/forward-occupancy.png)
