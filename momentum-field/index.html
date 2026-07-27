@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>momentum-field — Fokker-Planck ball-state propagation</title>
+<link rel="icon" href="data:,"><!-- no favicon: keep the console clean -->
+
+<style>
+  :root { --bg:#0c0f14; --panel:#151a22; --ink:#e6edf3; --muted:#8b98a8; --accent:#37e0a6; }
+  * { box-sizing: border-box; }
+  html,body { margin:0; height:100%; background:var(--bg); color:var(--ink);
+    font:13px/1.4 ui-monospace,SFMono-Regular,Menlo,monospace; }
+  #wrap { display:flex; flex-direction:column; height:100vh; }
+  header { padding:8px 14px; display:flex; align-items:baseline; gap:14px; border-bottom:1px solid #1d2530; }
+  header h1 { font-size:14px; margin:0; font-weight:600; letter-spacing:.02em; }
+  header .sub { color:var(--muted); font-size:11px; }
+  #stage { flex:1; position:relative; min-height:0; }
+  canvas { width:100%; height:100%; display:block; cursor:crosshair; }
+  #readout { position:absolute; top:10px; left:12px; background:rgba(13,17,23,.72);
+    border:1px solid #233; border-radius:8px; padding:8px 11px; pointer-events:none;
+    font-size:12px; min-width:180px; }
+  #readout b { color:var(--accent); font-weight:600; }
+  #readout .row { display:flex; justify-content:space-between; gap:16px; }
+  #hint { position:absolute; bottom:10px; left:12px; color:var(--muted); font-size:11px;
+    background:rgba(13,17,23,.6); padding:4px 8px; border-radius:6px; }
+  footer { background:var(--panel); border-top:1px solid #1d2530; padding:10px 14px; flex:none; }
+  #controls { display:flex; flex-wrap:wrap; align-items:flex-start; gap:12px 20px; margin-top:10px;
+    max-height:46vh; overflow-y:auto; }
+  #controls.collapsed { display:none; }
+  .group { display:flex; flex-direction:column; gap:8px; padding-right:18px; border-right:1px solid #1d2530; }
+  .group:last-child { border-right:none; padding-right:0; }
+  .ghead { font-size:9px; text-transform:uppercase; letter-spacing:.13em; color:var(--accent);
+    opacity:.85; font-weight:700; }
+  .gbody { display:flex; flex-wrap:wrap; gap:10px 16px; align-items:flex-start; }
+  #toggle { margin-left:auto; }
+  .ctl { display:flex; flex-direction:column; gap:3px; }
+  .ctl label { color:var(--muted); font-size:10px; text-transform:uppercase; letter-spacing:.06em; }
+  .ctl .val { color:var(--ink); font-variant-numeric:tabular-nums; }
+  input[type=range] { width:150px; accent-color:var(--accent); }
+  select { background:#1f2a36; color:var(--ink); border:1px solid #2e3d4d; border-radius:6px;
+    padding:6px 8px; font:inherit; }
+  .timeline { display:flex; align-items:center; gap:12px; flex-basis:100%; width:100%; }
+  .timeline input[type=range] { flex:1; width:auto; }
+  button { background:#1f2a36; color:var(--ink); border:1px solid #2e3d4d; border-radius:6px;
+    padding:7px 14px; font:inherit; cursor:pointer; }
+  button:hover { background:#26343f; }
+  button.primary { background:var(--accent); color:#06231a; border-color:var(--accent); font-weight:600; }
+  label.chk { flex-direction:row; align-items:center; gap:6px; color:var(--ink); text-transform:none;
+    letter-spacing:0; font-size:12px; }
+  #err { position:absolute; inset:0; display:none; align-items:center; justify-content:center;
+    color:#ff7b72; padding:30px; text-align:center; white-space:pre-wrap; }
+  @media (max-width: 760px) {
+    header .sub { display:none; }
+    #hint { display:none; }
+    #readout { font-size:11px; min-width:0; padding:6px 8px; top:6px; left:6px; }
+    footer { padding:8px 10px; }
+    #controls { gap:12px 14px; max-height:40vh; }
+    input[type=range] { width:130px; }
+    .timeline { gap:8px; }
+    #t0label { display:none; }
+  }
+</style>
+</head>
+<body>
+<div id="wrap">
+  <header>
+    <h1>momentum-field</h1>
+    <span class="sub">drift–diffusion ball-state PDF · Fokker–Planck propagation · WebGL2 + Rust/wasm</span>
+  </header>
+  <div id="stage">
+    <canvas id="gl"></canvas>
+    <div id="readout">
+      <div class="row"><span>sim&nbsp;t</span><b id="r-t">0.00 s</b></div>
+      <div class="row"><span>match&nbsp;t</span><span id="r-mt">—</span></div>
+      <div class="row"><span id="r-mass-label">surviving</span><span id="r-mass">—</span></div>
+      <div class="row"><span>cum&nbsp;xG</span><b id="r-xg">—</b></div>
+      <div class="row"><span>model</span><b id="r-model">—</b></div>
+      <div class="row"><span>possession</span><b id="r-poss">—</b></div>
+      <div class="row"><span>ball</span><span id="r-ball">—</span></div>
+    </div>
+    <div id="hint">click the pitch to re-seed the PDF · scrub <b>start</b> to move through the match</div>
+    <div id="err"></div>
+  </div>
+  <footer>
+    <div class="timeline">
+      <button id="play" class="primary">⏸ pause</button>
+      <span id="t0label" style="color:var(--muted);white-space:nowrap">match time</span>
+      <input type="range" id="t0" min="0" max="6311" step="0.5" value="0">
+      <span class="val" id="t0v" style="min-width:64px;text-align:right">0 s</span>
+      <button id="toggle" title="show/hide controls">⚙ controls</button>
+    </div>
+    <div id="controls">
+    <div class="group">
+      <div class="ghead">view</div>
+      <div class="gbody">
+        <div class="ctl"><label>view</label>
+          <select id="layer">
+            <option value="forward" selected>forward — where the ball goes</option>
+            <option value="game">game — players evolve (Nash)</option>
+            <option value="wake">wake — where it came from</option>
+            <option value="value">value — ideal xG surface</option>
+          </select></div>
+        <div id="viewinfo" style="flex:1 0 100%; max-width:340px; font-size:10.5px;
+             line-height:1.45; color:var(--muted);"></div>
+        <div class="ctl"><label>brightness</label>
+          <input type="range" id="gam" min="0.25" max="1" step="0.05" value="1">
+          <span class="val" id="gamv">1.00</span></div>
+        <label class="chk"><input type="checkbox" id="players" checked> show players</label>
+        <label class="chk"><input type="checkbox" id="quiver"> drift quiver</label>
+      </div>
+    </div>
+    <div class="group">
+      <div class="ghead">playback</div>
+      <div class="gbody">
+        <div class="ctl"><label>play speed</label>
+          <input type="range" id="spd" min="0.1" max="6" step="0.1" value="1">
+          <span class="val" id="spdv">1.0×</span></div>
+        <label class="chk"><input type="checkbox" id="skip" checked> skip dead time</label>
+        <label class="chk" style="display:none"><input type="checkbox" id="follow" checked> follow ball</label>
+      </div>
+    </div>
+    <div class="group" data-views="forward game">
+      <div class="ghead">forward sim</div>
+      <div class="gbody">
+        <div class="ctl" title="how far ahead the PDF and tracks are propagated (drives BOTH forward and game views)">
+          <label>horizon</label>
+          <input type="range" id="fhz" min="2" max="30" step="0.5" value="20">
+          <span class="val" id="fhzv">20.0 s</span></div>
+        <div class="ctl" title="how strongly the ball's current velocity is injected as decaying drift">
+          <label>momentum</label>
+          <input type="range" id="mom" min="0" max="1" step="0.05" value="0.7">
+          <span class="val" id="momv">0.70</span></div>
+        <div class="ctl" data-views="forward game"
+             title="forward view: number of density modes re-seeded per scenario-tree level; game view: number of ensemble ball tracks">
+          <label>modes / tracks (K)</label>
+          <input type="range" id="kmodes" min="1" max="8" step="1" value="4">
+          <span class="val" id="kmodesv">4</span></div>
+        <div class="ctl" data-views="forward"
+             title="scenario-tree depth: 1 = single propagation; deeper re-extracts the top-K modes of the end-of-horizon density and propagates each again (horizon is split across levels)">
+          <label>tree depth</label>
+          <input type="range" id="depth" min="1" max="6" step="1" value="1">
+          <span class="val" id="depthv">1</span></div>
+        <div class="ctl" data-views="forward" title="cross-frame smoothing of the PDF: 1 = live each frame, small = long trail">
+          <label>fwd trail (EWMA)</label>
+          <input type="range" id="trail" min="0.05" max="1" step="0.05" value="0.9">
+          <span class="val" id="trailv">0.90</span></div>
+      </div>
+    </div>
+    <div class="group" data-views="forward game value">
+      <div class="ghead">dynamics model</div>
+      <div class="gbody">
+        <label class="chk" title="match-averaged drift/diffusion estimated from tracking">
+          <input type="radio" name="fieldsrc" id="fs-emp" value="emp"> empirical field</label>
+        <label class="chk" title="deep-sets kernel trained on DFL + A-League tracking (one-step NLL)">
+          <input type="radio" name="fieldsrc" id="fs-kernel" value="kernel" checked> learned kernel</label>
+        <label class="chk" title="v2 parametric interaction model: time-to-intercept control, pass lanes, control volatility (θ, fittable)">
+          <input type="radio" name="fieldsrc" id="fs-theta" value="theta"> θ interaction field (v2)</label>
+        <div class="ctl" data-views="forward" title="blend weight of the state-conditioned field into the forward sim">
+          <label>play-state</label>
+          <input type="range" id="statew" min="0" max="1" step="0.05" value="0.5">
+          <span class="val" id="statewv">0.50</span></div>
+        <div class="ctl" data-views="forward" id="biasrow"
+             title="v1 crutch: goalward pull added to the direction-marginalized empirical field. In the θ v2 model this is LEARNED (dr_carry / dr_pass), so the slider is ignored there.">
+          <label>attack bias</label>
+          <input type="range" id="attackbias" min="0" max="3" step="0.1" value="1">
+          <span class="val" id="attackbiasv">1.0</span></div>
+      </div>
+    </div>
+    <div class="group" data-views="game">
+      <div class="ghead">player model</div>
+      <div class="gbody">
+        <label class="chk" title="acceleration-limited best response: defenders mark, attackers steer along the θ drift features">
+          <input type="radio" name="pmodel" id="pm-inertial" value="inertial" checked> inertial best-response</label>
+        <label class="chk" title="near-ball players replaced by the coupled-Riccati feedback-Nash equilibrium (iLQ, θ-weighted costs)">
+          <input type="radio" name="pmodel" id="pm-nash" value="nash"> Nash equilibrium (iLQ)</label>
+      </div>
+    </div>
+    <div class="group" data-views="forward game">
+      <div class="ghead">trajectories</div>
+      <div class="gbody">
+        <label class="chk"><input type="checkbox" id="futureactual" checked> future actual</label>
+        <div class="ctl"><label>actual length</label>
+          <input type="range" id="actlen" min="2" max="30" step="0.5" value="8">
+          <span class="val" id="actlenv">8.0 s</span></div>
+        <label class="chk"><input type="checkbox" id="future"> ball path (recent)</label>
+      </div>
+    </div>
+    <div class="group" data-views="wake">
+      <div class="ghead">wake</div>
+      <div class="gbody">
+        <div class="ctl"><label id="hzlabel">wake window</label>
+          <input type="range" id="hz" min="1" max="20" step="0.5" value="8">
+          <span class="val" id="hzv">8.0 s</span></div>
+      </div>
+    </div>
+    <div class="group" data-views="value">
+      <div class="ghead">value field</div>
+      <div class="gbody">
+        <div class="ctl" title="ball speed cap of the idealised attacker in the Bellman iteration. Defaults to the θ-DERIVED transport speed (fitted carry top speed + fitted pass-transport rate); moving the slider overrides the learned value for this view only.">
+          <label>ideal speed</label>
+          <input type="range" id="vmax" min="2" max="14" step="0.5" value="8">
+          <span class="val" id="vmaxv">8.0</span></div>
+        <label class="chk" title="tie this view's look-ahead to the forward-sim horizon — the SAME coupling the predictions use internally (the pass-decision policy plans on a value surface iterated to the forward horizon)">
+          <input type="checkbox" id="vlink" checked> follow fwd horizon</label>
+        <div class="ctl" title="look-ahead of THIS surface in seconds; 30 = whole possession (run to convergence). Display-only: the predictions build their own V, coupled to the forward horizon.">
+          <label>value horizon</label>
+          <input type="range" id="vhz" min="1" max="30" step="1" value="30">
+          <span class="val" id="vhzv">∞</span></div>
+        <label class="chk" title="reward = probability a shot is generated, instead of expected goals (shot prob × finishing)">
+          <input type="checkbox" id="vmode" checked> value: P(shot)</label>
+        <label class="chk" title="overlay ∇V arrows (ideal attacking directions) on any view">
+          <input type="checkbox" id="optfield"> optimal field</label>
+      </div>
+    </div>
+    <div class="group">
+      <div class="ghead">λ(t) hazard window — coupled v2</div>
+      <div class="gbody">
+        <label class="chk"><input type="checkbox" id="mupanel"> compute at playhead (80′→90′)</label>
+        <div style="height:150px; position:relative; flex:1 0 100%; min-width:320px;">
+          <canvas id="mustrip"
+            style="position:absolute; inset:0; width:100%; height:150px; background:rgba(0,0,0,.35);
+                   border:1px solid rgba(0,240,255,.25); border-radius:6px;"></canvas>
+        </div>
+        <div id="muinfo"
+          style="font-family:var(--font-mono); font-size:.62rem; color:var(--text-dim);
+                 letter-spacing:1px; margin-top:4px; line-height:1.5; min-height:2.4em;
+                 flex:1 0 100%;">off</div>
+      </div>
+    </div>
+    </div>
+    </div>
+  </footer>
+</div>
+<script type="module" src="./app.js"></script>
+</body>
+</html>

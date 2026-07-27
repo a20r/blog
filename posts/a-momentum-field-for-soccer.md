@@ -324,6 +324,12 @@ The ensemble trajectories sample the same jump tables per step (release → choo
 ![Multimodal game-view PDF at a 10-second horizon](/images/momentum-field-soccer/game-multimodal-10s.png)
 *The payoff. Game view, fitted θ, 10 s horizon: the ball PDF is genuinely multimodal — the carry mode around the ball plus discrete lobes at receivers' lead targets. Pink strands are ensemble tracks sampling the same decision process; grey dots are the simulated future player configuration; the cyan line is what actually happened.*
 
+**[▶ Open the live demo](/momentum-field/)** — the real model running in your browser (WebGL2, ~14 MB of tracking data, nothing leaves the page). Or play with it right here:
+
+<iframe src="/momentum-field/" title="momentum-field live demo"
+        style="width:100%; height:720px; border:1px solid #234; border-radius:8px;"
+        loading="lazy"></iframe>
+
 ![Forward view without the decision jumps' player evolution](/images/momentum-field-soccer/forward-occupancy.png)
 *For contrast, the forward view: same fitted transport but players frozen at the playhead — a corridor of play rather than a branch structure.*
 
@@ -358,7 +364,7 @@ Details that mattered more than they should have:
 - **Every structural claim in this post is a unit test**: probability conservation, monotone survival, the $S = e^{-\int \lambda}$ identity, neutral-state equivalence to v1, jump mass conservation and multimodality, kick-rate recovery on synthetic data, RLS model recovery, GLM coefficient recovery, and a headless-browser acceptance test that drives the real app against the real match and asserts the multimodal PDF plus UI-decoupling invariants.
 
 ![The full instrument](/images/momentum-field-soccer/app-full.png)
-*The full app (value view): view-scoped controls, the fitted-θ readout, the θ-derived ideal speed, and the λ(t) hazard strip. The bottom line is the whole project in one row — "next goal by 90′: poss 10% · opp 13% · none 76%" — the competing-risks three-vector, computed in-browser from the live state at the playhead.*
+*The full app (value view): view-scoped controls, the fitted-θ readout, the θ-derived ideal speed, and the λ(t) hazard strip. The bottom line is the whole project in one row — "next goal by 90′: poss 10% · opp 13% · none 76%" — the competing-risks three-vector, computed in-browser from the live state at the playhead. [It's live on this site](/momentum-field/) — same build, same fitted θ, same match.*
 
 ## 11. What's next
 
