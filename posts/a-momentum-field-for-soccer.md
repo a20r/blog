@@ -5,13 +5,13 @@ date: 2026-07-27
 
 # A Momentum Field for Soccer: Pricing Late-Game Goal Risk with Fokker–Planck, Decision Jumps, and a 49-Parameter Learnable θ
 
-*This post documents the `momentum-field` engine inside my Kalshi basket project: a parametric, learnable model of soccer "game momentum" that turns live player tracking into a time-varying goal intensity $\lambda_g(t)$ — the number a late-game trading strategy actually needs. It starts from a trading problem, detours through Fokker–Planck equations, pitch-control races, and piecewise-deterministic jump processes, and ends with a fitted model running entirely in the browser. All of it is open in the repo; none of it is calibrated enough to bet on yet, and the post is explicit about where that line is.*
+*Part 2 of 2. [Part 1](/posts/capitulation-basket/) covers the trading strategy this model exists to serve — the capitulation thesis, the basket geometry, the entry gates, and the ledger. This post documents the `momentum-field` engine inside my Kalshi basket project: a parametric, learnable model of soccer "game momentum" that turns live player tracking into a time-varying goal intensity $\lambda_g(t)$ — the number a late-game trading strategy actually needs. It starts from a trading problem, detours through Fokker–Planck equations, pitch-control races, and piecewise-deterministic jump processes, and ends with a fitted model running entirely in the browser. All of it is open in the repo; none of it is calibrated enough to bet on yet, and the post is explicit about where that line is.*
 
 ---
 
 ## 1. The trading problem, and why it reduces to one function
 
-Kalshi lists three-outcome soccer markets: contracts $\{A, D, B\}$ (team A wins / draw / team B wins), each YES paying \$1. The strategy I trade — *late-game capitulation basket conversion* — is not a prediction strategy. It waits for a late score-state shock, rides the slow emotional repricing of directional traders, and converts an accumulated one-leg carry (usually the draw) into a **bounded basket**: quantities $q_A, q_D, q_B$ whose worst-case terminal profit
+Kalshi lists three-outcome soccer markets: contracts $\{A, D, B\}$ (team A wins / draw / team B wins), each YES paying \$1. The strategy I trade — [*late-game capitulation basket conversion*](/posts/capitulation-basket/) — is not a prediction strategy. It waits for a late score-state shock, rides the slow emotional repricing of directional traders, and converts an accumulated one-leg carry (usually the draw) into a **bounded basket**: quantities $q_A, q_D, q_B$ whose worst-case terminal profit
 
 $$
 \Pi_{\min} = \min(\Pi_A, \Pi_D, \Pi_B), \qquad \Pi_j = q_j - C
