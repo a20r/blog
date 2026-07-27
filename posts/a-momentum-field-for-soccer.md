@@ -4,6 +4,7 @@ topics: [quant, soccer, prediction-markets, stochastic-processes, rust, wasm]
 date: 2026-07-27T15:00:00Z
 series: Kalshi basket
 seriesPart: 2
+summary: "A parametric, learnable model of soccer momentum: Fokker–Planck transport over the pitch, pass decisions as jumps, and a fitted 49-parameter θ that turns live player tracking into the goal intensity a late-game trading strategy needs — running entirely in the browser, live demo included."
 ---
 
 # A Momentum Field for Soccer: Pricing Late-Game Goal Risk with Fokker–Planck, Decision Jumps, and a 49-Parameter Learnable θ

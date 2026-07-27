@@ -5,6 +5,7 @@ topics: [quant, prediction-markets, kalshi, soccer, optimal-stopping, trading]
 date: 2026-07-27T09:00:00Z
 series: Kalshi basket
 seriesPart: 1
+summary: "Wait for a late score shock in Kalshi's three-outcome soccer markets, ride the slow emotional repricing, and convert the carry into a basket that profits in every outcome. The market model, the entry gates, the optimal-stopping lock rule, and the accounting that keeps it honest."
 ---
 
 # Late-Game Capitulation Basket Conversion: A Protocol for Three-Outcome Soccer Markets

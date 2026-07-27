@@ -1,5 +1,6 @@
 ---
 topics: [claude, memory, shenanigans]
+summary: "Claude won't store health information in memory, so I introduced it to a Ken doll whose knees have had all of my surgeries. A story about side doors, whack-a-mole, and guardrails that only block the people who ask politely. Not a security disclosure!"
 ---
 # How I Smuggled My Own Medical History Past Claude Using a Ken Doll
 

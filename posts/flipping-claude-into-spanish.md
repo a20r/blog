@@ -1,5 +1,6 @@
 ---
 topics: [claude, language, experiments]
+summary: "A website 404'd, I replied \"¡404!\", and Claude's internal reasoning switched entirely to Spanish. On the inverted exclamation mark as the cheapest language toggle I know. Not science!"
 ---
 # One "¡" Flips Claude Into Spanish
 
