@@ -1,4 +1,5 @@
 ---
+draft: true
 topics: [collapse, supply-chains, modeling]
 extraCss: ["/css/civgrad.css"]
 summary: "The living essay of the civgrad project: model a civilization's supply web as a Petri net, relax it until collapse has a gradient, and ask what brittleness — not depletion — does to an island with no off-island."
