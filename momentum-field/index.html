@@ -60,6 +60,7 @@
     .timeline { gap:8px; }
     #t0label { display:none; }
   }
+.declegend { display: flex; flex-wrap: wrap; gap: 2px 8px; font-size: 10px; padding: 2px 0 0 2px; }
 </style>
 </head>
 <body>
@@ -174,6 +175,15 @@
           <input type="radio" name="pmodel" id="pm-inertial" value="inertial" checked> inertial best-response</label>
         <label class="chk" title="near-ball players replaced by the coupled-Riccati feedback-Nash equilibrium (iLQ, θ-weighted costs)">
           <input type="radio" name="pmodel" id="pm-nash" value="nash"> Nash equilibrium (iLQ)</label>
+        <label class="chk" title="the decided defensive tasks at the playhead (Part 3): every defender softmaxes over man-mark / zone / lane-block / press / cover by THREAT DENIED — line = task, dot = its target">
+          <input type="checkbox" id="g-decisions" checked> defender decisions</label>
+        <div class="declegend">
+          <span style="color:#f472b6">—press</span>
+          <span style="color:#fbbf24">—lane</span>
+          <span style="color:#f87171">—mark</span>
+          <span style="color:#a78bfa">—cover</span>
+          <span style="color:#64748b">—zone</span>
+        </div>
       </div>
     </div>
     <div class="group" data-views="forward game">

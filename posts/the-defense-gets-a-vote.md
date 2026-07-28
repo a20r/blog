@@ -62,6 +62,8 @@ Those two figures are frozen frames. The layer itself is better experienced than
         style="width:100%; aspect-ratio: 880 / 640; border:1px solid #234; border-radius:8px;"
         loading="lazy"></iframe>
 
+And this is not a side exhibit — the layer is in the *main instrument* now. [Part 2's full app](/momentum-field/?view=game) runs on the upgraded model: its game view's simulated players re-plan through the same decision layer as they evolve (which is what shapes the jump tables and the multimodal PDF downstream), and a **defender decisions** toggle draws the decided tasks at the playhead over the real DFL replay — same match, same fitted θ (staged as a prefix of the grown vector; the new $\theta_{\text{def}}$ entries ride at their priors until a defensive-scheme fit runs). The sandbox above is where you isolate the policy; the app is where it lives.
+
 Two findings from building it, both of which I believe more than I expected to:
 
 **Marked receivers are dead lanes.** I spent a while constructing a scenario where lane-blocking would be the obvious choice, and the model kept refusing — because the moment a defender stands goal-side of a runner, the lane race collapses that option's completion $c_r$, which collapses its choice probability $q_r$, which collapses the lane's value $q_r c_r V$. The model was telling me something true: you don't block the lane to a marked man, because *the mark already blocked it*. Lane-blocking earns its place in broken shapes — a runner nobody owns, a recovering defender who can reach the diagonal — which is exactly where real defenses spring offside traps and covering interceptions. Under the prior θ it is correctly the *rare* choice.
