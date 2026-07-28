@@ -71,7 +71,7 @@ jobs:
             if git fetch origin "refs/pull/$pr/head" \
                && git worktree add "/tmp/pr-$pr" FETCH_HEAD \
                && (cd "/tmp/pr-$pr" && npm ci --no-audit --no-fund \
-                   && PATH_PREFIX="$BASE_PATH/pr-preview/pr-$pr" npm run build); then
+                   && PATH_PREFIX="$BASE_PATH/pr-preview/pr-$pr" SHOW_DRAFTS=1 npm run build); then
               mkdir -p "_site/pr-preview/pr-$pr"
               cp -a "/tmp/pr-$pr/_site/." "_site/pr-preview/pr-$pr/"
             else

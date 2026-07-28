@@ -18,6 +18,20 @@ export default function (eleventyConfig) {
   eleventyConfig.ignores.add("README.md");
   eleventyConfig.ignores.add("CLAUDE.md");
 
+  // Drafts: front matter `draft: true` drops a post from real builds (page,
+  // index, and tag listings alike). Drafts still render in `npm start`
+  // (serve/watch) and in builds with SHOW_DRAFTS=1 — the PR-preview builds
+  // set that, so a drafted post stays reviewable at its preview URL.
+  eleventyConfig.addPreprocessor("drafts", "*", (data) => {
+    if (
+      data.draft &&
+      process.env.ELEVENTY_RUN_MODE === "build" &&
+      !process.env.SHOW_DRAFTS
+    ) {
+      return false;
+    }
+  });
+
   eleventyConfig.addFilter("readableDate", (date) => {
     return new Intl.DateTimeFormat("en-US", {
       year: "numeric",
