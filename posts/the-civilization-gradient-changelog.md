@@ -4,12 +4,13 @@ eleventyExcludeFromCollections: true
 ---
 # The civilization gradient — essay changelog
 
-This post is the essay's single source of truth (migrated from
-a20r/civgrad's `essay/` on 2026-07-28; the civgrad repo hosts the model,
-data, and audits, and its site links here). The essay stays versioned like
-civgrad's METHODOLOGY.md: bump the version in the post intro, add a line
-here, and keep the essay's claims consistent with the scorecard and audits
-at that version. This file is not rendered on the site.
+The essay's single source of truth is the post beside this file,
+`posts/the-civilization-gradient.md` (migrated from a20r/civgrad's
+`essay/` on 2026-07-28; the civgrad repo hosts the model, data, and audits,
+and its site links here). The essay stays versioned like civgrad's
+METHODOLOGY.md: bump the version in the post intro, add a line here, and
+keep the essay's claims consistent with the scorecard and audits at that
+version. This file is not rendered on the site.
 
 - **v0.1** — scaffold: eight section stubs (2–4 sentences each, sources named,
   no prose), demo embedded between §5 and §6, scorecard mirror in §7,
@@ -24,17 +25,7 @@ at that version. This file is not rendered on the site.
   framing dropped, a formal machinery section (§3) and a method reflection
   (§9) added there, and sensitivity/price-experiment numbers quoted from an
   analysis whose repo artifacts had not yet landed. Recorded here
-  retroactively; this repo copy stayed at the 8-section structure.
-- **v0.4** — the audit and the conclusion, in full (blog copy): the essay
-  absorbs the evidence it previously linked out to — the 500-draw audit
-  summary, the buffer-rule table, both robust marginal-value tables, the
-  mean-vs-tail comparison, and the price experiment's two result tables
-  now sit inline in §8/§9 of the blog copy, styled on the site theme.
-  This repo-site copy stays prose-only (its client-side renderer has no
-  table support); the generated POLICY.md / SENSITIVITY.md /
-  PRICE_EXPERIMENT.md remain the regenerable sources of every number.
-  Includes the sign-label fix (strict directional fractions; exactly-zero
-  gradients support neither sign).
+  retroactively; the repo copy stayed at the 8-section structure.
 - **v0.3** — audited numbers + the policy section, both copies: the §5
   sensitivity parenthetical and boneyard passage now quote the committed,
   reproducible audit (SENSITIVITY.md: big negative signs 85–92% under
@@ -46,11 +37,18 @@ at that version. This file is not rendered on the site.
   gradient-as-price → total collapse); new §8 "The marginal dollar, cashed
   out" condensing POLICY.md; old §8 renumbered §9 with its scope line
   updated. Header notes the blog as the canonical fullest copy.
+- **v0.4** — the audit and the conclusion, in full: the essay absorbs the
+  evidence it previously linked out to — the 500-draw audit summary, the
+  buffer-rule table, both robust marginal-value tables, the mean-vs-tail
+  comparison, and the price experiment's two result tables now sit inline
+  in §8/§9, styled on the site theme. Includes the sign-label fix (strict
+  directional fractions; exactly-zero gradients support neither sign) and
+  the Tōhoku deficit correction (measured 1.0/0.6 month-equivalents, not
+  the design-session "~0.3"). The generated POLICY.md / SENSITIVITY.md /
+  PRICE_EXPERIMENT.md in civgrad remain the regenerable sources of every
+  number.
 - **v0.4 (addendum)** — source of truth moved to this repo: a20r/civgrad
   dropped its `essay/` copy (its renderer could not carry the tables and
   the two-copy setup had already produced one real drift bug — the ~0.3
   Tōhoku deficit), its project site now hosts the live model only and
-  links here, and this changelog moved alongside the post. The v0.4
-  content itself also grew: §8/§9 absorbed the audit summary, buffer-rule,
-  marginal-value, CVaR, and price-experiment tables inline, with every
-  cell machine-checked against civgrad's committed artifacts.
+  links here, and this changelog moved alongside the post.

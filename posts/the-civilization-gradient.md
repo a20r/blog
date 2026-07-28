@@ -10,7 +10,7 @@ summary: "The living essay of the civgrad project: model a civilization's supply
 single source of truth, versioned like the repo's methodology — the
 [changelog](https://github.com/a20r/blog/blob/main/posts/the-civilization-gradient-changelog.md)
 lives alongside it here; civgrad hosts the model, the data, and the
-seeded audits every number and table below traces to.*
+seeded audits that every number and table below traces to.*
 
 ## 1. An island with no off-island
 
