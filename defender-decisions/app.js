@@ -105,8 +105,12 @@ async function boot() {
 }
 
 function stageF32(arr) {
-  const ptr = wasm.mf_alloc(arr.length * 4);
-  new Float32Array(mem.buffer, ptr, arr.length).set(arr);
+  // stage as BYTES: a Float32Array view at ptr would assume 4-byte alignment,
+  // which a Vec<u8>-backed allocator does not guarantee (same pattern as the
+  // main WebGL app's stageFloats)
+  const ptr = wasm.mf_alloc(arr.byteLength);
+  new Uint8Array(mem.buffer, ptr, arr.byteLength)
+    .set(new Uint8Array(arr.buffer, arr.byteOffset, arr.byteLength));
   return ptr;
 }
 
