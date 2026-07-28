@@ -532,3 +532,35 @@ mjx-container[display="true"] {
     width: 100vw;
   }
 }
+
+/* ---------- prose tables (the audit tables in the essay body) ----------
+   Scoped to markdown tables only; the scorecard widget's table keeps its
+   own layout (it lives in .civgrad-scorecard .table-wrap). */
+
+.post table:not(#scorecard-table) {
+  display: block;
+  overflow-x: auto;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+  margin: 1.5rem 0;
+}
+
+.post table:not(#scorecard-table) th,
+.post table:not(#scorecard-table) td {
+  padding: 0.45rem 0.65rem;
+  border-bottom: 1px solid var(--rule);
+  vertical-align: top;
+  white-space: nowrap;
+}
+
+.post table:not(#scorecard-table) th {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+}
+
+.post table:not(#scorecard-table) td:first-child {
+  font-weight: 500;
+}
