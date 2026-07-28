@@ -1144,10 +1144,10 @@ function setMode(m) {
 function wireUI() {
   // collapsible controls (keeps the pitch visible on mobile); collapsed by default on narrow screens
   const controls = $('controls');
+  const relayout = () => requestAnimationFrame(() => window.dispatchEvent(new Event('resize')));
   // the GL canvas was sized before this collapse changes the stage height —
   // re-run resize() or the backing store stays stale and the pitch stretches
   if (window.innerWidth <= 760) { controls.classList.add('collapsed'); relayout(); }
-  const relayout = () => requestAnimationFrame(() => window.dispatchEvent(new Event('resize')));
   $('toggle').onclick = () => { controls.classList.toggle('collapsed'); relayout(); };
 
   $('play').onclick = () => { playing = !playing; $('play').textContent = playing ? '⏸ pause' : '▶ play';
