@@ -4,12 +4,12 @@ topics: [quant, soccer, prediction-markets, stochastic-processes, rust, calibrat
 date: 2026-07-28T15:00:00Z
 series: Kalshi basket
 seriesPart: 3
-summary: "The momentum field's four roadmap items, delivered: a defender decision model that chooses what to deny, per-player skill fitted from tracking alone, a multi-goal outcome law that prices matches before the 80th minute, and the C.6 calibration gate — which still, correctly, says no."
+summary: "The momentum field's four roadmap items, delivered — then made to face the 40% of the match no fit ever saw. The transport model beats a train-corrected persistence baseline at every horizon (4× the probability on the right cell at 10 s), the decision jumps carry a third of the edge, the defender motion model loses and says so, and the calibration gate still, correctly, says no."
 ---
 
 # The Defense Gets a Vote: Defender Decisions, Player Skill, the Multi-Goal Law, and a Gate That Can Say No
 
-*Part 3 of 3. [Part 1](/posts/capitulation-basket/) is the trading strategy; [Part 2](/posts/a-momentum-field-for-soccer/) is the momentum-field model that computes the strategy's one missing input. Part 2 ended with a four-item roadmap — the defender decision model, per-player skill estimation, the multi-goal convolution, and C.6 calibration. This post is the delivery report: all four are now implemented in the kalshi-basket repo, with the tests that pin them and the honest accounting of what each one can and cannot yet claim. One of the four ends the only way it truthfully could, and that ending is the point of the whole framework.*
+*Part 3 of 3. [Part 1](/posts/capitulation-basket/) is the trading strategy; [Part 2](/posts/a-momentum-field-for-soccer/) is the momentum-field model that computes the strategy's one missing input. Part 2 ended with a four-item roadmap — the defender decision model, per-player skill estimation, the multi-goal convolution, and C.6 calibration. This post is the delivery report, and then the reckoning: all four are implemented in the kalshi-basket repo with the tests that pin them, and the assembled model is then validated against the segment of real match data none of its fits ever touched (§5) — where it wins clearly on ball transport, ties-to-wins on survival, and loses on defender motion, each with a number attached. One roadmap item still ends the only way it truthfully could, and that ending is the point of the whole framework.*
 
 ---
 
@@ -22,7 +22,7 @@ Part 2 closed with a roadmap, and each item on it was a named hole in the model 
 3. **The multi-goal convolution.** The fair-value three-vector $\{P(A), P(D), P(B)\}$ was *next-goal-decisive*: it treats the next goal as settling the match. Good late, wrong early, and the post said so explicitly — "the rigorous fix is the full multi-goal convolution, which is on the roadmap, not in v1."
 4. **C.6 calibration.** The gate that decides whether any of this may price a dollar. Every output in the pipeline ships stamped `calibrated: false`, and Part 2 was blunt that the *statistical* claim — "these intensities are calibrated goal probabilities" — was not yet earned.
 
-Four debts. Here is how each was paid, in the order they compound.
+Four debts. Here is how each was paid, in the order they compound — and then the part a delivery report cannot supply on its own credit: §5 takes the assembled model to the 40% of the match that no estimator ever saw and reports what it can actually predict there, baselines, confidence intervals, losses and all.
 
 ## 2. The defense gets a vote
 
@@ -109,38 +109,80 @@ Mechanically it is an exact dynamic program on the (score difference, any-goal f
 
 What this buys the strategy is concrete. Part 1's §10 subsidised-upside engine prices a tail iff $P(\text{side wins from here}) > p$, and flagged its own input as "asserted, not proven" — window-unconditional, score-blind. The convolution gives that inequality a minute-conditional, score-state-conditional left-hand side *with the correct structure*: from $-1$ down at 70′, from level at 55′, from $+1$ up at 85′, each its own law. Class B and Class C setups — leads and deficits — become priceable objects instead of footnotes. Structure, not yet calibrated truth: the numbers inherit `calibrated: false` from the intensities underneath, and the post-goal rates are score-blind (no parked bus, no desperation surge) until a real corpus exists to fit those effects. The DP is exact; its inputs are still the model's.
 
-## 5. The gate that can say no
+## 5. Held out: what the model actually predicts
 
-The last roadmap item is the one that cannot be finessed. C.6 says: before the computed λ prices a dollar, it must — out-of-sample, at match level, pre-registered — be reliable, score well on proper rules, and at least match the de-vigged market on held-out matches. `calibrate.rs` is that judge, implemented so it can actually rule:
+Sections 2–4 delivered machinery, and machinery is cheap to praise on the data it was built from. The only question that matters is the one none of the above answers: **on match data the model has never seen, does it predict anything better than not having a model?** So before the calibration gate gets its say, here is the study that answers it, run by the new `validate` subcommand.
+
+**The protocol.** The shipped DFL match is split *temporally* at a possession-run boundary: the first 60% (56,643 frames, 1,078 possession runs, through minute ~68) is the training segment, the last 40% (37,297 frames, 614 runs) is touched by nothing except scoring. Everything learnable is fit on train only: θ's drift, volatility, and turnover/out hazards (drift RMSE 5.84 → 4.23 m/s over 3,604 samples), the per-player skill table (401 harvested passes), and every statistic the baselines use. Then, from 900 anchor states strided through the evaluation runs — each a real frozen moment with real velocities — every contender predicts forward and gets scored against what actually happened. Uncertainty comes from a block bootstrap that resamples whole possession runs, because frames inside a run are not independent and pretending otherwise is how you fake significance.
+
+**Observable 1: where the ball goes.** Each model propagates its ball-state density $\Delta t \in \{2, 5, 10\}$ s ahead (conditioned on the possession surviving, which is scored separately below) and is charged the log-likelihood of the 3 m grid cell the ball actually landed in, with an $\varepsilon$-uniform mixture so nobody can score $-\infty$. Four contenders: the **full Part-3 model** (fitted θ + explicit decision jumps + skills), the **diffuse-moments ablation** (same fitted θ, passes as drift/diffusion moments instead of jumps — the pre-§7 model of Part 2), **prior θ with jumps** (nothing fitted), and **persistence** — a Gaussian at $x + v\,\Delta t$ with train-fitted drift correction and covariance, the strongest dumb baseline I could build. Uniform-over-the-pitch ($\ln \tfrac{1}{805} = -6.69$ nats) is the "knows nothing" floor.
+
+![Held-out log-likelihood gain over persistence](/images/the-defense-gets-a-vote/heldout_loglik.svg)
+*Log-likelihood gain over persistence on the held-out segment, by horizon. Whiskers are 90% CIs from the run-level bootstrap; win % is the fraction of anchors where the full model outscores persistence. (The absolute numbers behind the bars: full model −3.76/−4.77/−4.56 nats at 2/5/10 s vs persistence −4.17/−5.41/−6.00. The 10 s anchor set is possessions that survived 10 s, hence easier than the 5 s set — comparisons are only ever within a horizon.)*
+
+Three findings, none of which I would have confidently bet on in advance:
+
+- **The field model beats persistence everywhere, and the gap grows with horizon: +0.42 / +0.64 / +1.44 nats per anchor at 2 / 5 / 10 s, every 90% CI clear of zero.** In odds terms: at 10 s the model puts $e^{1.44} \approx 4.2\times$ more probability on the cell the ball actually reached, and wins 91% of anchors. At 2 s persistence is genuinely hard to beat — a moving ball keeps moving — and the model's edge is a real but modest 1.5×. By 10 s persistence has decayed to near-uniform (−6.00 vs −6.69) while the model still carries $e^{2.1} \approx 8\times$ uniform: this is exactly the regime the Fokker–Planck transport was built for, where "where the ball is going" stops being kinematics and starts being football.
+- **The decision jumps are load-bearing.** The moments-only ablation — identical fitted θ, passes smeared into drift and diffusion — gives back +0.34, +0.36, and +0.51 nats of the full model's edge at the three horizons, and at 2 s its CI includes zero (it can't reliably beat persistence at all). Multimodal mass relocation along the option tree is not a rendering flourish; it is a third of the measured predictive edge.
+- **Fitting θ pays from 5 s out, not at 2 s.** Prior θ with jumps matches the fitted model at 2 s (+0.44 vs +0.42 — statistically a tie), then falls behind at 5 s (+0.25, CI spanning zero, vs +0.64) and 10 s (+1.13 vs +1.44). Short-horizon transport is dominated by geometry the priors already encode — players, lanes, momentum. What fitting buys is the *medium-term* physics: how fast possession danger builds and dissipates on this pitch, in this match.
+
+**Observable 2: is the density honest about itself?** A model can win log-likelihood while lying about its uncertainty, and a lying density is exactly what the C.6 gate later exists to catch. The check: for each anchor, find the smallest highest-density region (HDR) of the predicted density that contains the realised cell; over many anchors, the γ-HDR should contain the truth γ of the time.
+
+![Held-out HDR coverage curves](/images/the-defense-gets-a-vote/heldout_coverage.svg)
+*Coverage above the diagonal = conservative (the density spreads wider than its errors); below = overconfident. Both the model (solid) and persistence (dashed) run conservative at every horizon — nobody is overconfident, which is the failure mode that costs money. The model hugs the diagonal tighter while carrying far more of its mass near the truth: its 10%-HDR alone captures the ball ~33% of the time.*
+
+**Observable 3: does the possession survive?** The transport score conditions on the run continuing; the model's *unconditioned* output also predicts whether it continues — surviving mass under the fitted turnover/out hazards. Scored as Brier against realised run continuation at each horizon, vs the train segment's continuation frequency (climatology — the strongest constant guess):
+
+| Δt | model Brier | climatology | Δ [90% CI] |
+|---|---|---|---|
+| 2 s | 0.240 | 0.248 | −0.007 [−0.022, +0.007] |
+| 5 s | 0.205 | 0.219 | −0.014 [−0.036, +0.007] |
+| 10 s | 0.122 | 0.133 | −0.011 [−0.026, +0.005] |
+
+Directionally better at every horizon; individually, every CI straddles zero. That is the honest reading of one match of data, and it stays in the table rather than the headline. (It is also a preview of why §6's gate demands a *corpus*: state-dependent hazard skill on the order of a Brier point cannot be certified from 614 runs.)
+
+**Observable 4: the defenders — where the model loses.** The §2 decision layer makes a checkable motion claim: simulate the defenders forward from each anchor (real positions *and* velocities seeded, the fitted θ, decisions re-planned on the replan clock) and compare against the realised tracks, with persistence ($x + v\,\Delta t$) and frozen-in-place as baselines.
+
+![Held-out defender motion error](/images/the-defense-gets-a-vote/defender_motion_error.svg)
+*Mean defender position error at 2 and 5 s. The decision sim loses to persistence by 2.8 m at 2 s [CI 2.6, 3.0] and 3.7 m at 5 s [2.9, 4.5] — it even loses to frozen at 2 s.*
+
+No spin: **as a trajectory forecaster of real defenders, the decision layer is bad.** It dispatches bodies toward decided targets at engagement speed while actual defenders mostly keep jogging the way they were jogging; over 2 s, inertia is nearly everything, and a model that ignores it loses to a one-line baseline. What the layer demonstrably does do is *price threat response* — the §2 A/B (pressure up, clean shot generation down, finishing down when the defense is allowed to decide) is what feeds the hazards, and the full model's transport wins above already include whatever the defensive configuration contributes to lanes and races. But "useful counterfactual engine" and "calibrated motion model" are different claims, the second one is now measured, and it failed. The fix is on the ledger: fit the `def_*` weights and the engagement speed against realised defensive motion — the harness to do it is literally this study's scoring loop.
+
+**What §5 adds up to.** On data none of the fits ever saw: the transport model is genuinely predictive and increasingly so at longer horizons, the decision jumps carry a measured share of that edge, the densities are honest about their own uncertainty, survival prediction is promisingly-but-not-provably better than climatology, and the defender motion model is worse than persistence and says so in its own figure. That is the conclusion the machinery sections owed you — and it is a claim about *transport physics on one match*, not about goal probabilities or prices. For those there is a gate.
+
+## 6. The gate that can say no
+
+The last roadmap item is the one that cannot be finessed. C.6 says: before the computed λ prices a dollar, it must — out-of-sample, at match level, pre-registered — be reliable, score well on proper rules, and at least match the de-vigged market on held-out matches. §5 validated *where the ball goes*; none of it validates *goal probabilities against markets* — that demands a corpus of tracked matches with de-vigged quotes and realised outcomes, which does not exist here yet. `calibrate.rs` is the judge for the day it does, implemented so it can actually rule:
 
 - **The corpus format** is one CSV row per evaluated snapshot — `match_id, minute, model three-vector, de-vigged market three-vector, realised outcome` — and **matches are the independent unit** everywhere: per-match score aggregation, match-level bootstrap. Snapshots within a match share an outcome; treating them as independent is how you fake significance.
 - **Reliability** is pooled over all three outcome probabilities into ten bins with an ECE threshold; **proper scores** are multiclass Brier and log-loss, required to beat the corpus base-rate reference (predicting the outcome frequencies is the floor below which no model deserves a verdict).
 - **The market benchmark** is an *equivalence test*, and this took actual thought: "at least match the market" cannot mean "bootstrap CI of (model − market) strictly below zero," because a model exactly as good as the market straddles zero half the time and would fail forever. The criterion is that the upper CI limit sit within a practical-equivalence band (0.002 Brier — far below any tradeable edge). Demonstrably not-worse, with the burden of proof on the model, small samples widening the CI and making the bar *harder* — the statistics lean the safe way.
 - **A PASS emits a certificate** bound to a hash of the exact corpus it was earned on, and `mu --certificate` is the *only* code path in the repo that flips `calibrated: true`. A FAIL certificate never certifies. There is no argument to a function anywhere that sets the flag by assertion.
 
-You cannot validate a model without a corpus, but you *can* validate the judge, and that is what ships: `calibrate --selftest` generates synthetic corpora where the verdict is known by construction — a truth-reporting model that deserves to pass, an overconfident model, a noisy model that loses to the market — and requires the gate to rule correctly on all three, with the right reasons on the failures.
+A gate with no corpus to rule on could still be a broken gate, so the judge itself goes on trial: `calibrate --selftest` generates synthetic corpora where the correct verdict is known *by construction* and requires the gate to reach it — pass the model that reports true probabilities, fail the overconfident one, fail the noisy one that loses to the market, each failure for the right named reason. To be unmistakable about the two figures below: **they are not the model being validated — §5 was the model.** These are the two ends of the judge's own exam, shown so you can see what a pass and a fail look like when the gate finally rules on real data.
 
-![Reliability of the model that deserves to pass](/images/the-defense-gets-a-vote/reliability_pass.svg)
-*The self-test's truth-reporting model: pooled reliability hugs the diagonal (bubble area = bin mass), ECE 0.022, and the gate passes it.*
+![Judge self-test: the synthetic model that deserves to pass](/images/the-defense-gets-a-vote/reliability_pass.svg)
+*Judge on trial, case 1 — a synthetic truth-reporting model. Each bubble is a probability bin (area = how many predictions landed there); x = what the model said, y = how often it happened. Hugging the diagonal means "when it says 30%, it happens 30% of the time." ECE 0.022 → the gate correctly passes it.*
 
-![Reliability of the overconfident model](/images/the-defense-gets-a-vote/reliability_overconfident.svg)
-*The same judge on the sharpened model: the classic overconfidence rotation off the diagonal, ECE 0.167, failed for reliability, the base-rate floor, and the market bar at once — each failure named in the report.*
+![Judge self-test: the synthetic model that deserves to fail](/images/the-defense-gets-a-vote/reliability_overconfident.svg)
+*Judge on trial, case 2 — the same corpus with the probabilities artificially sharpened. Low forecasts land above the line, high forecasts below: the S-rotation of overconfidence. The gate correctly fails it, naming reliability, the base-rate floor, and the market bar.*
 
-And the verdict on the real model, which is the ending Part 2 promised in advance: **there is no verdict, because there is no corpus.** One tracked match fits transport physics — drift, volatility, release rates, even a skill ordering — but it cannot calibrate a hazard, and no amount of machinery changes that. So the gate stands built and armed, the certificate file does not exist, every output still says `calibrated: false`, the manual hazard gate keeps its override, and the crossover rule runs on the base rate. The framework's first design principle is that the best output is often *no trade*; the calibration gate's first output is *no verdict*. Both are the system working.
+And the verdict on the real model, which is the ending Part 2 promised in advance: **there is no verdict, because there is no corpus.** One tracked match validates transport physics — §5 just did, baselines and CIs and all — but it cannot calibrate a goal hazard, and no amount of machinery changes that. So the gate stands built and armed, the certificate file does not exist, every output still says `calibrated: false`, the manual hazard gate keeps its override, and the crossover rule runs on the base rate. The framework's first design principle is that the best output is often *no trade*; the calibration gate's first output is *no verdict*. Both are the system working.
 
-## 6. The scoreboard
+## 7. The scoreboard
 
-Where the four debts stand, in the ledger's own style:
+Where the four debts stand — plus the validation none of them counted as delivered until it existed — in the ledger's own style:
 
-| roadmap item | delivered | still owed |
+| item | delivered | still owed |
 |---|---|---|
-| defender decisions | the five-action softmax over threat denied; sequential claims; sim integration; A/B-tested hazard coupling | fitting the `def_*` scheme weights to real tracking (they ship as priors) |
+| defender decisions | the five-action softmax over threat denied; sequential claims; sim integration; A/B-tested hazard coupling | fitting the `def_*` weights and engagement speed to realised defensive motion — §5 measured the current layer losing to persistence as a motion predictor |
 | per-player skill | tracking-only pass harvesting; pid identity through the schema; shrunk fixed-point fit; recovery-tested | a multi-match corpus before the multipliers mean people, not noise |
 | multi-goal law | exact score-lattice DP; both regime claims unit-tested; wired to the CLI, core, and deck | score-state-conditioned post-goal rates (bus-parking is real and unmodelled) |
+| held-out validation | temporal split on the real match; transport beats train-corrected persistence at every horizon (up to +1.44 nats, 91% of anchors, CIs clear of zero); jumps carry a third of the edge; densities conservative, never overconfident | more matches (survival skill is directional, not significant); the defender-motion fix above |
 | C.6 gate | the full judge: reliability, proper scores, market equivalence, certificates; self-tested in both directions | the corpus. Everything is the corpus. |
 
-The through-line is the same discipline the series started with. Part 1 was a strategy built out of refusals; Part 2 was a model that labeled every uncalibrated number as uncalibrated; Part 3's biggest deliverable is a piece of software whose entire job is to keep saying *no* until the data says otherwise — and which, on the day it can finally rule, will already know exactly what evidence would change its mind. The defense gets a vote now. So does the judge.
+The through-line is the same discipline the series started with. Part 1 was a strategy built out of refusals; Part 2 was a model that labeled every uncalibrated number as uncalibrated; Part 3 delivers the machinery, then makes it face match data it never trained on and prints the losses next to the wins — and its biggest single deliverable is still a piece of software whose entire job is to keep saying *no* until the data says otherwise. The defense gets a vote now. So does the held-out data. So does the judge.
 
 ---
 
-*All four implementations, their tests (33 new; the workspace suite and the wasm build stay green), the CLI subcommands (`decisions`, `calibrate`, `fit --skills`, `mu --multigoal`), and the figures in this post live in the kalshi-basket repo's `momentum-field` crate. [Part 1](/posts/capitulation-basket/) covers the trading framework, [Part 2](/posts/a-momentum-field-for-soccer/) the field model both of these posts stand on.*
+*All four implementations, the held-out study, their tests (38 new; the workspace suite and the wasm build stay green), the CLI subcommands (`decisions`, `calibrate`, `fit --skills`, `mu --multigoal`, `validate`), and the figures in this post live in the kalshi-basket repo's `momentum-field` crate. [Part 1](/posts/capitulation-basket/) covers the trading framework, [Part 2](/posts/a-momentum-field-for-soccer/) the field model both of these posts stand on.*
