@@ -56,6 +56,12 @@ $\kappa_{\text{claim}}$ is the piece I did not plan and the simulation demanded.
 ![The same state under a lane-denying θ](/images/the-defense-gets-a-vote/decisions_lane.svg)
 *The same state, decided under a lane-denying scheme ($\theta_{\text{lane}}$ raised, cover cheapened): two bodies collapse onto the carrier→runner diagonal (yellow). The defensive scheme is a parameter vector now — same machinery, different team.*
 
+Those two figures are frozen frames. The layer itself is better experienced than read about, so — like Part 2 — the real thing runs in your browser: the exact `defend.rs` above, compiled to wasm, re-deciding on every pointer move. **[▶ Open the live demo](/defender-decisions/)**, or play with it right here — drag the ball or any player (drag the free runner somewhere embarrassing and watch who deals with it), switch the scheme presets, move the θ sliders, and click a defender to see the softmax it decided from:
+
+<iframe src="/defender-decisions/" title="defender decision layer live demo"
+        style="width:100%; aspect-ratio: 880 / 640; border:1px solid #234; border-radius:8px;"
+        loading="lazy"></iframe>
+
 Two findings from building it, both of which I believe more than I expected to:
 
 **Marked receivers are dead lanes.** I spent a while constructing a scenario where lane-blocking would be the obvious choice, and the model kept refusing — because the moment a defender stands goal-side of a runner, the lane race collapses that option's completion $c_r$, which collapses its choice probability $q_r$, which collapses the lane's value $q_r c_r V$. The model was telling me something true: you don't block the lane to a marked man, because *the mark already blocked it*. Lane-blocking earns its place in broken shapes — a runner nobody owns, a recovering defender who can reach the diagonal — which is exactly where real defenses spring offside traps and covering interceptions. Under the prior θ it is correctly the *rare* choice.
