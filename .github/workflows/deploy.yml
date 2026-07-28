@@ -13,6 +13,8 @@ permissions:
   id-token: write
   # Needed to delete duplicate github-pages artifacts (see the prune step).
   actions: write
+  # Needed to enumerate open PRs for the preview assembly.
+  pull-requests: read
 
 concurrency:
   group: pages
@@ -48,6 +50,36 @@ jobs:
         run: npm run build
         env:
           PATH_PREFIX: ${{ steps.pages.outputs.base_path }}
+
+      # PR previews: the deployed site also carries a build of every open
+      # same-repo PR under /pr-preview/pr-<N>/. Pages serves exactly one site
+      # per repo, so previews ride along in the same deployment; a PR event
+      # dispatches this workflow on main (see pr-preview.yml), and a closed
+      # PR simply drops out of the next assembly. A broken PR build skips
+      # that preview with a warning instead of blocking the main deploy.
+      - name: Build previews for open PRs
+        if: github.event_name != 'pull_request'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BASE_PATH: ${{ steps.pages.outputs.base_path }}
+        run: |
+          set -euo pipefail
+          for pr in $(gh pr list --repo "$GITHUB_REPOSITORY" --state open \
+              --json number,headRepositoryOwner \
+              --jq ".[] | select(.headRepositoryOwner.login == \"${GITHUB_REPOSITORY_OWNER}\") | .number"); do
+            echo "::group::preview for PR #$pr"
+            if git fetch origin "refs/pull/$pr/head" \
+               && git worktree add "/tmp/pr-$pr" FETCH_HEAD \
+               && (cd "/tmp/pr-$pr" && npm ci --no-audit --no-fund \
+                   && PATH_PREFIX="$BASE_PATH/pr-preview/pr-$pr" npm run build); then
+              mkdir -p "_site/pr-preview/pr-$pr"
+              cp -a "/tmp/pr-$pr/_site/." "_site/pr-preview/pr-$pr/"
+            else
+              echo "::warning::preview build for PR #$pr failed; skipping it"
+            fi
+            git worktree remove --force "/tmp/pr-$pr" 2>/dev/null || true
+            echo "::endgroup::"
+          done
 
       - name: Upload Pages artifact
         if: github.event_name != 'pull_request'
