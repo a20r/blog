@@ -6,10 +6,10 @@ summary: "The living essay of the civgrad project: model a civilization's supply
 # The civilization gradient
 
 *The living essay of the [civgrad](https://github.com/a20r/civgrad) project
-(v0.3 — audited numbers and the policy section), moved here from the project
+(v0.4 — the audit and the conclusion, in full), moved here from the project
 site. Versioned like the methodology: see `essay/VERSION` and
-`essay/CHANGELOG.md` in the repo. Every number in it traces to the repo's
-frozen baseline or its committed audits.*
+`essay/CHANGELOG.md` in the repo. Every number and table in it traces to
+the repo's frozen baseline or its committed, seeded audits.*
 
 ## 1. An island with no off-island
 
@@ -307,9 +307,8 @@ wrong by a factor of two keeps the two big negative signs in 85–92% of
 draws (100% under pure disruption-prior fog), and keeps the top of the
 ranking inside the production/equipment complex in 91–99% of draws — while
 *which* node leads is fog-conditional and fine-grained rank order
-dissolves (Kendall τ ≈ 0.5); the repo's
-[`SENSITIVITY.md`](https://github.com/a20r/civgrad/blob/main/SENSITIVITY.md)
-holds the tables — but two results deserve to be told straight.
+dissolves (Kendall τ ≈ 0.5); §9 lays the audit out in full — but two
+results deserve to be told straight.
 
 First, the **negative shipping gradient**: −2.68 in the single-scenario run,
 −1.63 averaged over the disruption prior. After a shock destroys fabrication
@@ -429,9 +428,11 @@ both protocols — with the documented ~6-month stockpiles (an industry lesson
 from the 2014 Crimea price spike), no fab stoppage, matching history; the
 same run *without* stockpiles takes a ~17% hit, which is the model pricing
 what that lesson was worth. **Tōhoku 2011** passes: two months of wafer
-inventory dwarfs a ~0.3 month-equivalent integrated deficit. That inequality
-— buffer-months versus the integral of the deficit while capacity ramps — is
-the single mechanism that decides nearly every event in the suite.
+inventory dwarfs the integrated deficit — 1.0 month-equivalent under the
+imposed ramp, 0.6 as measured under the adaptation law (§9 tabulates all
+six). That inequality — buffer-months versus the integral of the deficit
+while capacity ramps — is the single mechanism that decides nearly every
+event in the suite.
 **Photoresist 2019** passes as the non-event it was; and the counterfactual
 run of what everyone *feared* (a real 90% cut) yields a 64% dip — the model
 quantifying what the panic implied and the licensing regime prevented.
@@ -460,18 +461,50 @@ out in months. But a formalism that can *express* collapse-as-attractor is
 exactly what a project with this name requires. It just needs the escape
 mechanism reality has, and that gap is a failing test on the scorecard —
 not a footnote.
-(Two things now sit on the other side of that test. The sweep says the
-miss is structural: 95% of 500 nearby parameterizations miss it too, so no
-citation will fix it. And an experiment says the diagnosis was right:
-teach the model to see a processing margin — fat input saturation beside a
-starved output, the formal shadow of the 1993 epoxy price spike — and let
-that margin restore destroyed capacity toward baseline, and the attractor
-dissolves: recovery in about ten months, the passing replays untouched.
-The same experiment's cautionary arm: rationing the contested stock by the
-gradient itself drives deliveries to zero, because a gradient computed on
-one catastrophe is the wrong price list for another.
-[`PRICE_EXPERIMENT.md`](https://github.com/a20r/civgrad/blob/main/PRICE_EXPERIMENT.md)
-in the repo has both.)
+
+Two results now sit on the other side of that test. The sensitivity sweep
+says the miss is **structural**: re-run the replay under 500 draws of
+parameter fog and 95% still miss the acceptance band — 45% never recover
+at all, and the median dip is 96% — so no citation will fix it. And the
+price experiment says the diagnosis was right, from both directions.
+Teach the model to see a **processing margin** — fat input saturation
+beside a starved output, the formal shadow of the 1993 epoxy price spike —
+and let that margin restore destroyed capacity toward baseline, and the
+attractor dissolves while the passing replays don't move:
+
+| event (v1 protocol) | frozen law | + margin restoration |
+|---|---:|---:|
+| neon 2022 | dip −0.7%, rec 0.0 mo | dip −0.7%, rec 0.0 mo |
+| Tōhoku 2011 | dip −0.6%, rec 0.0 mo | dip −0.6%, rec 0.0 mo |
+| **Sumitomo 1993** | **dip 57.6%, never recovers** | **dip 57.6%, rec 9.9 mo** |
+| photoresist 2019 | dip −0.7%, rec 0.0 mo | dip −0.7%, rec 0.0 mo |
+
+A margin term one step removed from an actual price supplies the escape
+reality has. That is evidence *for* the missing-mechanism diagnosis — not
+a fix. The scorecard row stays red until this ships through the
+frozen-parameter discipline, because a law changed after seeing the
+holdout is, by definition, no longer validated against it.
+
+The experiment's cautionary arm inverts the lesson. Suppose a crisis
+manager takes the project's thesis object literally and allocates the
+contested stock — packaged chips — by the gradient's own priority list,
+the one computed on a catastrophe that destroys tools:
+
+| consumer of the packaged-chip stock | gradient | crisis allocation weight |
+|---|---:|---:|
+| Ship_Strait (deliveries) | −2.68 | 0.000 |
+| Build_EUV (tool building) | 81.79 | 0.963 |
+| Refurb (tool refurbishment) | 3.15 | 0.037 |
+
+That price list hands everything to the equipment loop and prices
+deliveries at zero — and deliveries go to zero and stay there: dip 100%,
+no recovery, a collapse the frozen law never produces. A gradient computed
+on one catastrophe is the wrong price list for another. Real prices
+re-solve the allocation problem every day with current information; a
+frozen derivative does not. (Both arms regenerate from
+[`analysis/`](https://github.com/a20r/civgrad/tree/main/analysis) in the
+repo, alongside
+[`PRICE_EXPERIMENT.md`](https://github.com/a20r/civgrad/blob/main/PRICE_EXPERIMENT.md).)
 
 Which yields the caveat that belongs in bold on everything this model
 outputs. It has no price-mediated allocation, no substitution, no
@@ -494,49 +527,169 @@ checked against it in CI.</p>
 ## 9. The marginal dollar, cashed out
 
 The question in §1 was where one marginal dollar of resilience should go.
-Having audited what the model can and cannot license, here is its answer —
-each conclusion wearing its measured robustness, all magnitudes under the
-standing caveat, full tables in the repo's
-[`POLICY.md`](https://github.com/a20r/civgrad/blob/main/POLICY.md).
+This section is the answer the model gives — the deliverable the rest of
+the essay was building toward — with every claim wearing its measured
+robustness, because an actionable conclusion that hides its error bars is
+a liability, not a contribution. Scope first, as always: one confidence-C
+semiconductor slice, declared fog at every frontier, no price-mediated
+allocation, so dips are ceilings, not forecasts. "Robust" below means:
+survives ×0.5–×2 ignorance in every parameter, and fog in the disruption
+prior, in the measured fractions. (Every table regenerates from the
+repo's seeded [`analysis/`](https://github.com/a20r/civgrad/tree/main/analysis)
+harness.)
 
-**Buffers first — and they have a sizing rule.** A shock bites only when
-buffer-months of cover fall short of the integrated capacity deficit while
-supply rebuilds; that one inequality decides all six replay rows. The
-industry's post-2014 neon stockpile (~6 months) sat just above the measured
-deficit (5.7 month-equivalents) — the 2014 lesson bought almost exactly the
-right amount of insurance. So: at single-source chokepoints, hold — or at
-least require disclosure of — months-of-cover sized against plausible
-outages. It is the cheapest resilience anywhere in the model.
+Start with what the 500-draw audit left standing, because it disciplines
+everything after it:
 
-**The marginal capacity dollar goes upstream — never to logistics.** In
-91–99% of fog draws the top-gradient capacity is fab, equipment-making, or
-a fab-input source; the equipment loop is the modal leader; shipping led in
-one draw out of a thousand. Which single node wins, the audit refuses to
-say — but industrial-policy dollars pointed at shipping, packaging, or
-consumption-side capacity are pointed the wrong way in nearly every world
-consistent with the map.
+| claim under audit | param fog (single-scenario) | param fog (prior-averaged) | prior fog |
+|---|---:|---:|---:|
+| shipping gradient is negative | 89% | 85% | 100% |
+| wear gradient is negative | 92% | 91% | 100% |
+| top capacity is in the production/equipment complex | 99% | 91% | 100% |
+| top stockpile is an equipment or fab-input stock | 100% | 90% | 100% |
+| Fab is the single #1 capacity | 9% | 10% | 94% |
+| boneyard: worn tools outrank working spares | 20% | 12% | 0% |
+| full ranking order (Kendall τ vs baseline, mean) | 0.53 | 0.47 | 0.92 |
 
-**Post-shock, allocation beats capacity — and static priority lists are
-dangerous.** The negative shipping gradient (sign-stable in 85–89% of
-parameter-fog draws, 100% under prior fog) is the model deriving wartime
-rationing from topology. But the price experiment's cautionary arm shows
-that a *frozen* priority list applied in the wrong crisis drives deliveries
-to zero. Crisis authority should reallocate on current information, per
-event — or get out of the way of the prices that re-solve that problem
-daily.
+Read the columns against each other and the audit's one-sentence verdict
+falls out: **what survives parameter fog is the partition, not the
+ordering** — which side of the net the marginal dollar belongs to is about
+as robust as anything this model produces, while which single node leads
+is fog-conditional. And the prior-fog column, stable nearly everywhere,
+locates the weakness precisely: it is parameter ignorance, not the choice
+of catastrophe prior — which is exactly what real citations on the map
+would sharpen. Five conclusions survive this table.
 
-**Stop shredding the boneyard.** Comparable value to pristine spares, at
-scrap prices, in every fog regime — and in the tail analysis it is the
-refurbishment loop that carries the system through the Zeiss-knockout
-scenario. A decommissioned-tool registry and refurbishment capacity are
-cheap resilience buys.
+**1. Buffers first — and they have a sizing rule.** A shock bites only
+when buffer-months of cover fall short of the integrated capacity deficit
+while supply rebuilds. That single inequality decides every replay in the
+suite:
 
-**Tail-risk planners buy fab redundancy.** Weight the objective toward the
-worst 30% of the prior and the ranking concentrates on the Taiwan-fab and
-gallium scenarios; no plausible buffer covers a 60-month ramp, so the tail
-answer is geographic redundancy for the decade-rebuild nodes. (The optics
-monopoly's true cost lives beyond the model's 72-month horizon — pricing it
-honestly is named future work, not a comfort.)
+| event | buffer (mo) | deficit, imposed-τ (mo) | deficit, emergent (mo) | outcome (v1) |
+|---|---:|---:|---:|---|
+| neon 2022 (historical) | 6.0 | 4.5 | 5.7 | dip −0.7% — invisible |
+| neon 2022 (lean counterfactual) | 0.5 | 4.5 | 5.7 | dip 17.5%, rec 6.7 mo |
+| Tōhoku 2011 | 2.0 | 1.0 | 0.6 | dip −0.6% — invisible |
+| Sumitomo 1993 | 1.5 | 3.6 | 7.6 | dip 57.6%, never† |
+| photoresist 2019 (realized) | 2.0 | 0.1 | 1.6 | dip −0.7% — invisible |
+| photoresist 2019 (feared) | 2.0 | 0.9 | 10.6 | dip 64.0%, rec 13.7 mo |
+
+*† depth real; the never-recovery is the §8 hysteresis artifact.*
+
+Buffer above deficit: the shock is invisible. Buffer below: it bites. Six
+rows, one rule — which is why this conclusion is a sizing formula, not a
+slogan. Worth savoring: the industry's post-2014 neon stockpile (~6
+months) sits just above the measured deficit (5.7 month-equivalents) —
+the 2014 lesson bought almost exactly the right amount of insurance. *So:
+at single-source chokepoints, hold — or at least require disclosure of —
+months-of-cover sized to `capacity-lost × expected-ramp-months` for the
+outages you consider plausible. Materials inventory at chokepoints is
+insurance priced far below the capacity it protects, and it is the
+cheapest resilience anywhere in this model.*
+
+**2. The marginal capacity dollar goes upstream — never to logistics.**
+Here is the full capacity gradient, both objectives, with each entry's
+sign stability and how often it tops the ranking under fog:
+
+| capacity | single-scenario | prior-averaged | sign under fog (single / prior-avg) | ranks #1 (single / prior-avg) |
+|---|---:|---:|---|---:|
+| Fab | 157.04 | 51.42 | + robust (99%) / + robust (91%) | 9% / 10% |
+| Build_EUV | 81.79 | 11.14 | + robust (93%) / + robust (91%) | 36% / 23% |
+| Refine_Ga | 0.00 | 9.61 | ~0 unstable (32%) / ~0 unstable (33%) | 12% / 12% |
+| Refurb | 3.15 | 7.61 | + robust (93%) / + robust (91%) | 4% / 3% |
+| Purify_Ne | 29.67 | 0.80 | ~0 unstable (53%) / + leaning (66%) | 14% / 22% |
+| Mine | 11.22 | 0.16 | + leaning (78%) / + leaning (82%) | 12% / 8% |
+| Recycle | 0.00 | 0.06 | ~0 unstable (32%) / ~0 unstable (33%) | 0% / 0% |
+| OpticsMfg | 0.00 | 0.01 | ~0 unstable (30%) / ~0 unstable (25%) | 1% / 0% |
+| Consume | 0.00 | 0.00 | ~0 unstable (32%) / ~0 unstable (32%) | 0% / 0% |
+| WaferSupply | 0.00 | 0.00 | ~0 unstable (25%) / ~0 unstable (15%) | 12% / 12% |
+| Package | −1.70 | −0.37 | ~0 unstable (51%) / + leaning (75%) | 0% / 3% |
+| Ship_Strait | −2.68 | −1.63 | − robust (89%) / − leaning (85%) | 0% / 0% |
+| Wear_EUV | −6.61 | −24.26 | − robust (92%) / − robust (91%) | 1% / 7% |
+
+*(Sign labels use strict directional fractions: "robust" ≥ 85% of draws
+agree on the sign, "leaning" ≥ 65%, "~0 unstable" means no sign commands
+even that — draws with exactly-zero gradients count for neither side,
+which is why the zero-at-baseline rows read as unstable rather than
+negative.)*
+
+The equipment loop (Build_EUV) is the modal leader; shipping topped the
+ranking in exactly one draw out of a thousand. Which single node wins, the
+audit refuses to say — but industrial-policy dollars pointed at shipping,
+packaging, or consumption-side capacity are pointed the wrong way in
+nearly every world consistent with the map. *Capacity subsidies go
+upstream: equipment, tooling, input processing.*
+
+**3. Post-shock, allocation beats capacity — and static priority lists
+are dangerous.** The negative shipping gradient (89%/85% sign-stable,
+100% under prior fog) is the model deriving wartime rationing from
+topology: after a capacity-destroying shock, exports drain exactly the
+intermediate the rebuild loop needs. But §8's cautionary arm shows the
+failure mode of taking that literally — a *frozen* priority list applied
+in the wrong crisis drove deliveries to zero. *Crisis authority should
+take the form of allocation power exercised on current information,
+recomputed per event — or get out of the way of the prices that re-solve
+that problem daily. It should not take the form of pre-committed priority
+lists, and not logistics-capacity subsidies.*
+
+**4. Stop shredding the boneyard.** The stockpile side of the same table:
+
+| stockpile | single-scenario | prior-averaged | sign under fog (single / prior-avg) | ranks #1 (single / prior-avg) |
+|---|---:|---:|---|---:|
+| EUV_tools | 0.695 | 0.511 | + robust (88%) / + robust (87%) | 44% / 48% |
+| EUV_worn | 0.848 | 0.434 | + robust (85%) / ~0 unstable (34%) | 1% / 0% |
+| Ga_refined | 0.000 | 0.242 | + leaning (66%) / ~0 unstable (32%) | 13% / 13% |
+| Chips | −0.020 | 0.074 | + leaning (82%) / + leaning (82%) | 0% / 8% |
+| Ne_purified | 0.705 | 0.035 | + leaning (82%) / ~0 unstable (64%) | 20% / 15% |
+| Pkg | −0.016 | 0.015 | + leaning (79%) / + leaning (79%) | 0% / 2% |
+| Ne_crude | 0.358 | 0.013 | ~0 unstable (53%) / + leaning (65%) | 8% / 1% |
+| Ga_byproduct | 0.000 | 0.003 | ~0 unstable (32%) / ~0 unstable (33%) | 0% / 1% |
+| EUV_optics | 0.000 | 0.000 | + robust (86%) / ~0 unstable (24%) | 1% / 0% |
+| E_waste | 0.000 | 0.000 | ~0 unstable (32%) / ~0 unstable (33%) | 0% / 0% |
+| Goods | 0.000 | 0.000 | ~0 unstable (32%) / ~0 unstable (33%) | 0% / 0% |
+| Wafers | 0.000 | 0.000 | ~0 unstable (25%) / ~0 unstable (15%) | 13% / 12% |
+
+Worn tools top the single-scenario baseline (0.848 over 0.695), lose the
+prior-averaged one (0.434 vs 0.511), and hold the top spot in only a
+fifth of fog draws — so the audited claim is *comparable value*, not
+*highest value*. Comparable is still remarkable for scrap, and the
+equipment stockpiles as a family dominate the #1 slot in every regime.
+*A decommissioned-tool registry, warm storage, and refurbishment capacity
+are cheap resilience buys; an industry that routinely scraps old fab
+equipment is discarding a stockpile the model prices near working
+spares.*
+
+**5. Tail-risk planners buy fab redundancy — and note which catastrophe
+does NOT make the tail.** The frozen objective is the prior *mean*;
+policy usually cares about tails. Re-weight toward the worst scenarios
+holding the last 30% of prior probability and the objective concentrates
+on two of the five:
+
+| scenario | prior prob | disrupted throughput | CVaR(30%) weight |
+|---|---:|---:|---:|
+| neon-style gas cut | 0.30 | 70.4 | 0.00 |
+| strait blockade | 0.25 | 70.5 | 0.00 |
+| **Taiwan fab loss** | 0.20 | **34.2** | **0.67** |
+| **gallium ban hardens** | 0.15 | **51.1** | **0.33** |
+| Zeiss knocked out | 0.10 | 70.5 | 0.00 |
+
+| rank | mean objective | tail objective |
+|---:|---|---|
+| 1 | Fab | Fab |
+| 2 | Build_EUV | Build_EUV |
+| 3 | Refine_Ga | Refurb |
+| 4 | Refurb | Refine_Ga |
+| 5 | Purify_Ne | Mine |
+
+The tail's top stockpile is working tools, and no plausible buffer covers
+a 60-month fab rebuild — so the tail answer is geographic redundancy for
+the decade-rebuild nodes. The surprise is the last row: the
+Zeiss knockout does *not* make the 72-month tail, because the
+refurbishment loop consumes worn tools and chips but no new optics — the
+boneyard result wearing its policy clothes. That comes with an honest
+caveat rather than a comfort: a 120-month rebuild mostly bites *beyond* a
+72-month horizon, so this table prices the six-year tail, not the forever
+tail, and extending the horizon is named future work.
 
 All of it conditional on a confidence-C toy slice — and the audit's own
 conclusion is that citations, not more cleverness, are what would sharpen
