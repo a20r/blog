@@ -620,7 +620,7 @@ function render(ballTime, pathA, pathB, travB) {
       const c = DEC_COLORS[d.a];
       if (Math.hypot(d.tx - d.x, d.ty - d.y) > 0.6)
         drawRibbon([[d.x, d.y], [d.tx, d.ty]], 0.32, c);
-      dots.push(d.tx, d.ty, c[0], c[1], c[2], 1.0, 6 * dpr2);
+      dots.push(d.tx, d.ty, c[0], c[1], c[2], c[3], 6 * dpr2);
     }
     drawFlat(gl.POINTS, new Float32Array(dots), dots.length / 7, true);
   }
