@@ -246,7 +246,7 @@ things that actually break are *stocks* and *concurrency*: buffers draining,
 processes waiting on each other, matter being conserved whether you like it
 or not. The machinery of §3 gives you all three natively: stocks are
 places, processes are transitions, and conservation comes already checked.
-The two exotic arc types earn their keep once you notice what they mean: a
+The two exotic arc types earn their keep: a
 read arc — required, not consumed — is exactly what capital equipment is,
 a catalyst; an inhibitor arc is exactly what a policy is. In this model,
 China's gallium export ban is
@@ -324,9 +324,8 @@ prior and the two flip (0.43 vs 0.51), and under parameter fog worn-on-top
 survives in only about a fifth of draws. What survives every regime is that
 a refurbishable boneyard is *comparable in value* to pristine inventory,
 because the refurbishment path converts junk back into capacity at a
-fraction of the cost of building new — still a strong claim about an
-industry that scraps old fab equipment routinely, and quietly shreds
-resilience capital doing it. The US Air Force figured this out decades ago
+fraction of the cost of building new — in an industry that scraps old
+fab equipment routinely, and quietly shreds resilience capital doing it. The US Air Force figured this out decades ago
 in the Arizona desert.
 
 <section class="civgrad-demo" id="demo">
@@ -386,7 +385,7 @@ where you feed in the answer isn't validation. So v1 replaces the imposed
 curve with an adaptation law: every transition's capacity grows at a rate
 α when it's scarce, and recovery time becomes an *output*.
 
-What counts as "scarce" took five instructive failures to get right, each
+What counts as "scarce" took five failures to get right, each
 forced by data rather than taste. **One**: the infinite-faucet
 bias from the discrete era — unconstrained sources faked away deadlock —
 which became the fog doctrine of §5. **Two**: the wrong observable —
@@ -443,7 +442,7 @@ invisible (−1.7% — the wrong-observable failure). Under v1, measured at the
 right observable, it predicts a 57.6% delivery collapse that *never
 recovers* within the 72-month horizon — against a historical record of
 "price spike, brief pain, no catastrophe." Tracing the never-recovers
-part shows the trap precisely: the
+part shows the trap: the
 outage piles up unpackaged chips upstream, and that bloated buffer *masks
 the destroyed capacity* — packaging flow returns to its pre-crisis
 reference while 8% of its capacity is still missing, so the restoration
@@ -458,7 +457,7 @@ worse basin that is locally stable. Uninvited, Diamond's actual thesis
 showed up in the mathematics — **collapse as attractor, not event**. For
 1993 the prediction is simply wrong; the real economy reallocated its way
 out in months. But a formalism that can *express* collapse-as-attractor is
-exactly what a project with this name requires. It just needs the escape
+what a project with this name requires. It just needs the escape
 mechanism reality has, and that gap is a failing test on the scorecard —
 not a footnote.
 
@@ -653,15 +652,15 @@ logistics-capacity subsidies.*
 Worn tools top the single-scenario baseline (0.848 over 0.695), lose the
 prior-averaged one (0.434 vs 0.511), and hold the top spot in only a
 fifth of fog draws — so the audited claim is *comparable value*, not
-*highest value*. Comparable is still remarkable for scrap, and the
-equipment stockpiles as a family dominate the #1 slot in every regime.
+*highest value*. The equipment stockpiles as a family dominate the #1
+slot in every regime.
 *A decommissioned-tool registry, warm storage, and refurbishment capacity
 are cheap resilience buys; an industry that routinely scraps old fab
 equipment is discarding a stockpile the model prices near working
 spares.*
 
-**5. Tail-risk planners buy fab redundancy — and note which catastrophe
-does *not* make the tail.** The frozen objective is the prior *mean*;
+**5. Tail-risk planners buy fab redundancy — and one catastrophe does
+*not* make the tail.** The frozen objective is the prior *mean*;
 policy usually cares about tails. Re-weight toward the worst scenarios
 holding the last 30% of prior probability and the objective concentrates
 on two of the five:
@@ -684,7 +683,7 @@ on two of the five:
 
 The tail's top stockpile is working tools, and no plausible buffer covers
 a 60-month fab rebuild — so the tail answer is geographic redundancy for
-the decade-rebuild nodes. The surprise is the last row: the
+the decade-rebuild nodes. The last row: the
 Zeiss knockout does *not* make the 72-month tail, because the
 refurbishment loop consumes worn tools and chips but no new optics — the
 boneyard result wearing its policy clothes. Don't read it as comfort: a
@@ -700,11 +699,11 @@ the rankings. That is what the map's provenance gates are for.
 
 This is not a forecast, not a claim that collapse is coming, and not a
 policy tool to point at the real world without reading its scorecard
-first; §9's conclusions carry their conditions for exactly that reason.
+first; §9's conclusions carry their conditions for that reason.
 Every parameter in the map carries provenance metadata; every one is
 still confidence-C, though the load-bearing ones now cite verified
-sources awaiting a reviewer's upgrade. It is a lens — and the surprise of
-the project is how much structure a toy lens resolves. Brittleness is
+sources awaiting a reviewer's upgrade. It is a lens — and a toy lens
+resolved more structure than I expected. Brittleness is
 concentration times
 rebuild time, not depletion. Buffer-months versus ramp-time integrals
 decide who feels a shock. Boneyards are resilience capital, and adding
