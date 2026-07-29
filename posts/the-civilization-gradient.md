@@ -6,7 +6,7 @@ summary: "The living essay of the civgrad project: model a civilization's supply
 # The civilization gradient
 
 *The living essay of the [civgrad](https://github.com/a20r/civgrad) project
-(v0.4 — the audit and the conclusion, in full). This post is the essay's
+(v0.5 — flow revision). This post is the essay's
 single source of truth, versioned like the repo's methodology — the
 [changelog](https://github.com/a20r/blog/blob/main/posts/the-civilization-gradient-changelog.md)
 lives alongside it here; civgrad hosts the model, the data, and the
@@ -231,7 +231,10 @@ how it earned each of those signals the hard way is §7's story. And the
 the *recovery* (months until the flow re-crosses 95% of that mean).
 Everything above lives in a few hundred lines of
 [the repo's](https://github.com/a20r/civgrad) `core/`, and the map's
-values feed it with provenance attached.
+values feed it with provenance attached — every parameter carries a
+source and a confidence grade, and today every grade is C: a session
+estimate awaiting a real citation. Hold onto that label; §9 measures
+exactly what that ignorance costs.
 
 That is the whole machine. The rest of the essay walks it: §4 argues why
 this formalism and not a flow network; §5 adds the epistemic layer — fog,
@@ -275,41 +278,43 @@ to. It borrows the fog of war from strategy games and makes it a modeling
 primitive. The formalism is hierarchical Petri nets: an **oracle** is a
 substitution transition — a black box that declares its interface (which
 stocks flow in and out) and a one-line contract, and nothing else
-(`map/_oracles/`). The demo below draws oracles as literal fog, because
-that's what they are: territory the map admits it hasn't surveyed.
+(`map/_oracles/`). The live model in §6 draws oracles as literal fog,
+because that's what they are: territory the map admits it hasn't surveyed.
 
-The epistemic point got demonstrated twice in this repo's own short history,
-in opposite directions. Fog hid *extra fragility*: the first cut treated
-"equipment manufacturing" as one box, and expanding it exposed the Zeiss
-optics monopoly — a deeper single point of failure than ASML itself, with a
-longer rebuild time. And fog manufactured *fake resilience*: unexpanded
-source transitions had no upstream constraints, so they behaved as infinite
-faucets, and the deadlock detector triumphantly reported that collapse was
-impossible. Same cause, opposite errors. Fog is not conservative and it is
-not optimistic; **it is wrong in whichever direction its hidden structure
-points**. The only honest response is to draw it, label it, and remember
-that every conclusion is conditional on where the fog currently sits.
+Why put the doctrine before the results? Because the fog burned this
+project twice before any result in this essay was computed — in opposite
+directions. Fog hid *extra fragility*: the first cut of the map treated
+"equipment manufacturing" as one box, and only expanding that box forced
+the question of where the optics come from — surfacing §2's
+monopoly-under-the-monopoly, Zeiss, a deeper chokepoint than ASML itself
+with a longer rebuild time, discovered by the act of drawing edges rather
+than by reading the news. And fog manufactured *fake resilience*: the
+unexpanded sources at the map's frontier had no upstream constraints, so
+they behaved as infinite faucets — and the discrete net of §4, asked
+whether any reachable state was a dead end, triumphantly reported that
+collapse was impossible. Same cause, opposite errors. Fog is not
+conservative and it is not optimistic; **it is wrong in whichever
+direction its hidden structure points**. The only honest response is to
+draw it, label it, and remember that everything downstream of here — the
+gradients of §6, the replays of §8, the conclusions of §9 — is
+conditional on where the fog currently sits.
 
 ## 6. The gradient of collapse
 
-Then comes the move the project is named for. Relax the discrete net into a
-continuous one — real-valued stocks, transitions as flow rates with
-saturation kinetics — and the whole system becomes a piecewise-smooth ODE
-that runs under JAX. Which means it's differentiable. Which means "where
+Now the payoff of the move §3 made. Relaxed, the net is a piecewise-smooth
+ODE running under JAX. Which means it's differentiable. Which means "where
 should civilization's marginal dollar go" stops being a panel discussion and
 becomes a vector you can compute: the derivative of disrupted throughput with
 respect to every capacity and every stockpile in the net
 (`core/gradients.py`). Investing along that vector is gradient ascent on
-resilience. The magnitudes are only as good as the calibration — the frozen
-numbers live in `validation/baseline_outputs.txt`, and "trust the signs and
-rankings, distrust the magnitudes" is no longer just an argument: a
-500-draw perturbation sweep that lets every confidence-C parameter be
-wrong by a factor of two keeps the two big negative signs in 85–92% of
-draws (100% under pure disruption-prior fog), and keeps the top of the
-ranking inside the production/equipment complex in 91–99% of draws — while
-*which* node leads is fog-conditional and fine-grained rank order
-dissolves (Kendall τ ≈ 0.5); §9 lays the audit out in full — but two
-results deserve to be told straight.
+resilience. Two health warnings before reading it. The magnitudes are only
+as good as the calibration — the frozen numbers live in
+`validation/baseline_outputs.txt`, and every parameter behind them is
+still confidence-C. And for that reason, every claim this section makes
+gets stress-tested in §9, where an audit lets all of those parameters be
+wrong at once; the short version is that the big signs and the broad shape
+survive, and the fine ordering does not. Warnings posted, two results
+deserve to be told straight.
 
 First, the **negative shipping gradient**: −2.68 in the single-scenario run,
 −1.63 averaged over the disruption prior. After a shock destroys fabrication
@@ -322,7 +327,7 @@ and that fell out of a derivative.
 
 Second, the **boneyard result**: worn-out tools are among the most
 valuable stockpiles in the entire net — 0.85 against 0.70 for *working*
-spare tools in the single-scenario run. The sensitivity sweep took the
+spare tools in the single-scenario run. §9's audit took the
 stronger version of this claim away from me: average over the disruption
 prior and the two flip (0.43 vs 0.51), and under parameter fog worn-on-top
 survives in only about a fifth of draws. What survives every regime is that
@@ -434,9 +439,12 @@ imposed ramp, 0.6 as measured under the adaptation law (§9 tabulates all
 six). That inequality — buffer-months versus the integral of the deficit
 while capacity ramps — is the single mechanism that decides nearly every
 event in the suite.
-**Photoresist 2019** passes as the non-event it was; and the counterfactual
-run of what everyone *feared* (a real 90% cut) yields a 64% dip — the model
-quantifying what the panic implied and the licensing regime prevented.
+**Photoresist 2019** — Japan putting export licenses on the chip chemicals
+it supplied to Korea's fabs, roughly 90% of the world's photoresist among
+them; the licenses flowed and the feared cutoff never came — passes as the
+non-event it was; and the counterfactual run of what everyone *feared* (a
+real 90% cut) yields a 64% dip — the model quantifying what the panic
+implied and the licensing regime prevented.
 
 And then **Sumitomo 1993**, which the model misses twice, in opposite
 directions, and which is the most valuable row on the board. Under v0 it's
@@ -463,10 +471,10 @@ exactly what a project with this name requires. It just needs the escape
 mechanism reality has, and that gap is a failing test on the scorecard —
 not a footnote.
 
-Two results now sit on the other side of that test. The sensitivity sweep
-says the miss is **structural**: re-run the replay under 500 draws of
-parameter fog and 95% still miss the acceptance band — 45% never recover
-at all, and the median dip is 96% — so no citation will fix it. And the
+Two results now sit on the other side of that test. §9's audit says the
+miss is **structural**: re-run this replay under its 500 parameter-fog
+draws and 95% still miss the acceptance band — 45% never recover at all,
+and the median dip is 96% — so no citation will fix it. And the
 price experiment says the diagnosis was right, from both directions.
 Teach the model to see a **processing margin** — fat input saturation
 beside a starved output, the formal shadow of the 1993 epoxy price spike —
@@ -533,14 +541,19 @@ the essay was building toward — with every claim wearing its measured
 robustness, because an actionable conclusion that hides its error bars is
 a liability, not a contribution. Scope first, as always: one confidence-C
 semiconductor slice, declared fog at every frontier, no price-mediated
-allocation, so dips are ceilings, not forecasts. "Robust" below means:
-survives ×0.5–×2 ignorance in every parameter, and fog in the disruption
-prior, in the measured fractions. (Every table regenerates from the
-repo's seeded [`analysis/`](https://github.com/a20r/civgrad/tree/main/analysis)
-harness.)
+allocation, so dips are ceilings, not forecasts.
 
-Start with what the 500-draw audit left standing, because it disciplines
-everything after it:
+Start with the audit that §§3–8 kept promising, because it disciplines
+everything after it. The protocol: 500 seeded draws, each multiplying
+every confidence-C parameter in the map by an independent lognormal
+factor — 95% of factors land between ×0.5 and ×2, which is the honest
+reading of "session estimate" — plus a separate sweep that holds the
+parameters and fogs the disruption prior instead. Every gradient is
+recomputed per draw, and each claim is scored by the fraction of draws
+that still agree with it. (Every table in this section regenerates from
+the repo's seeded
+[`analysis/`](https://github.com/a20r/civgrad/tree/main/analysis)
+harness.) What the audit left standing:
 
 | claim under audit | param fog (single-scenario) | param fog (prior-averaged) | prior fog |
 |---|---:|---:|---:|
@@ -687,10 +700,10 @@ a 60-month fab rebuild — so the tail answer is geographic redundancy for
 the decade-rebuild nodes. The surprise is the last row: the
 Zeiss knockout does *not* make the 72-month tail, because the
 refurbishment loop consumes worn tools and chips but no new optics — the
-boneyard result wearing its policy clothes. That comes with an honest
-caveat rather than a comfort: a 120-month rebuild mostly bites *beyond* a
-72-month horizon, so this table prices the six-year tail, not the forever
-tail, and extending the horizon is named future work.
+boneyard result wearing its policy clothes. Don't read it as comfort: a
+120-month rebuild mostly bites *beyond* a 72-month horizon, so this table
+prices the six-year tail, not the forever tail, and extending the horizon
+is named future work.
 
 All of it conditional on a confidence-C toy slice — and the audit's own
 conclusion is that citations, not more cleverness, are what would sharpen
@@ -749,12 +762,12 @@ unknown directions, so declare it. And an honest scorecard beats an
 impressive demo: the red Sumitomo row is the most valuable pixel on this
 site, because it's the model telling you exactly where not to trust it.
 
-This started as: a guy reads the Easter Island chapter and wonders, for a
-closed island with no off-island, which way is up. It was built in one long
-back-and-forth with an AI (the receipts are in the footer), then hardened
-by the discipline any model deserves — frozen parameters, registered
-predictions, public misses. The gradient points somewhere. Mostly, I built
-this to learn how to read it. Play with the demo above; every number it
+This started with a chapter of *Collapse* and a question that would not
+leave: on a closed island with no off-island, which way is up? The answer
+was built in one long back-and-forth with an AI (the receipts are in the
+footer), then hardened by the discipline any model deserves — frozen
+parameters, registered predictions, public misses. The gradient points
+somewhere. Mostly, I built this to learn how to read it. Play with the demo above; every number it
 shows traces back to the repo; and if you happen to know one of the fogged
 territories — resin chemistry, phosphate logistics, optics — the fog is
 labeled, and the gate is open.

@@ -52,3 +52,15 @@ version. This file is not rendered on the site.
   the two-copy setup had already produced one real drift bug — the ~0.3
   Tōhoku deficit), its project site now hosts the live model only and
   links here, and this changelog moved alongside the post.
+- **v0.5** — flow revision, on Alex's notes: §5 no longer leans on
+  machinery the reader hasn't met (the dead-end check is grounded in §4's
+  discrete net, the Zeiss discovery tied back to §2's tour) and closes by
+  signposting that everything downstream is fog-conditional; §6's audit
+  parenthetical shrinks to a plain promise, with the numbers and the full
+  protocol moved to §9 where the table lives; §3 plants the confidence-C
+  grading early; §8's structural-miss result is labeled as §9's
+  machinery; §11's origin line reframed. A fresh-reader review pass then
+  caught three more: §6 no longer re-derives §3's relaxation as if new,
+  photoresist 2019 gets its one-clause introduction in §8 (the only
+  scored event that had none), and §9's "honest caveat" hedging label is
+  gone. No number, table, or result changed.
