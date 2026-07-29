@@ -72,4 +72,11 @@ version. This file is not rendered on the site.
   §3/§11 confidence-C statements reconciled, and sentences shortened
   throughout. §10 ("What the way of looking taught", the method
   reflection) cut at Alex's direction; the closing section renumbered
-  §10 and the roadmap updated. No number, table, or result changed.
+  §10 and the roadmap updated. A final de-reinforcer pass stripped the
+  essay's self-narration — evaluative asides ("the most valuable row on
+  the board", "That is the point"), reader-instruction ("Hold onto that
+  label", "Note the near-miss", "Read the columns"), virtue-narration
+  ("the honest name", "the only honest response", "the discipline any
+  model deserves", "not a slogan", "a liability, not a contribution") —
+  while keeping every caveat and discipline fact intact. No number,
+  table, or result changed.
