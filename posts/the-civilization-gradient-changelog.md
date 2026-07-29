@@ -52,7 +52,7 @@ version. This file is not rendered on the site.
   the two-copy setup had already produced one real drift bug — the ~0.3
   Tōhoku deficit), its project site now hosts the live model only and
   links here, and this changelog moved alongside the post.
-- **v0.5** — flow revision, on Alex's notes: §5 no longer leans on
+- **v0.5** — flow and editorial revision, on Alex's notes: §5 no longer leans on
   machinery the reader hasn't met (the dead-end check is grounded in §4's
   discrete net, the Zeiss discovery tied back to §2's tour) and closes by
   signposting that everything downstream is fog-conditional; §6's audit
@@ -63,4 +63,11 @@ version. This file is not rendered on the site.
   caught three more: §6 no longer re-derives §3's relaxation as if new,
   photoresist 2019 gets its one-clause introduction in §8 (the only
   scored event that had none), and §9's "honest caveat" hedging label is
-  gone. No number, table, or result changed.
+  gone. A full editorial pass in The Economist's register followed, at
+  Alex's direction: throat-clears out ("Here's the thing", "I should
+  state it honestly", "Worth savoring"), questions stated plainly (the
+  §11 origin line asks the essay's actual question), emphasis carried by
+  construction rather than typography (pure-stress bolds dropped; coined
+  terms keep theirs), the un-introduced "SPOFs" jargon replaced, the
+  §3/§11 confidence-C statements reconciled, and sentences shortened
+  throughout. No number, table, or result changed.
