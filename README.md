@@ -1,4 +1,4 @@
-# unrelated rambles
+# toilet time explorations
 
 A blog built with [Eleventy](https://www.11ty.dev/), deployed automatically to GitHub Pages.
 
