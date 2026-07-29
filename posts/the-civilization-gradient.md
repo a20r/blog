@@ -6,7 +6,7 @@ summary: "The living essay of the civgrad project: model a civilization's supply
 # The civilization gradient
 
 *The living essay of the [civgrad](https://github.com/a20r/civgrad) project
-(v0.4 — the audit and the conclusion, in full). This post is the essay's
+(v0.5 — flow and editorial revision). This post is the essay's
 single source of truth, versioned like the repo's methodology — the
 [changelog](https://github.com/a20r/blog/blob/main/posts/the-civilization-gradient-changelog.md)
 lives alongside it here; civgrad hosts the model, the data, and the
@@ -21,45 +21,41 @@ ringed by an ocean that might as well have been vacuum. A few thousand people
 to that island is, at relative scale, a few billion people to this planet. The
 ratio changes; the geometry doesn't.
 
-Before leaning on the metaphor, I should state it honestly, because the famous
-version of the story is contested. Terry Hunt and Carl Lipo have argued for
-years that the ecocide narrative is mostly wrong: Polynesian rats, not
-profligate islanders, drove the deforestation by eating palm seeds, and the
-demographic catastrophe came *after* European contact, from disease and slave
-raiding — not before it, from self-inflicted resource collapse. Diamond's
-flagship case is shakier than his chapter admits, and this essay keeps both
-readings on the table.
+The famous version of that story is contested. Terry Hunt and Carl Lipo
+have argued for years that the ecocide narrative is mostly wrong:
+Polynesian rats, not profligate islanders, drove the deforestation by
+eating palm seeds, and the demographic catastrophe came *after* European
+contact, from disease and slave raiding — not before it, from
+self-inflicted resource collapse. Diamond's flagship case is shakier than
+his chapter admits, and this essay keeps both readings on the table.
 
-Here's the thing: the metaphor survives either reading. What matters isn't
-*why* the trees disappeared. It's that when they did, there was nowhere to
-import canoes from. A closed system has to solve its problems with what's
-inside it, at the speed its internal machinery allows. Earth has no
-off-island.
+The metaphor survives either reading. What matters is not why the trees
+disappeared but that, once they had, there was nowhere to import canoes
+from. A closed system must solve its problems with what is inside it, at
+the speed its internal machinery allows. Earth has no off-island.
 
-So this isn't an essay about running out of things. It's about the question
-the island geometry actually raises: in a closed, hyperconnected economy,
-*where precisely is it brittle* — and if you had one marginal dollar of
-resilience to spend, where should it go?
+This is not an essay about running out of things. It asks the question the
+island's geometry raises: in a closed, hyperconnected economy, where
+precisely is it brittle — and where should a marginal dollar of resilience
+go?
 
 <aside class="cg-callout">
 <p class="kicker">what this essay is</p>
 <p class="pull">One marginal dollar of resilience to spend — where should
 it go?</p>
-<p class="note">An exploration, not a thesis. There was no destination
-when this started: a question wandered in during a book chapter and got
-taken seriously. What follows is a small formal model of one
-supply-chain slice — built in the open, running live in this page,
-graded against four historical shocks with its misses kept in red.
-Where it ends up was not known at the start. That is the point.</p>
+<p class="note">An exploration, not a thesis. What follows is a small
+formal model of one supply-chain slice — built in the open, running live
+in this page, graded against four historical shocks with its misses kept
+in red. Where it would end up was not known at the start.</p>
 </aside>
 
 ## 2. Brittleness is not depletion
 
-The collapse conversation fixates on depletion — peak this, running out of
-that. But for most industrial inputs, aggregate abundance is fine. The scary
-structure is different: **concentration times rebuild time**. The supply
-graph is absurdly non-redundant at a small number of nodes, and some of those
-nodes would take a decade to rebuild.
+Talk of collapse fixates on depletion — peak this, running out of that.
+For most industrial inputs, abundance is not the problem. The dangerous
+structure is **concentration times rebuild time**: the supply graph lacks
+redundancy at a handful of nodes, and some of those nodes would take a
+decade to rebuild.
 
 A short tour of the neighborhood this project models. Semiconductor lasers
 breathe neon, which is a byproduct of Soviet-era steel-mill air separation,
@@ -86,12 +82,12 @@ which also hosts the shipping strait,
 which means one bad month in one place hits fabrication *and* transport as a
 single correlated event.
 
-Notice the two different species of chokepoint. Gallium refining is a
+The chokepoints come in two species. Gallium refining is a
 **capacity monopoly**: annoying, but rebuildable in two or three years of
 determined investment. Zeiss and TSMC are **knowledge monopolies**: decade-
-plus rebuild times, because what's concentrated isn't machines but learning.
-Brittleness, throughout this project, means concentration × rebuild-time ×
-co-location. Depletion barely makes the list.
+plus rebuild times, because what is concentrated is not machines but
+learning. Brittleness, throughout this project, means concentration ×
+rebuild-time × co-location. Depletion barely makes the list.
 
 ## 3. The machinery, defined
 
@@ -231,16 +227,17 @@ how it earned each of those signals the hard way is §7's story. And the
 the *recovery* (months until the flow re-crosses 95% of that mean).
 Everything above lives in a few hundred lines of
 [the repo's](https://github.com/a20r/civgrad) `core/`, and the map's
-values feed it with provenance attached.
+values feed it with provenance attached — every parameter carries a
+source and a confidence grade, and no grade has yet risen above C, the
+lowest. §9 measures what that ignorance costs.
 
 That is the whole machine. The rest of the essay walks it: §4 argues why
 this formalism and not a flow network; §5 adds the epistemic layer — fog,
-drawn honestly; §6 reads the gradient and its two surprises, with the
+drawn and labeled; §6 reads the gradient and its two surprises, with the
 model running live; §7 makes recovery emergent and confesses the five
 failures that shaped it; §8 scores the machine against history, misses
 included; §9 cashes the gradient out into an actionable conclusion; §10
-steps back to what the way of looking taught; §11 says what all of this is
-and isn't.
+says what all of this is and isn't.
 
 ## 4. Why Petri nets
 
@@ -248,9 +245,8 @@ Supply chains usually get modeled as graphs — nodes, edges, flows. But the
 things that actually break are *stocks* and *concurrency*: buffers draining,
 processes waiting on each other, matter being conserved whether you like it
 or not. The machinery of §3 gives you all three natively: stocks are
-places, processes are transitions, and conservation is an invariant you
-can check rather than an assumption you hope holds. And the two exotic arc
-types do surprising amounts of work once you notice what they *mean*: a
+places, processes are transitions, and conservation comes already checked.
+The two exotic arc types earn their keep: a
 read arc — required, not consumed — is exactly what capital equipment is,
 a catalyst; an inhibitor arc is exactly what a policy is. In this model,
 China's gallium export ban is
@@ -261,7 +257,7 @@ flow networks cannot even state. From the initial state, a single legal
 firing — one EUV tool wearing out before any chips have been banked — reaches
 a state from which no chip can *ever* be made again, while raw materials keep
 flowing forever. Mining continues. Refining continues. Everything moves;
-nothing can be accomplished. The formal name is livelock; the honest name is
+nothing can be accomplished. The formal name is livelock; the plainer name is
 **busy futility**. And it rhymes with the island: Rapa Nui society kept
 functioning for generations after the last tree fell. What it lost was the
 ability to build ocean-going canoes. Collapse doesn't have to look like
@@ -275,41 +271,41 @@ to. It borrows the fog of war from strategy games and makes it a modeling
 primitive. The formalism is hierarchical Petri nets: an **oracle** is a
 substitution transition — a black box that declares its interface (which
 stocks flow in and out) and a one-line contract, and nothing else
-(`map/_oracles/`). The demo below draws oracles as literal fog, because
-that's what they are: territory the map admits it hasn't surveyed.
+(`map/_oracles/`). The live model in §6 draws oracles as literal fog,
+because that's what they are: territory the map admits it hasn't surveyed.
 
-The epistemic point got demonstrated twice in this repo's own short history,
-in opposite directions. Fog hid *extra fragility*: the first cut treated
-"equipment manufacturing" as one box, and expanding it exposed the Zeiss
-optics monopoly — a deeper single point of failure than ASML itself, with a
-longer rebuild time. And fog manufactured *fake resilience*: unexpanded
-source transitions had no upstream constraints, so they behaved as infinite
-faucets, and the deadlock detector triumphantly reported that collapse was
-impossible. Same cause, opposite errors. Fog is not conservative and it is
-not optimistic; **it is wrong in whichever direction its hidden structure
-points**. The only honest response is to draw it, label it, and remember
-that every conclusion is conditional on where the fog currently sits.
+The doctrine comes before the results because the fog burned this project
+twice before any result in this essay existed — in opposite directions.
+Fog hid *extra fragility*: the first cut of the map treated "equipment
+manufacturing" as one box, and only expanding that box forced the question
+of where the optics come from — surfacing §2's monopoly-under-the-monopoly,
+Zeiss, a deeper chokepoint than ASML itself with a longer rebuild time,
+found by drawing edges rather than by reading the news. And fog
+manufactured *fake resilience*: the unexpanded sources at the map's
+frontier had no upstream constraints, so they behaved as infinite faucets —
+and the discrete net of §4, asked whether any reachable state was a dead
+end, triumphantly reported that collapse was impossible. Same cause,
+opposite errors. Fog is not conservative and it is not optimistic; it is
+wrong in whichever direction its hidden structure points. All one can do
+is draw it, label it, and remember that everything downstream of here —
+the gradients of §6, the replays of §8, the conclusions of §9 — is
+conditional on where the fog currently sits.
 
 ## 6. The gradient of collapse
 
-Then comes the move the project is named for. Relax the discrete net into a
-continuous one — real-valued stocks, transitions as flow rates with
-saturation kinetics — and the whole system becomes a piecewise-smooth ODE
-that runs under JAX. Which means it's differentiable. Which means "where
+Now the payoff of the move §3 made. Relaxed, the net is a piecewise-smooth
+ODE running under JAX. Which means it's differentiable. Which means "where
 should civilization's marginal dollar go" stops being a panel discussion and
 becomes a vector you can compute: the derivative of disrupted throughput with
 respect to every capacity and every stockpile in the net
 (`core/gradients.py`). Investing along that vector is gradient ascent on
-resilience. The magnitudes are only as good as the calibration — the frozen
-numbers live in `validation/baseline_outputs.txt`, and "trust the signs and
-rankings, distrust the magnitudes" is no longer just an argument: a
-500-draw perturbation sweep that lets every confidence-C parameter be
-wrong by a factor of two keeps the two big negative signs in 85–92% of
-draws (100% under pure disruption-prior fog), and keeps the top of the
-ranking inside the production/equipment complex in 91–99% of draws — while
-*which* node leads is fog-conditional and fine-grained rank order
-dissolves (Kendall τ ≈ 0.5); §9 lays the audit out in full — but two
-results deserve to be told straight.
+resilience. Two caveats first. The magnitudes are only as good as the
+calibration — the frozen numbers live in
+`validation/baseline_outputs.txt`, and every parameter behind them is
+still confidence-C. For that reason, every claim in this section is
+stress-tested in §9, where an audit lets all of those parameters be wrong
+at once: the big signs and the broad shape survive; the fine ordering
+does not. Two results stand out.
 
 First, the **negative shipping gradient**: −2.68 in the single-scenario run,
 −1.63 averaged over the disruption prior. After a shock destroys fabrication
@@ -322,15 +318,14 @@ and that fell out of a derivative.
 
 Second, the **boneyard result**: worn-out tools are among the most
 valuable stockpiles in the entire net — 0.85 against 0.70 for *working*
-spare tools in the single-scenario run. The sensitivity sweep took the
+spare tools in the single-scenario run. §9's audit took the
 stronger version of this claim away from me: average over the disruption
 prior and the two flip (0.43 vs 0.51), and under parameter fog worn-on-top
 survives in only about a fifth of draws. What survives every regime is that
 a refurbishable boneyard is *comparable in value* to pristine inventory,
 because the refurbishment path converts junk back into capacity at a
-fraction of the cost of building new — still a strong claim about an
-industry that scraps old fab equipment routinely, and quietly shreds
-resilience capital doing it. The US Air Force figured this out decades ago
+fraction of the cost of building new — in an industry that scraps old
+fab equipment routinely, and quietly shreds resilience capital doing it. The US Air Force figured this out decades ago
 in the Arizona desert.
 
 <section class="civgrad-demo" id="demo">
@@ -390,8 +385,8 @@ where you feed in the answer isn't validation. So v1 replaces the imposed
 curve with an adaptation law: every transition's capacity grows at a rate
 α when it's scarce, and recovery time becomes an *output*.
 
-What counts as "scarce" took five instructive failures to get honest, and
-each one was forced by data rather than taste. **One**: the infinite-faucet
+What counts as "scarce" took five failures to get right, each
+forced by data rather than taste. **One**: the infinite-faucet
 bias from the discrete era — unconstrained sources faked away deadlock —
 which became the fog doctrine of §5. **Two**: the wrong observable —
 Sumitomo 1993 was invisible through fab throughput because packaging sits
@@ -401,7 +396,7 @@ mask the alarm — a scarcity signal based on stock levels meant a fat
 stockpile suppressed the warning until the buffer was gone, and the dip
 arrived late anyway. Real markets are forward-looking: neon prices went up
 9× within weeks in 2022 while stockpiles were still full, because traders
-compute *runway* — months of cover at the current net drain. The fixed
+compute *runway* — months of cover at the current net drain. The repaired
 signal fires when runway falls below a planning horizon. **Four**:
 equilibrium hides shortage — runway alone goes silent once the system
 stabilizes *into* scarcity, because nothing is draining anymore; the model
@@ -434,17 +429,20 @@ imposed ramp, 0.6 as measured under the adaptation law (§9 tabulates all
 six). That inequality — buffer-months versus the integral of the deficit
 while capacity ramps — is the single mechanism that decides nearly every
 event in the suite.
-**Photoresist 2019** passes as the non-event it was; and the counterfactual
-run of what everyone *feared* (a real 90% cut) yields a 64% dip — the model
-quantifying what the panic implied and the licensing regime prevented.
+**Photoresist 2019** — Japan putting export licenses on the chip chemicals
+it supplied to Korea's fabs, roughly 90% of the world's photoresist among
+them; the licenses flowed and the feared cutoff never came — passes as the
+non-event it was; and the counterfactual run of what everyone *feared* (a
+real 90% cut) yields a 64% dip — the model quantifying what the panic
+implied and the licensing regime prevented.
 
 And then **Sumitomo 1993**, which the model misses twice, in opposite
-directions, and which is the most valuable row on the board. Under v0 it's
+directions. Under v0 it's
 invisible (−1.7% — the wrong-observable failure). Under v1, measured at the
 right observable, it predicts a 57.6% delivery collapse that *never
 recovers* within the 72-month horizon — against a historical record of
-"price spike, brief pain, no catastrophe." The never-recovers part is the
-interesting part, and tracing the trajectory shows the trap precisely: the
+"price spike, brief pain, no catastrophe." Tracing the never-recovers
+part shows the trap: the
 outage piles up unpackaged chips upstream, and that bloated buffer *masks
 the destroyed capacity* — packaging flow returns to its pre-crisis
 reference while 8% of its capacity is still missing, so the restoration
@@ -459,14 +457,14 @@ worse basin that is locally stable. Uninvited, Diamond's actual thesis
 showed up in the mathematics — **collapse as attractor, not event**. For
 1993 the prediction is simply wrong; the real economy reallocated its way
 out in months. But a formalism that can *express* collapse-as-attractor is
-exactly what a project with this name requires. It just needs the escape
+what a project with this name requires. It just needs the escape
 mechanism reality has, and that gap is a failing test on the scorecard —
 not a footnote.
 
-Two results now sit on the other side of that test. The sensitivity sweep
-says the miss is **structural**: re-run the replay under 500 draws of
-parameter fog and 95% still miss the acceptance band — 45% never recover
-at all, and the median dip is 96% — so no citation will fix it. And the
+Two results now sit on the other side of that test. §9's audit says the
+miss is structural: re-run this replay under its 500 parameter-fog
+draws and 95% still miss the acceptance band — 45% never recover at all,
+and the median dip is 96% — so no citation will fix it. And the
 price experiment says the diagnosis was right, from both directions.
 Teach the model to see a **processing margin** — fat input saturation
 beside a starved output, the formal shadow of the 1993 epoxy price spike —
@@ -484,7 +482,7 @@ A margin term one step removed from an actual price supplies the escape
 reality has. That is evidence *for* the missing-mechanism diagnosis — not
 a fix. The scorecard row stays red until this ships through the
 frozen-parameter discipline, because a law changed after seeing the
-holdout is, by definition, no longer validated against it.
+holdout is no longer validated against it.
 
 The experiment's cautionary arm inverts the lesson. Suppose a crisis
 manager takes the project's thesis object literally and allocates the
@@ -507,12 +505,12 @@ frozen derivative does not. (Both arms regenerate from
 repo, alongside
 [`PRICE_EXPERIMENT.md`](https://github.com/a20r/civgrad/blob/main/PRICE_EXPERIMENT.md).)
 
-Which yields the caveat that belongs in bold on everything this model
-outputs. It has no price-mediated allocation, no substitution, no
-design-around response, and therefore it **systematically overstates how
-deep shocks bite and how long they last**. Trust where it says fragility
-concentrates — the rankings, the SPOFs, the signs of the gradients.
-Distrust how bad it says things get.
+One caveat governs everything this model outputs. It has no
+price-mediated allocation, no substitution, no design-around response,
+and so it systematically overstates how deep shocks bite and how long
+they last. Trust where it says fragility concentrates — the rankings, the
+chokepoints, the signs of the gradients. Distrust how bad it says things
+get.
 
 <section class="civgrad-scorecard" id="scorecard">
 <h2>The scorecard, in full</h2>
@@ -528,19 +526,22 @@ checked against it in CI.</p>
 ## 9. The marginal dollar, cashed out
 
 The question in §1 was where one marginal dollar of resilience should go.
-This section is the answer the model gives — the deliverable the rest of
-the essay was building toward — with every claim wearing its measured
-robustness, because an actionable conclusion that hides its error bars is
-a liability, not a contribution. Scope first, as always: one confidence-C
+This section is the model's answer, each claim carrying its measured
+robustness. The scope restrictions ride along: one confidence-C
 semiconductor slice, declared fog at every frontier, no price-mediated
-allocation, so dips are ceilings, not forecasts. "Robust" below means:
-survives ×0.5–×2 ignorance in every parameter, and fog in the disruption
-prior, in the measured fractions. (Every table regenerates from the
-repo's seeded [`analysis/`](https://github.com/a20r/civgrad/tree/main/analysis)
-harness.)
+allocation — so dips are ceilings, not forecasts.
 
-Start with what the 500-draw audit left standing, because it disciplines
-everything after it:
+The audit promised since §3 comes first. The protocol: 500 seeded draws,
+each multiplying
+every confidence-C parameter in the map by an independent lognormal
+factor — 95% of factors land between ×0.5 and ×2, a fair reading of
+"session estimate" — plus a separate sweep that holds the
+parameters and fogs the disruption prior instead. Every gradient is
+recomputed per draw, and each claim is scored by the fraction of draws
+that still agree with it. (Every table in this section regenerates from
+the repo's seeded
+[`analysis/`](https://github.com/a20r/civgrad/tree/main/analysis)
+harness.) What the audit left standing:
 
 | claim under audit | param fog (single-scenario) | param fog (prior-averaged) | prior fog |
 |---|---:|---:|---:|
@@ -552,14 +553,13 @@ everything after it:
 | boneyard: worn tools outrank working spares | 20% | 12% | 0% |
 | full ranking order (Kendall τ vs baseline, mean) | 0.53 | 0.47 | 0.92 |
 
-Read the columns against each other and the audit's one-sentence verdict
-falls out: **what survives parameter fog is the partition, not the
+The verdict: **what survives parameter fog is the partition, not the
 ordering** — which side of the net the marginal dollar belongs to is about
 as robust as anything this model produces, while which single node leads
-is fog-conditional. And the prior-fog column, stable nearly everywhere,
-locates the weakness precisely: it is parameter ignorance, not the choice
-of catastrophe prior — which is exactly what real citations on the map
-would sharpen. Five conclusions survive this table.
+is fog-conditional. The prior-fog column, stable nearly everywhere,
+locates the weakness: parameter ignorance, not the choice of catastrophe
+prior — which real citations on the map would sharpen. Five conclusions
+survive this table.
 
 **1. Buffers first — and they have a sizing rule.** A shock bites only
 when buffer-months of cover fall short of the integrated capacity deficit
@@ -578,15 +578,14 @@ suite:
 *† depth real; the never-recovery is the §8 hysteresis artifact.*
 
 Buffer above deficit: the shock is invisible. Buffer below: it bites. Six
-rows, one rule — which is why this conclusion is a sizing formula, not a
-slogan. Worth savoring: the industry's post-2014 neon stockpile (~6
-months) sits just above the measured deficit (5.7 month-equivalents) —
-the 2014 lesson bought almost exactly the right amount of insurance. *So:
-at single-source chokepoints, hold — or at least require disclosure of —
+rows, one rule. The industry's post-2014 neon stockpile (~6 months) sits
+just above the measured deficit (5.7 month-equivalents); the 2014 lesson
+bought almost exactly the right amount of insurance. *At
+single-source chokepoints, hold — or require disclosure of —
 months-of-cover sized to `capacity-lost × expected-ramp-months` for the
-outages you consider plausible. Materials inventory at chokepoints is
-insurance priced far below the capacity it protects, and it is the
-cheapest resilience anywhere in this model.*
+outages you consider plausible. Inventory at chokepoints is insurance
+priced far below the capacity it protects — the cheapest resilience in
+this model.*
 
 **2. The marginal capacity dollar goes upstream — never to logistics.**
 Here is the full capacity gradient, both objectives, with each entry's
@@ -630,8 +629,8 @@ failure mode of taking that literally — a *frozen* priority list applied
 in the wrong crisis drove deliveries to zero. *Crisis authority should
 take the form of allocation power exercised on current information,
 recomputed per event — or get out of the way of the prices that re-solve
-that problem daily. It should not take the form of pre-committed priority
-lists, and not logistics-capacity subsidies.*
+that problem daily. Not pre-committed priority lists; not
+logistics-capacity subsidies.*
 
 **4. Stop shredding the boneyard.** The stockpile side of the same table:
 
@@ -653,15 +652,15 @@ lists, and not logistics-capacity subsidies.*
 Worn tools top the single-scenario baseline (0.848 over 0.695), lose the
 prior-averaged one (0.434 vs 0.511), and hold the top spot in only a
 fifth of fog draws — so the audited claim is *comparable value*, not
-*highest value*. Comparable is still remarkable for scrap, and the
-equipment stockpiles as a family dominate the #1 slot in every regime.
+*highest value*. The equipment stockpiles as a family dominate the #1
+slot in every regime.
 *A decommissioned-tool registry, warm storage, and refurbishment capacity
 are cheap resilience buys; an industry that routinely scraps old fab
 equipment is discarding a stockpile the model prices near working
 spares.*
 
-**5. Tail-risk planners buy fab redundancy — and note which catastrophe
-does NOT make the tail.** The frozen objective is the prior *mean*;
+**5. Tail-risk planners buy fab redundancy — and one catastrophe does
+*not* make the tail.** The frozen objective is the prior *mean*;
 policy usually cares about tails. Re-weight toward the worst scenarios
 holding the last 30% of prior probability and the objective concentrates
 on two of the five:
@@ -684,80 +683,44 @@ on two of the five:
 
 The tail's top stockpile is working tools, and no plausible buffer covers
 a 60-month fab rebuild — so the tail answer is geographic redundancy for
-the decade-rebuild nodes. The surprise is the last row: the
+the decade-rebuild nodes. The last row: the
 Zeiss knockout does *not* make the 72-month tail, because the
 refurbishment loop consumes worn tools and chips but no new optics — the
-boneyard result wearing its policy clothes. That comes with an honest
-caveat rather than a comfort: a 120-month rebuild mostly bites *beyond* a
-72-month horizon, so this table prices the six-year tail, not the forever
-tail, and extending the horizon is named future work.
+boneyard result wearing its policy clothes. Don't read it as comfort: a
+120-month rebuild mostly bites *beyond* a 72-month horizon, so this table
+prices the six-year tail, not the forever tail, and extending the horizon
+is named future work.
 
 All of it conditional on a confidence-C toy slice — and the audit's own
 conclusion is that citations, not more cleverness, are what would sharpen
-the rankings. That is exactly what the map's provenance gates are for.
+the rankings. That is what the map's provenance gates are for.
 
-## 10. What the way of looking taught
-
-There is a version of this essay that is all prose — the chokepoint tour
-of §2 stretched to five thousand words, with adjectives standing where
-the numbers are. That essay would have been easier to write and
-impossible to be wrong in, and those are the same defect. The reason to
-build the machine instead is that a formalism is an instrument for
-locating your own ignorance. "Equipment manufacturing is concentrated"
-sat comfortably in the prose version for exactly as long as it took to
-draw the box — at which point the box demanded edges, the edges demanded
-a source for optics, and the Zeiss monopoly fell out of the act of
-diagramming. The fog of §5 exists as a concept because the net forced
-every unknown to have a shape and a location. You cannot label an
-ignorance you cannot draw.
-
-The second lesson is that predictions have to be allowed to die.
-Freezing the constants, registering the bands, and replaying history
-turned this from a mood into an experiment, and the education came
-almost entirely from the failures: the five instructive wrongs of §7,
-and Sumitomo missing twice in opposite directions, which located the
-model's actual boundary — no prices — with a precision no amount of
-introspection would have found. When the sensitivity audit later took
-the boneyard headline away, that was the same instrument working in the
-other direction. A method that cannot lose claims cannot be trusted to
-keep them.
-
-And the third: derivatives discipline rhetoric. The question in the
-callout up top — the marginal dollar — is unanswerable in prose; every
-op-ed answers it with the author's priors wearing a suit. Making it a
-gradient did not make the answer *true* (the magnitudes are only as good
-as the confidence-C fog they pass through), but it made the answer
-*arguable*: a vector with signs that survive an audit and rankings that
-only coarsely do. That trade — from unfalsifiable confidence to
-falsifiable structure — is why the essay looks at the world this way.
-The wandering was real, and the method is what kept it honest.
-
-## 11. What this is and isn't
+## 10. What this is and isn't
 
 This is not a forecast, not a claim that collapse is coming, and not a
-policy tool you should point at the real world without reading its
-scorecard first — §9's conclusions come with their conditions attached for
-exactly that reason. Every parameter in the map carries provenance
-metadata; every one is still confidence-C, though the load-bearing ones now
-carry verified citations awaiting a reviewer's upgrade. It is a lens — and
-the honest surprise of the project is how
-much structure a toy lens resolves. Brittleness is concentration times
+policy tool to point at the real world without reading its scorecard
+first; §9's conclusions carry their conditions for that reason.
+Every parameter in the map carries provenance metadata; every one is
+still confidence-C, though the load-bearing ones now cite verified
+sources awaiting a reviewer's upgrade. It is a lens — and a toy lens
+resolved more structure than I expected. Brittleness is
+concentration times
 rebuild time, not depletion. Buffer-months versus ramp-time integrals
 decide who feels a shock. Boneyards are resilience capital, and adding
 capacity in the wrong place can carry a negative sign. Fog is wrong in
-unknown directions, so declare it. And an honest scorecard beats an
-impressive demo: the red Sumitomo row is the most valuable pixel on this
-site, because it's the model telling you exactly where not to trust it.
+unknown directions, so declare it. And a scorecard that shows its misses
+beats an impressive demo: the red Sumitomo row is the model saying where
+not to trust it.
 
-This started as: a guy reads the Easter Island chapter and wonders, for a
-closed island with no off-island, which way is up. It was built in one long
-back-and-forth with an AI (the receipts are in the footer), then hardened
-by the discipline any model deserves — frozen parameters, registered
-predictions, public misses. The gradient points somewhere. Mostly, I built
-this to learn how to read it. Play with the demo above; every number it
-shows traces back to the repo; and if you happen to know one of the fogged
-territories — resin chemistry, phosphate logistics, optics — the fog is
-labeled, and the gate is open.
+This began with a chapter of *Collapse* and a question that stuck: where,
+in a closed system, is a marginal dollar of resilience best spent? The
+answer was built in one long back-and-forth with an AI (the receipts are
+in the footer), then held to a discipline: frozen parameters, registered
+predictions, public misses. The gradient
+points somewhere. Mostly, I built this to learn how to read it. Play with
+the demo above; every number it shows traces back to the repo. And if you
+know one of the fogged territories — resin chemistry, phosphate
+logistics, optics — the fog is labeled and the gate is open.
 
 ---
 

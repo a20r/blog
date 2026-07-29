@@ -52,3 +52,31 @@ version. This file is not rendered on the site.
   the two-copy setup had already produced one real drift bug — the ~0.3
   Tōhoku deficit), its project site now hosts the live model only and
   links here, and this changelog moved alongside the post.
+- **v0.5** — flow and editorial revision, on Alex's notes: §5 no longer leans on
+  machinery the reader hasn't met (the dead-end check is grounded in §4's
+  discrete net, the Zeiss discovery tied back to §2's tour) and closes by
+  signposting that everything downstream is fog-conditional; §6's audit
+  parenthetical shrinks to a plain promise, with the numbers and the full
+  protocol moved to §9 where the table lives; §3 plants the confidence-C
+  grading early; §8's structural-miss result is labeled as §9's
+  machinery; §11's origin line reframed. A fresh-reader review pass then
+  caught three more: §6 no longer re-derives §3's relaxation as if new,
+  photoresist 2019 gets its one-clause introduction in §8 (the only
+  scored event that had none), and §9's "honest caveat" hedging label is
+  gone. A full editorial pass in The Economist's register followed, at
+  Alex's direction: throat-clears out ("Here's the thing", "I should
+  state it honestly", "Worth savoring"), questions stated plainly (the
+  §11 origin line asks the essay's actual question), emphasis carried by
+  construction rather than typography (pure-stress bolds dropped; coined
+  terms keep theirs), the un-introduced "SPOFs" jargon replaced, the
+  §3/§11 confidence-C statements reconciled, and sentences shortened
+  throughout. §10 ("What the way of looking taught", the method
+  reflection) cut at Alex's direction; the closing section renumbered
+  §10 and the roadmap updated. A final de-reinforcer pass stripped the
+  essay's self-narration — evaluative asides ("the most valuable row on
+  the board", "That is the point"), reader-instruction ("Hold onto that
+  label", "Note the near-miss", "Read the columns"), virtue-narration
+  ("the honest name", "the only honest response", "the discipline any
+  model deserves", "not a slogan", "a liability, not a contribution") —
+  while keeping every caveat and discipline fact intact. No number,
+  table, or result changed.
