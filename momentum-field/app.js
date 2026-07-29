@@ -1024,10 +1024,22 @@ function computeGame() {
   for (let i = 0; i < kp; i++) { const npts = buf[idx++], wt = buf[idx++], pts = [];
     for (let j = 0; j < npts; j++) { pts.push([buf[idx], buf[idx+1]]); idx += 2; }
     out.push({ w: wt, pts: chaikin(pts, 1) }); }
-  const a = 0.55;
-  if (predPaths && predPaths.length === out.length && predPaths[0].pts.length === out[0].pts.length)
-    for (let i = 0; i < out.length; i++) { out[i].w = a*out[i].w + (1-a)*predPaths[i].w; const cp = out[i].pts, pp = predPaths[i].pts;
-      for (let q = 0; q < cp.length; q++) { cp[q][0] = a*cp[q][0]+(1-a)*pp[q][0]; cp[q][1] = a*cp[q][1]+(1-a)*pp[q][1]; } }
+  // cross-frame smoothing, but ONLY for tracks whose sampled future is the
+  // same shape and nearby — a track that re-rolled a different pass (or died
+  // earlier) SNAPS to its new path instead of being averaged through the
+  // valley between two modes, which used to draw lines the heatmap disowns
+  const a = 0.55, SNAP_M = 6;
+  if (predPaths && predPaths.length === out.length)
+    for (let i = 0; i < out.length; i++) {
+      const cp = out[i].pts, pp = predPaths[i].pts;
+      if (cp.length !== pp.length) continue;
+      let maxd = 0;
+      for (let q = 0; q < cp.length; q++)
+        maxd = Math.max(maxd, Math.hypot(cp[q][0]-pp[q][0], cp[q][1]-pp[q][1]));
+      if (maxd > SNAP_M) continue;
+      out[i].w = a*out[i].w + (1-a)*predPaths[i].w;
+      for (let q = 0; q < cp.length; q++) { cp[q][0] = a*cp[q][0]+(1-a)*pp[q][0]; cp[q][1] = a*cp[q][1]+(1-a)*pp[q][1]; }
+    }
   predPaths = out;
   // ghosts — cross-frame EWMA (by snapshot/player index) so the future-player dots glide
   const gl_ = wasm.pghost_len();
@@ -1084,8 +1096,17 @@ function frameLoop(ts) {
     render(playhead, playhead - H, playhead, null);
     $('r-t').textContent = H.toFixed(1) + ' s win';
     $('r-mt').textContent = (400 + playhead).toFixed(1) + ' s';
-    $('r-mass-label').textContent = 'fwd modes';
-    $('r-mass').textContent = (layer === 'wake' || layer === 'value') ? '—' : `${fwdModes.length} / ${$('kmodes').value}`;
+    if (layer === 'game') {
+      $('r-mass-label').textContent = 'ball tracks';
+      $('r-mass').textContent = `${$('kmodes').value}`;
+    } else if (layer === 'forward') {
+      $('r-mass-label').textContent = 'tree paths';
+      const wdt = wasm.fwd_tree_width ? wasm.fwd_tree_width() : 1;
+      $('r-mass').textContent = `${wdt} (K ${$('kmodes').value} × depth ${$('depth').value})`;
+    } else {
+      $('r-mass-label').textContent = 'fwd modes';
+      $('r-mass').textContent = '—';
+    }
     $('r-xg').textContent = '—';
     const srcName = { emp: 'empirical', kernel: 'learned kernel', theta: 'θ v2' }[fieldSrc()];
     $('r-model').textContent = `${srcName} · θ ${thetaFitted ? 'FITTED' : 'prior'}`;

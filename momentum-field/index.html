@@ -128,7 +128,7 @@
           <label>horizon</label>
           <input type="range" id="fhz" min="2" max="30" step="0.5" value="20">
           <span class="val" id="fhzv">20.0 s</span></div>
-        <div class="ctl" title="how strongly the ball's current velocity is injected as decaying drift">
+        <div class="ctl" title="how much of the ball's current velocity is injected as decaying (τ≈1.5 s) drift. The empirical/kernel fields need it — their drift is match-averaged, so instantaneous momentum is missing: ~0.7. The θ v2 field already carries FITTED momentum (dr_mom ≈ 0.49 from the tracking fit), so keep this ≤0.2 there or momentum is double-counted.">
           <label>momentum</label>
           <input type="range" id="mom" min="0" max="1" step="0.05" value="0.7">
           <span class="val" id="momv">0.70</span></div>
@@ -157,10 +157,10 @@
           <input type="radio" name="fieldsrc" id="fs-kernel" value="kernel" checked> learned kernel</label>
         <label class="chk" title="v2 parametric interaction model: time-to-intercept control, pass lanes, control volatility (θ, fittable)">
           <input type="radio" name="fieldsrc" id="fs-theta" value="theta"> θ interaction field (v2)</label>
-        <div class="ctl" data-views="forward" title="blend weight of the state-conditioned field into the forward sim">
+        <div class="ctl" data-views="forward" title="forward view only: constant blend of the player-configuration field vs the neutral marginal (the game view instead decays it live as exp(−t/τ_state), which is the right thing). The principled constant is the horizon-average of that decay, (τ/H)(1−e^(−H/τ)): with τ_state = 45 s and the default 20 s horizon ≈ 0.8.">
           <label>play-state</label>
-          <input type="range" id="statew" min="0" max="1" step="0.05" value="0.5">
-          <span class="val" id="statewv">0.50</span></div>
+          <input type="range" id="statew" min="0" max="1" step="0.05" value="0.8">
+          <span class="val" id="statewv">0.80</span></div>
         <div class="ctl" data-views="forward" id="biasrow"
              title="v1 crutch: goalward pull added to the direction-marginalized empirical field. In the θ v2 model this is LEARNED (dr_carry / dr_pass), so the slider is ignored there.">
           <label>attack bias</label>
