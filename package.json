@@ -1,7 +1,7 @@
 {
-  "name": "unrelated-rambles",
+  "name": "toilet-time-explorations",
   "version": "1.0.0",
-  "description": "unrelated rambles — a blog",
+  "description": "toilet time explorations — a blog",
   "type": "module",
   "private": true,
   "scripts": {
