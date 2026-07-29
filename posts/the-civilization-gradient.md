@@ -762,12 +762,12 @@ unknown directions, so declare it. And an honest scorecard beats an
 impressive demo: the red Sumitomo row is the most valuable pixel on this
 site, because it's the model telling you exactly where not to trust it.
 
-This started with a chapter of *Collapse* and a question that would not
-leave: on a closed island with no off-island, which way is up? The answer
-was built in one long back-and-forth with an AI (the receipts are in the
-footer), then hardened by the discipline any model deserves — frozen
-parameters, registered predictions, public misses. The gradient points
-somewhere. Mostly, I built this to learn how to read it. Play with the demo above; every number it
+This began with a chapter of *Collapse* and a question that stuck: where,
+in a closed system, is a marginal dollar of resilience best spent? The
+answer was built in one long back-and-forth with an AI (the receipts are
+in the footer), then hardened by the discipline any model deserves —
+frozen parameters, registered predictions, public misses. The gradient
+points somewhere. Mostly, I built this to learn how to read it. Play with the demo above; every number it
 shows traces back to the repo; and if you happen to know one of the fogged
 territories — resin chemistry, phosphate logistics, optics — the fog is
 labeled, and the gate is open.
