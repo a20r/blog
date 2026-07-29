@@ -10,7 +10,7 @@ summary: "Wait for a late score shock in Kalshi's three-outcome soccer markets, 
 
 # Late-Game Capitulation Basket Conversion: A Protocol for Three-Outcome Soccer Markets
 
-*Part 1 of 3. This post documents the trading strategy I run on Kalshi's three-outcome soccer markets — the market model, the behavioral thesis, the payoff optimization, the entry gates, the optimal-stopping rule for when to lock, and the accounting protocol that keeps me honest about whether any of it works. It's synthesized from the project's internal design docs and a season of building tooling around them. [Part 2](/posts/a-momentum-field-for-soccer/) covers the momentum-field model that computes the one input this framework currently has to fake; [Part 3](/posts/the-defense-gets-a-vote/) closes out that model's roadmap.*
+*Part 1 of 3. This post documents the trading strategy I run on Kalshi's three-outcome soccer markets — the market model, the behavioral thesis, the payoff optimization, the entry gates, the optimal-stopping rule for when to lock, and the accounting protocol that keeps me honest about whether any of it works. It's synthesized from the project's internal design docs and a season of building tooling around them. [Part 2](/posts/a-momentum-field-for-soccer/) covers the momentum-field model that computes the one input this framework currently has to fake; [Part 3](/posts/held-out/) closes out that model's roadmap.*
 
 ---
 
