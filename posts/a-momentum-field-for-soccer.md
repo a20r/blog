@@ -9,7 +9,7 @@ summary: "A parametric, learnable model of soccer momentum: Fokker–Planck tran
 
 # A Momentum Field for Soccer: Pricing Late-Game Goal Risk with Fokker–Planck, Decision Jumps, and a 49-Parameter Learnable θ
 
-*Part 2 of 2. [Part 1](/posts/capitulation-basket/) covers the trading strategy this model exists to serve — the capitulation thesis, the basket geometry, the entry gates, and the ledger. This post documents the `momentum-field` engine inside my Kalshi basket project: a parametric, learnable model of soccer "game momentum" that turns live player tracking into a time-varying goal intensity $\lambda_g(t)$ — the number a late-game trading strategy actually needs. It starts from a trading problem, detours through Fokker–Planck equations, pitch-control races, and piecewise-deterministic jump processes, and ends with a fitted model running entirely in the browser. All of it is open in the repo; none of it is calibrated enough to bet on yet, and the post is explicit about where that line is.*
+*Part 2 of 3. [Part 1](/posts/capitulation-basket/) covers the trading strategy this model exists to serve — the capitulation thesis, the basket geometry, the entry gates, and the ledger. This post documents the `momentum-field` engine inside my Kalshi basket project: a parametric, learnable model of soccer "game momentum" that turns live player tracking into a time-varying goal intensity $\lambda_g(t)$ — the number a late-game trading strategy actually needs. It starts from a trading problem, detours through Fokker–Planck equations, pitch-control races, and piecewise-deterministic jump processes, and ends with a fitted model running entirely in the browser. All of it is open in the repo; none of it is calibrated enough to bet on yet, and the post is explicit about where that line is.*
 
 ---
 
@@ -372,7 +372,7 @@ Details that mattered more than they should have:
 
 ## 11. What's next
 
-In rough order: the **defender decision model** (the discrete counterpart of §7 on the defensive side); **per-player skill estimation** so the $s_{\text{passer}} s_{\text{receiver}}$ hooks stop defaulting to 1; the **multi-goal convolution** to extend the next-goal-decisive three-vector earlier into matches; and the big one, **C.6 calibration** on a real corpus with the market as benchmark-not-target. If calibration passes, the manual hazard gate retires, the crossover rule runs on measured $\lambda(t)$, and the fair-value three-vector prices the basket directly. If it fails, that's a logged research result and the manual gates stand — which is the correct failure mode for a system whose first design principle is that the best output is often *no trade*.
+In rough order: the **defender decision model** (the discrete counterpart of §7 on the defensive side); **per-player skill estimation** so the $s_{\text{passer}} s_{\text{receiver}}$ hooks stop defaulting to 1; the **multi-goal convolution** to extend the next-goal-decisive three-vector earlier into matches; and the big one, **C.6 calibration** on a real corpus with the market as benchmark-not-target. If calibration passes, the manual hazard gate retires, the crossover rule runs on measured $\lambda(t)$, and the fair-value three-vector prices the basket directly. If it fails, that's a logged research result and the manual gates stand — which is the correct failure mode for a system whose first design principle is that the best output is often *no trade*. (*Update: all four items are now implemented — [Part 3](/posts/held-out/) is the delivery report.*)
 
 ---
 

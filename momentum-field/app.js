@@ -60,9 +60,14 @@ async function loadParams() {
   let p;
   try { p = await (await fetch('./assets/params_flat.json')).json(); } catch { return false; }
   if (p?.schema !== 'theta-flat-v1' || !Array.isArray(p.values)) return false;
-  if (p.values.length !== wasm.param_count()) {
-    console.warn(`params_flat.json has ${p.values.length} values but the wasm expects ${wasm.param_count()} — using defaults`);
+  if (p.values.length > wasm.param_count()) {
+    console.warn(`params_flat.json has ${p.values.length} values but the wasm expects at most ${wasm.param_count()} — using defaults`);
     return false;
+  }
+  if (p.values.length < wasm.param_count()) {
+    // θ grows append-only, so an older fitted file stages as a PREFIX and the
+    // appended parameters (e.g. the defender-decision block) keep defaults
+    console.info(`params_flat.json has ${p.values.length} of ${wasm.param_count()} values — staging as a prefix`);
   }
   stageFloats(new Float32Array(p.values));
   wasm.set_params(p.values.length);
@@ -607,6 +612,19 @@ function render(ballTime, pathA, pathB, travB) {
     }
   }
 
+  // decided defensive tasks at the playhead (Part 3): line = defender → its
+  // decided target, colour = action (legend in the game controls)
+  if (lyr === 'game' && defDecisions && defDecisions.length) {
+    const dpr2 = Math.min(devicePixelRatio, 2), dots = [];
+    for (const d of defDecisions) {
+      const c = DEC_COLORS[d.a];
+      if (Math.hypot(d.tx - d.x, d.ty - d.y) > 0.6)
+        drawRibbon([[d.x, d.y], [d.tx, d.ty]], 0.32, c);
+      dots.push(d.tx, d.ty, c[0], c[1], c[2], c[3], 6 * dpr2);
+    }
+    drawFlat(gl.POINTS, new Float32Array(dots), dots.length / 7, true);
+  }
+
   // PREDICTED tracks — hurricane fan: the K most-likely paths, thicker/brighter for
   // higher probability; small fixed-spacing arrows on the single most-likely track.
   if (lyr === 'game' && predPaths && predPaths.length) {
@@ -744,6 +762,40 @@ function applyState(sw, gdir) {
     for (let i = 0; i < def.length; i++) { arr[i*2] = def[i][0]; arr[i*2+1] = def[i][1]; }
     stageFloats(arr); wasm.set_state(def.length, gdir);
   }
+}
+
+// ------------------- defender decisions overlay (Part 3, defend.rs) -------
+// The decided defensive tasks at the playhead: every defender softmaxes over
+// {man-mark, zone, lane-block, press, cover} by threat denied. Runs the same
+// defense_decide the standalone demo uses — microseconds per round, so it
+// re-decides as the playhead moves. Action colours match the Part 3 figures.
+const DEC_COLORS = [
+  [0.97, 0.44, 0.44, 0.95], // 0 man-mark  #f87171
+  [0.39, 0.45, 0.55, 0.80], // 1 zone      #64748b
+  [0.98, 0.75, 0.14, 0.95], // 2 lane      #fbbf24
+  [0.96, 0.45, 0.71, 0.95], // 3 press     #f472b6
+  [0.65, 0.55, 0.98, 0.95], // 4 cover     #a78bfa
+];
+let defDecisions = null, defDecT = -1e9;
+function updateDecisions() {
+  const box = $('g-decisions');
+  if (layer !== 'game' || !box || !box.checked || !wasm.defense_decide) { defDecisions = null; return; }
+  if (defDecisions && Math.abs(playhead - defDecT) < 0.04) return;
+  const arr = playersV5(playhead);
+  if (!arr) { defDecisions = null; return; }
+  const gdir = dirAt(playhead) || 1;
+  const [bx, by] = ballAt(playhead), v = ballVel(playhead);
+  stageFloats(arr);
+  const ptr = wasm.defense_decide(22, gdir, bx, by, v[0], v[1]);
+  if (!ptr) { defDecisions = null; return; }
+  const out = f32at(ptr, wasm.defense_out_len());
+  const n = out[0] | 0, ds = [];
+  let k = 1;
+  for (let i = 0; i < n; i++, k += 9) {
+    if (out[k] < 0) continue; // attacker
+    ds.push({ x: arr[i * 5], y: arr[i * 5 + 1], a: out[k] | 0, tx: out[k + 1], ty: out[k + 2] });
+  }
+  defDecisions = ds; defDecT = playhead;
 }
 
 // ------------------------- λ(t) hazard strip (coupled v2, Addendum C) ------
@@ -972,10 +1024,22 @@ function computeGame() {
   for (let i = 0; i < kp; i++) { const npts = buf[idx++], wt = buf[idx++], pts = [];
     for (let j = 0; j < npts; j++) { pts.push([buf[idx], buf[idx+1]]); idx += 2; }
     out.push({ w: wt, pts: chaikin(pts, 1) }); }
-  const a = 0.55;
-  if (predPaths && predPaths.length === out.length && predPaths[0].pts.length === out[0].pts.length)
-    for (let i = 0; i < out.length; i++) { out[i].w = a*out[i].w + (1-a)*predPaths[i].w; const cp = out[i].pts, pp = predPaths[i].pts;
-      for (let q = 0; q < cp.length; q++) { cp[q][0] = a*cp[q][0]+(1-a)*pp[q][0]; cp[q][1] = a*cp[q][1]+(1-a)*pp[q][1]; } }
+  // cross-frame smoothing, but ONLY for tracks whose sampled future is the
+  // same shape and nearby — a track that re-rolled a different pass (or died
+  // earlier) SNAPS to its new path instead of being averaged through the
+  // valley between two modes, which used to draw lines the heatmap disowns
+  const a = 0.55, SNAP_M = 6;
+  if (predPaths && predPaths.length === out.length)
+    for (let i = 0; i < out.length; i++) {
+      const cp = out[i].pts, pp = predPaths[i].pts;
+      if (cp.length !== pp.length) continue;
+      let maxd = 0;
+      for (let q = 0; q < cp.length; q++)
+        maxd = Math.max(maxd, Math.hypot(cp[q][0]-pp[q][0], cp[q][1]-pp[q][1]));
+      if (maxd > SNAP_M) continue;
+      out[i].w = a*out[i].w + (1-a)*predPaths[i].w;
+      for (let q = 0; q < cp.length; q++) { cp[q][0] = a*cp[q][0]+(1-a)*pp[q][0]; cp[q][1] = a*cp[q][1]+(1-a)*pp[q][1]; }
+    }
   predPaths = out;
   // ghosts — cross-frame EWMA (by snapshot/player index) so the future-player dots glide
   const gl_ = wasm.pghost_len();
@@ -1026,13 +1090,23 @@ function frameLoop(ts) {
     else {
       ghostSnaps = null;
       if ((layer === 'forward' || layer === 'game') && fwdDirty) computeForward();
+      updateDecisions();
     }
     if (needValue() && (!valFlat || valGdir !== (dirAt(playhead) || 1) || valVmax !== +$('vmax').value)) computeValue();
     render(playhead, playhead - H, playhead, null);
     $('r-t').textContent = H.toFixed(1) + ' s win';
     $('r-mt').textContent = (400 + playhead).toFixed(1) + ' s';
-    $('r-mass-label').textContent = 'fwd modes';
-    $('r-mass').textContent = (layer === 'wake' || layer === 'value') ? '—' : `${fwdModes.length} / ${$('kmodes').value}`;
+    if (layer === 'game') {
+      $('r-mass-label').textContent = 'ball tracks';
+      $('r-mass').textContent = `${$('kmodes').value}`;
+    } else if (layer === 'forward') {
+      $('r-mass-label').textContent = 'tree paths';
+      const wdt = wasm.fwd_tree_width ? wasm.fwd_tree_width() : 1;
+      $('r-mass').textContent = `${wdt} (K ${$('kmodes').value} × depth ${$('depth').value})`;
+    } else {
+      $('r-mass-label').textContent = 'fwd modes';
+      $('r-mass').textContent = '—';
+    }
     $('r-xg').textContent = '—';
     const srcName = { emp: 'empirical', kernel: 'learned kernel', theta: 'θ v2' }[fieldSrc()];
     $('r-model').textContent = `${srcName} · θ ${thetaFitted ? 'FITTED' : 'prior'}`;
@@ -1061,7 +1135,7 @@ function frameLoop(ts) {
 // row also hides under the θ model (there the pull is learned, not a slider)
 const VIEW_INFO = {
   forward: 'Heatmap = expected ball dwell-time over the next horizon, players FROZEN at the playhead. Bright ridge = the corridor of play, not the destination.',
-  game: 'Same dwell-time heatmap, but the 22 players are SIMULATED forward (grey ghosts) and the field re-derives from their predicted positions. Under the θ model the carrier also DECIDES: passes are discrete jumps to lead targets, chosen by value gained — expect MULTIMODAL lobes at receivers, not one blob. Cyan-pink strands = ball tracks sampling the same decisions.',
+  game: 'Same dwell-time heatmap, but the 22 players are SIMULATED forward (grey ghosts) and the field re-derives from their predicted positions. Under the θ model the carrier DECIDES (passes are value-steered jumps — expect MULTIMODAL lobes at receivers) and, since Part 3, so does the DEFENSE: each defender softmaxes over man-mark / zone / lane-block / press / cover by threat denied. Coloured lines = the decided tasks at the playhead; the simulated defenders re-plan the same way as they evolve.',
   wake: 'Heatmap = where the ball has just been (a rolling window into the past). Pure history, no prediction.',
   value: 'Surface = ideal value V(x): expected goal-scoring from having the ball at x under ideal play. The SAME surface (rebuilt per slice, horizon-coupled) steers the pass-decision policy inside forward/game predictions; these sliders restyle only this view.',
 };
@@ -1077,6 +1151,7 @@ function updateVis() {
 function resetDerived() {
   fwdAccum = null; fwdNorm = 1e-6; fwdDirty = true;
   predDirty = true; predPaths = null; ghostSnaps = null; gameOccPrev = null;
+  defDecisions = null; defDecT = -1e9;
   valFlat = null;
 }
 
@@ -1137,6 +1212,16 @@ function wireUI() {
     updateVis();
     if (layer === 'wake') wakeWarmup();
   });
+  const gdec = $('g-decisions');
+  if (gdec) gdec.addEventListener('change', () => { defDecT = -1e9; defDecisions = null; });
+  // deep link: ?view=forward|game|wake|value opens that view directly
+  {
+    const qv = new URLSearchParams(location.search).get('view');
+    if (qv && ['forward', 'game', 'wake', 'value'].includes(qv)) {
+      $('layer').value = qv;
+      $('layer').dispatchEvent(new Event('change'));
+    }
+  }
   // recompute the forward cone when its parameters change
   ['fhz', 'kmodes', 'depth'].forEach(id => $(id).addEventListener('input', () => { fwdAccum = null; fwdNorm = 1e-6; fwdDirty = true; predDirty = true; }));
   ['trail', 'mom'].forEach(id => $(id).addEventListener('input', () => { fwdDirty = true; predDirty = true; }));

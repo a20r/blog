@@ -10,6 +10,9 @@ export default function (eleventyConfig) {
   // keep Eleventy from processing its index.html as a template.
   eleventyConfig.addPassthroughCopy("momentum-field");
   eleventyConfig.ignores.add("momentum-field/**");
+  // Same for the defender-decision demo (Kalshi basket part 3).
+  eleventyConfig.addPassthroughCopy("defender-decisions");
+  eleventyConfig.ignores.add("defender-decisions/**");
   eleventyConfig.addPlugin(HtmlBasePlugin);
   eleventyConfig.addPlugin(syntaxHighlight);
   // $...$ / $$...$$ rendered to inline SVG at build time — no client JS.

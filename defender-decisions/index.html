@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>defender decisions — live demo</title>
+<style>
+  :root {
+    --bg: #07120c; --panel: #0b1a12; --line: #1d3a2c; --text: #cfe;
+    --dim: #9fb8ac; --atk: #4ade80; --def: #7dd3fc;
+    --press: #f472b6; --lane: #fbbf24; --mark: #f87171; --cover: #a78bfa; --zone: #64748b;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    background: var(--bg); color: var(--text);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 12px; display: flex; flex-direction: column; overflow: hidden;
+  }
+  header {
+    display: flex; align-items: baseline; gap: 10px; padding: 8px 12px 4px;
+    flex-wrap: wrap;
+  }
+  header h1 { font-size: 13px; font-weight: 600; letter-spacing: .02em; }
+  header .sub { color: var(--dim); font-size: 11px; }
+  #main { display: flex; flex: 1; min-height: 0; }
+  #left { flex: 1; display: flex; flex-direction: column; min-width: 0; padding: 4px 8px 8px 12px; }
+  #pitchwrap { position: relative; flex: 1; min-height: 0; }
+  canvas { position: absolute; inset: 0; width: 100%; height: 100%; cursor: grab; touch-action: none; }
+  #side {
+    width: 218px; flex: none; padding: 4px 12px 10px 6px; overflow-y: auto;
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .box { background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 8px; }
+  .box h2 { font-size: 11px; color: var(--dim); font-weight: 600; margin-bottom: 6px; letter-spacing: .04em; }
+  .sl { display: grid; grid-template-columns: 58px 1fr 30px; gap: 6px; align-items: center; margin: 3px 0; }
+  .sl label { color: var(--dim); font-size: 11px; }
+  .sl output { text-align: right; font-size: 11px; }
+  input[type=range] { width: 100%; accent-color: #4ade80; height: 14px; }
+  .presets { display: flex; flex-wrap: wrap; gap: 5px; }
+  button {
+    background: #10241a; color: var(--text); border: 1px solid var(--line);
+    border-radius: 5px; padding: 4px 8px; font: inherit; font-size: 11px; cursor: pointer;
+  }
+  button:hover { border-color: #3a7a58; }
+  button.active { border-color: #4ade80; color: #4ade80; }
+  #bars { display: flex; flex-direction: column; gap: 4px; }
+  .bar { display: grid; grid-template-columns: 52px 1fr 34px; gap: 6px; align-items: center; }
+  .bar .lbl { font-size: 11px; color: var(--dim); }
+  .bar .track { height: 9px; background: #0f221a; border-radius: 4px; overflow: hidden; }
+  .bar .fill { height: 100%; border-radius: 4px; }
+  .bar .val { font-size: 10px; text-align: right; color: var(--dim); }
+  #status { color: var(--dim); font-size: 10px; padding: 2px 0 0; min-height: 14px; }
+  .legend { display: flex; flex-wrap: wrap; gap: 8px 12px; padding: 4px 0 0; font-size: 10px; color: var(--dim); }
+  .legend span::before { content: "—"; font-weight: 700; margin-right: 4px; }
+  .lg-press::before { color: var(--press); } .lg-lane::before { color: var(--lane); }
+  .lg-mark::before { color: var(--mark); } .lg-cover::before { color: var(--cover); }
+  .lg-zone::before { color: var(--zone); }
+  .hint { color: var(--dim); font-size: 10px; line-height: 1.45; }
+  @media (max-width: 620px) { #side { width: 170px; } }
+</style>
+</head>
+<body>
+<header>
+  <h1>the defender decision layer, live</h1>
+  <span class="sub">drag anyone (or the ball) — the defense re-decides on every move; sliders are θ</span>
+</header>
+<div id="main">
+  <div id="left">
+    <div id="pitchwrap"><canvas id="pitch"></canvas></div>
+    <div class="legend">
+      <span class="lg-press">press</span><span class="lg-lane">lane-block</span>
+      <span class="lg-mark">man-mark</span><span class="lg-cover">cover</span>
+      <span class="lg-zone">zone</span>
+      <span style="margin-left:auto">attack → right goal · dashed cyan = pass options (opacity ∝ q·c)</span>
+    </div>
+    <div id="status">loading wasm…</div>
+  </div>
+  <div id="side">
+    <div class="box">
+      <h2>θ · defensive scheme</h2>
+      <div class="sl"><label>mark</label><input type="range" id="th_mark" min="0" max="4" step="0.1" value="1"><output>1.0</output></div>
+      <div class="sl"><label>lane</label><input type="range" id="th_lane" min="0" max="8" step="0.1" value="1"><output>1.0</output></div>
+      <div class="sl"><label>press</label><input type="range" id="th_press" min="0" max="6" step="0.1" value="1.5"><output>1.5</output></div>
+      <div class="sl"><label>cover</label><input type="range" id="th_cover" min="0" max="4" step="0.1" value="0.8"><output>0.8</output></div>
+      <div class="sl"><label>zone bias</label><input type="range" id="th_zone" min="-0.5" max="1.5" step="0.05" value="0.2"><output>0.2</output></div>
+      <div class="sl"><label>temp</label><input type="range" id="th_temp" min="0.05" max="3" step="0.05" value="1"><output>1.0</output></div>
+    </div>
+    <div class="box">
+      <h2>schemes</h2>
+      <div class="presets">
+        <button data-preset="prior" class="active">prior θ</button>
+        <button data-preset="lanes">deny lanes</button>
+        <button data-preset="press">gegenpress</button>
+        <button data-preset="bus">park the bus</button>
+      </div>
+    </div>
+    <div class="box">
+      <h2>scenarios</h2>
+      <div class="presets">
+        <button data-scene="broken">broken shape</button>
+        <button data-scene="block">low block</button>
+        <button data-scene="mid">midfield</button>
+      </div>
+    </div>
+    <div class="box">
+      <h2 id="barhdr">policy · click a defender</h2>
+      <div id="bars"></div>
+    </div>
+    <div class="box hint">
+      Every defender softmaxes over {man-mark, zone, lane-block, press, cover}
+      by <b>threat denied</b> — value at the denied spot × a time-to-reach
+      discount × a claim discount on spots teammates already took (decisions
+      are sequential, nearest-to-ball first; the keeper always covers). This
+      page runs the exact <code>defend.rs</code> the simulation uses, compiled
+      to wasm — nothing leaves your browser.
+    </div>
+  </div>
+</div>
+<script src="./app.js"></script>
+</body>
+</html>

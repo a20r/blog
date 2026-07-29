@@ -1,0 +1,46 @@
+<svg xmlns='http://www.w3.org/2000/svg' width='720' height='360' viewBox='0 0 720 360' font-family='monospace'>
+<rect width='720' height='360' fill='#07120c'/>
+<text x='14' y='20' fill='#cfe' font-size='13'>per-player skill: fitted multiplier vs scripted ground truth (150 harvested passes)</text>
+<text x='14' y='36' fill='#9fb8ac' font-size='11'>shrinkage + pooled pass/trap roles compress the scale; the ORDER is what one match can earn</text>
+<line x1='58' y1='248.1' x2='696' y2='248.1' stroke='#1d3a2c'/>
+<text x='50' y='251.1' fill='#9fb8ac' font-size='10' text-anchor='end'>0.25</text>
+<line x1='58' y1='202.1' x2='696' y2='202.1' stroke='#1d3a2c'/>
+<text x='50' y='205.1' fill='#9fb8ac' font-size='10' text-anchor='end'>0.50</text>
+<line x1='58' y1='156.2' x2='696' y2='156.2' stroke='#1d3a2c'/>
+<text x='50' y='159.2' fill='#9fb8ac' font-size='10' text-anchor='end'>0.75</text>
+<line x1='58' y1='110.3' x2='696' y2='110.3' stroke='#1d3a2c'/>
+<text x='50' y='113.3' fill='#9fb8ac' font-size='10' text-anchor='end'>1.00</text>
+<line x1='58' y1='64.4' x2='696' y2='64.4' stroke='#1d3a2c'/>
+<text x='50' y='67.4' fill='#9fb8ac' font-size='10' text-anchor='end'>1.25</text>
+<line x1='58' y1='110.3' x2='696' y2='110.3' stroke='#cfe' stroke-width='1' stroke-dasharray='5,4'/>
+<rect x='78.4' y='157.1' width='38.3' height='136.9' fill='#f472b6' fill-opacity='0.85'/>
+<text x='97.6' y='151.1' fill='#cfe' font-size='11' text-anchor='middle'>0.74</text>
+<rect x='126.9' y='220.5' width='38.3' height='73.5' fill='none' stroke='#9fb8ac' stroke-width='1.4'/>
+<text x='146.0' y='214.5' fill='#9fb8ac' font-size='10' text-anchor='middle'>0.40</text>
+<text x='121.8' y='312' fill='#cfe' font-size='11' text-anchor='middle'>p3 · the butcher</text>
+<rect x='206.0' y='141.5' width='38.3' height='152.5' fill='#f472b6' fill-opacity='0.85'/>
+<text x='225.2' y='135.5' fill='#cfe' font-size='11' text-anchor='middle'>0.83</text>
+<rect x='254.5' y='156.2' width='38.3' height='137.8' fill='none' stroke='#9fb8ac' stroke-width='1.4'/>
+<text x='273.6' y='150.2' fill='#9fb8ac' font-size='10' text-anchor='middle'>0.75</text>
+<text x='249.4' y='312' fill='#cfe' font-size='11' text-anchor='middle'>p4</text>
+<rect x='333.6' y='110.3' width='38.3' height='183.7' fill='#4ade80' fill-opacity='0.85'/>
+<text x='352.8' y='104.3' fill='#cfe' font-size='11' text-anchor='middle'>1.00</text>
+<rect x='382.1' y='156.2' width='38.3' height='137.8' fill='none' stroke='#9fb8ac' stroke-width='1.4'/>
+<text x='401.2' y='150.2' fill='#9fb8ac' font-size='10' text-anchor='middle'>0.75</text>
+<text x='377.0' y='312' fill='#cfe' font-size='11' text-anchor='middle'>p2</text>
+<rect x='461.2' y='106.4' width='38.3' height='187.6' fill='#4ade80' fill-opacity='0.85'/>
+<text x='480.4' y='100.4' fill='#cfe' font-size='11' text-anchor='middle'>1.02</text>
+<rect x='509.7' y='156.2' width='38.3' height='137.8' fill='none' stroke='#9fb8ac' stroke-width='1.4'/>
+<text x='528.8' y='150.2' fill='#9fb8ac' font-size='10' text-anchor='middle'>0.75</text>
+<text x='504.6' y='312' fill='#cfe' font-size='11' text-anchor='middle'>p0</text>
+<rect x='588.8' y='75.4' width='38.3' height='218.6' fill='#67e8f9' fill-opacity='0.85'/>
+<text x='608.0' y='69.4' fill='#cfe' font-size='11' text-anchor='middle'>1.19</text>
+<rect x='637.3' y='119.5' width='38.3' height='174.5' fill='none' stroke='#9fb8ac' stroke-width='1.4'/>
+<text x='656.4' y='113.5' fill='#9fb8ac' font-size='10' text-anchor='middle'>0.95</text>
+<text x='632.2' y='312' fill='#cfe' font-size='11' text-anchor='middle'>p1 · the metronome</text>
+<rect x='64' y='54' width='14' height='10' fill='#4ade80' fill-opacity='0.85'/>
+<text x='84' y='63' fill='#cfe' font-size='11'>fitted s (median-pinned)</text>
+<rect x='270' y='54' width='14' height='10' fill='none' stroke='#9fb8ac' stroke-width='1.4'/>
+<text x='290' y='63' fill='#cfe' font-size='11'>scripted completion rate</text>
+<text x='377.0' y='348' fill='#9fb8ac' font-size='11' text-anchor='middle'>five identified passers, 30 passes each, outcomes scripted; estimator sees tracking only</text>
+</svg>
