@@ -239,8 +239,7 @@ drawn honestly; §6 reads the gradient and its two surprises, with the
 model running live; §7 makes recovery emergent and confesses the five
 failures that shaped it; §8 scores the machine against history, misses
 included; §9 cashes the gradient out into an actionable conclusion; §10
-steps back to what the way of looking taught; §11 says what all of this is
-and isn't.
+says what all of this is and isn't.
 
 ## 4. Why Petri nets
 
@@ -704,43 +703,7 @@ All of it conditional on a confidence-C toy slice — and the audit's own
 conclusion is that citations, not more cleverness, are what would sharpen
 the rankings. That is exactly what the map's provenance gates are for.
 
-## 10. What the way of looking taught
-
-There is a version of this essay that is all prose — the chokepoint tour
-of §2 stretched to five thousand words, with adjectives standing where
-the numbers are. That essay would have been easier to write and
-impossible to be wrong in, and those are the same defect. The reason to
-build the machine instead is that a formalism is an instrument for
-locating your own ignorance. "Equipment manufacturing is concentrated"
-sat comfortably in the prose version for exactly as long as it took to
-draw the box — at which point the box demanded edges, the edges demanded
-a source for optics, and the Zeiss monopoly fell out of the act of
-diagramming. The fog of §5 exists as a concept because the net forced
-every unknown to have a shape and a location. You cannot label an
-ignorance you cannot draw.
-
-The second lesson is that predictions have to be allowed to die.
-Freezing the constants, registering the bands, and replaying history
-turned this from a mood into an experiment, and the education came
-almost entirely from the failures: the five instructive wrongs of §7,
-and Sumitomo missing twice in opposite directions, which located the
-model's actual boundary — no prices — with a precision no amount of
-introspection would have found. When the sensitivity audit later took
-the boneyard headline away, that was the same instrument working in the
-other direction. A method that cannot lose claims cannot be trusted to
-keep them.
-
-And the third: derivatives discipline rhetoric. The question in the
-callout up top — the marginal dollar — is unanswerable in prose; every
-op-ed answers it with the author's priors wearing a suit. Making it a
-gradient did not make the answer *true* (the magnitudes are only as good
-as the confidence-C fog they pass through), but it made the answer
-*arguable*: a vector with signs that survive an audit and rankings that
-only coarsely do. That trade — from unfalsifiable confidence to
-falsifiable structure — is why the essay looks at the world this way.
-The wandering was real, and the method is what kept it honest.
-
-## 11. What this is and isn't
+## 10. What this is and isn't
 
 This is not a forecast, not a claim that collapse is coming, and not a
 policy tool to point at the real world without reading its scorecard

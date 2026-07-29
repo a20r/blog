@@ -70,4 +70,6 @@ version. This file is not rendered on the site.
   construction rather than typography (pure-stress bolds dropped; coined
   terms keep theirs), the un-introduced "SPOFs" jargon replaced, the
   §3/§11 confidence-C statements reconciled, and sentences shortened
-  throughout. No number, table, or result changed.
+  throughout. §10 ("What the way of looking taught", the method
+  reflection) cut at Alex's direction; the closing section renumbered
+  §10 and the roadmap updated. No number, table, or result changed.
