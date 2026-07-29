@@ -550,6 +550,45 @@ a.tag-chip:hover {
   border-radius: 8px;
 }
 
+/* Tables (markdown pipe tables in posts) ----------------------------------
+   Markdown emits bare <table>; without rules it renders as floating text.
+   display:block lets a wide table scroll inside its own box on phones
+   instead of stretching the page. */
+.post table {
+  display: block;
+  overflow-x: auto;
+  border-collapse: collapse;
+  margin: 1.75rem 0;
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+
+.post th {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--text-muted);
+  text-align: left;
+}
+
+.post th,
+.post td {
+  padding: 0.55rem 1.25rem 0.55rem 0;
+  border-bottom: 1px solid var(--rule);
+  vertical-align: top;
+}
+
+.post thead th {
+  border-bottom: 2px solid var(--border);
+}
+
+.post td:last-child,
+.post th:last-child {
+  padding-right: 0;
+}
+
 /* Build-time MathJax output: display math scrolls inside its own box
    instead of stretching the page horizontally. */
 .post mjx-container[display="true"] {

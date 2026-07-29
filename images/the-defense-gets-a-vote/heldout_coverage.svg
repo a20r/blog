@@ -42,10 +42,11 @@
 <text x='526' y='166' fill='#cfe' font-size='11'>persistence (dashed)</text>
 <line x1='526' y1='180' x2='552' y2='180' stroke='#64748b' stroke-width='1.3' stroke-dasharray='5,4'/>
 <text x='526' y='216' fill='#9fb8ac' font-size='10'>above the diagonal =</text>
-<text x='526' y='230' fill='#9fb8ac' font-size='10'>conservative (HDRs catch</text>
-<text x='526' y='244' fill='#9fb8ac' font-size='10'>more truth than claimed);</text>
+<text x='526' y='230' fill='#9fb8ac' font-size='10'>conservative (region catches</text>
+<text x='526' y='244' fill='#9fb8ac' font-size='10'>more truth than it claims);</text>
 <text x='526' y='258' fill='#9fb8ac' font-size='10'>below = overconfident.</text>
-<text x='526' y='272' fill='#9fb8ac' font-size='10'>Nobody lies about certainty;</text>
-<text x='526' y='286' fill='#9fb8ac' font-size='10'>the model is the sharper</text>
-<text x='526' y='300' fill='#9fb8ac' font-size='10'>honest density.</text>
+<text x='526' y='272' fill='#9fb8ac' font-size='10'>Core: conservative at every</text>
+<text x='526' y='286' fill='#9fb8ac' font-size='10'>horizon. Tail: the 5 s curve</text>
+<text x='526' y='300' fill='#9fb8ac' font-size='10'>runs thin (82% inside the</text>
+<text x='526' y='314' fill='#9fb8ac' font-size='10'>90% region).</text>
 </svg>
