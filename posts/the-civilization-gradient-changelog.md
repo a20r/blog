@@ -2,7 +2,7 @@
 permalink: false
 eleventyExcludeFromCollections: true
 ---
-# The civilization gradient — essay changelog
+# Collapse Has a Gradient — essay changelog
 
 The essay's single source of truth is the post beside this file,
 `posts/the-civilization-gradient.md` (migrated from a20r/civgrad's

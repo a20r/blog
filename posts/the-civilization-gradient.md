@@ -3,7 +3,7 @@ topics: [collapse, supply-chains, modeling]
 extraCss: ["/css/civgrad.css"]
 summary: "The living essay of the civgrad project: model a civilization's supply web as a Petri net, relax it until collapse has a gradient, and ask what brittleness — not depletion — does to an island with no off-island."
 ---
-# The civilization gradient
+# Collapse Has a Gradient
 
 *The living essay of the [civgrad](https://github.com/a20r/civgrad) project
 (v0.5 — flow and editorial revision). This post is the essay's
