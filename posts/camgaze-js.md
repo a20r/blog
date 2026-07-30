@@ -1,7 +1,7 @@
 ---
 topics: [javascript, typescript, computer-vision, eye-tracking, browser]
 date: 2026-07-30
-summary: "In 2013 I wrote a webcam eye tracker in JavaScript by concatenating files together and sweeping intensity thresholds. Thirteen years later I rebuilt it: same idea, zero dependencies, and every stage of the pipeline replaced with an algorithm from the eye-tracking literature that didn't exist yet when v1 shipped."
+summary: "In 2013 I wrote a webcam eye tracker in JavaScript by concatenating files together and sweeping intensity thresholds. Thirteen years later I had it rebuilt — by two frontier models in two roughly parallel shots: same idea, zero dependencies, and every stage of the pipeline replaced with an algorithm from the eye-tracking literature that didn't exist yet when v1 shipped."
 ---
 # camgaze.js: rebuilding a 2013 webcam eye tracker with 2016's algorithms
 
@@ -20,14 +20,18 @@ outright. The demo didn't degrade; it stopped existing as a runnable
 artifact. The repo sat there for over a decade as a monument to a browser
 API surface that no longer exists.
 
-This year I rebuilt it. Version 2 is a ground-up modernization: an ES-module
-TypeScript library with a test suite, typed APIs, and **zero runtime
-dependencies** — and, more interestingly, a tracking pipeline where nearly
-every stage is an algorithm from the eye-tracking literature that *postdates
-the original project*. Rebuilding a 2013 system in 2026 means you get to
-cherry-pick a decade of papers written in between. This post walks through
-the pipeline stage by stage: what v1 did, what the literature figured out,
-and what v2 does now.
+This year I rebuilt it — or, more honestly, I had it rebuilt. The v2
+rewrite was done by Claude Fable 5 (running its ultracode multi-agent
+orchestration mode) and GPT 5.6 Sol, in two roughly parallel shots; my
+contribution was the direction and the code review. Version 2 is a
+ground-up modernization: an ES-module TypeScript library with a test
+suite, typed APIs, and **zero runtime dependencies** — and, more
+interestingly, a tracking pipeline where nearly every stage is an
+algorithm from the eye-tracking literature that *postdates the original
+project*. Rebuilding a 2013 system in 2026 means you get to cherry-pick a
+decade of papers written in between. This post walks through the pipeline
+stage by stage: what v1 did, what the literature figured out, and what v2
+does now.
 
 There's a [live demo](https://a20r.github.io/camgaze.js/) — start the
 camera, run the 9-point calibration, and watch the red dot follow your gaze.
@@ -367,6 +371,15 @@ Also: version your platform assumptions. The 2013 code's fatal bug wasn't
 in the vision — it was `URL.createObjectURL(stream)`, a line that
 seemed too mundane to be a risk. The vision math from 2013 still runs
 fine; it's the glue that rotted.
+
+And the part 2013 me would find hardest to believe isn't in the pipeline
+at all: nobody typed this rewrite. Two frontier models produced v2 in two
+roughly parallel shots — the algorithm selection, the dependency-free
+Haar port, the typed APIs, the headless test suite. The literature I
+didn't know to read in 2013 is in their training data, which is exactly
+why every stage came back research-backed instead of hand-tuned. The
+original cost an intern a summer; the rebuild cost a prompt, a merge, and
+a code review.
 
 ```sh
 npm install camgaze
